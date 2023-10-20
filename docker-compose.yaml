@@ -1,0 +1,57 @@
+networks:
+  rugram:
+    name: rugram_default
+services:
+  Gateway:
+    container_name: Gateway
+    image: rugramgateway
+    ports:
+      - "3000:80"
+    restart: always
+    build:
+      context: ./Gateway
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - AuthOptions__Issuer=RugramAuth
+      - AuthOptions__Audience=Rugram
+      - AuthOptions__JwtSecretKey=123
+      - AuthOptions__AccessTokenLifetimeInMinutes=2
+    networks:
+      rugram:
+        aliases:
+          - gateway
+  Auth:
+    container_name: Auth
+    image: rugramauth
+    restart: always
+    build:
+      context: ./Auth
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AuthOptions__Issuer=RugramAuth
+      - AuthOptions__Audience=Rugram
+      - AuthOptions__JwtSecretKey=123
+      - AuthOptions__RefreshTokenLifetimeInHours=168
+      - AuthOptions__AccessTokenLifetimeInMinutes=2
+      - ConnectionStrings__PostreSQLConnectionString=Server=dbAuth;Port=5432;Database=RugramAuth;User Id=dev;Password=111;Include Error Detail=true;
+    depends_on:
+      - DbAuth
+    networks:
+      rugram:
+        aliases:
+          - auth
+  DbAuth:
+    container_name: DbAuth
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: 111
+      POSTGRES_DB: RugramAuth
+    networks:
+      rugram:
+        aliases:
+          - dbAuth
