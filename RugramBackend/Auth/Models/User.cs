@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace Auth.Models;
 
 public class User
@@ -8,7 +6,7 @@ public class User
     {
         Id = Guid.NewGuid();
     }
-    
+
     public Guid Id { get; set; }
     public required string Email { get; set; }
     public required Role Role { get; set; }

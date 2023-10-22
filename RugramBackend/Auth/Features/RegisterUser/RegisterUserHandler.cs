@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Features.RegisterUser;
 
-public class RegisterUserHandler : IRequestHandler<RegisterUserRequest,RegisterUserResponse>
+public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, RegisterUserResponse>
 {
     private readonly AppDbContext _dbContext;
     private readonly UserAuthHelperService _userAuthHelperService;
@@ -18,6 +18,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserRequest,RegisterU
         _userAuthHelperService = userAuthHelperService;
         _dbContext = dbContext;
     }
+
     public async Task<RegisterUserResponse> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
     {
         var countUserWithSameEmail = await _dbContext.Users.AsNoTracking()
@@ -42,9 +43,9 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserRequest,RegisterU
         _dbContext.Users.Add(user);
         _dbContext.RefreshTokens.Add(refreshToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
-        
+
         var jwtToken = _userAuthHelperService.GenerateJwtTokenForUser(user.Id, user.Role);
-        
-        return new RegisterUserResponse(jwtToken,refreshToken.Token,StatusCodes.Status200OK);
+
+        return new RegisterUserResponse(jwtToken, refreshToken.Token, StatusCodes.Status200OK);
     }
 }

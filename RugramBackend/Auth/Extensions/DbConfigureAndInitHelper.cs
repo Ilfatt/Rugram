@@ -27,6 +27,7 @@ public static class DbConfigureAndInitHelper
                     });
             });
     }
+
     /// <summary>
     ///     Миграция бд
     /// </summary>

@@ -1,7 +1,5 @@
 using Auth.AutoMapper;
-using Auth.Data;
 using Auth.Extensions;
-using Auth.Models;
 using Auth.Services;
 using Auth.Services.BackgroundServices;
 
@@ -19,7 +17,5 @@ builder.Services.AddHostedService<DeleteOutdatedRefreshTokens>();
 var app = builder.Build();
 
 await app.MigrateDb();
-
-app.MapGet("/", () => "Hello World!");
 
 app.Run();

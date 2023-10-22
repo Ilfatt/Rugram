@@ -79,7 +79,7 @@ public class UserAuthHelperService
         };
     }
 
-    public string GenerateJwtTokenForUser(Guid userId,Role role)
+    public string GenerateJwtTokenForUser(Guid userId, Role role)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var jwtSecurityKey = Encoding.ASCII.GetBytes(
@@ -87,7 +87,7 @@ public class UserAuthHelperService
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, userId.ToString()),
-            new(ClaimTypes.Role,((int)role).ToString())
+            new(ClaimTypes.Role, ((int)role).ToString())
         };
 
         var tokenDescriptor = new SecurityTokenDescriptor

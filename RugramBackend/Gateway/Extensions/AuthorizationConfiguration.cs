@@ -13,7 +13,7 @@ public static class AuthorizationConfiguration
     public static void AddAuthorization(this WebApplicationBuilder builder)
     {
         var authConf = builder.Configuration.GetSection("AuthOptions");
-        
+
         builder.Services.AddAuthorization();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
