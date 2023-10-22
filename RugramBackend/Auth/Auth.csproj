@@ -27,12 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Protobuf Include="Protos\AuthService.proto">
-        <GrpcServices>Server</GrpcServices>
-        <Access>Public</Access>
-        <ProtoCompile>True</ProtoCompile>
-        <CompileOutputs>True</CompileOutputs>
-        <OutputDir>obj\Debug\net7.0\</OutputDir>
+      <Protobuf Include="Grpc\Protos\AuthService.proto">
         <Generator>MSBuild:Compile</Generator>
       </Protobuf>
     </ItemGroup>
