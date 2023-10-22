@@ -43,7 +43,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserRequest,RegisterU
         _dbContext.RefreshTokens.Add(refreshToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
         
-        var jwtToken = _userAuthHelperService.GenerateAccessTokenForUserAsync(user.Id, user.Role);
+        var jwtToken = _userAuthHelperService.GenerateJwtTokenForUser(user.Id, user.Role);
         
         return new RegisterUserResponse(jwtToken,refreshToken.Token,StatusCodes.Status200OK);
     }

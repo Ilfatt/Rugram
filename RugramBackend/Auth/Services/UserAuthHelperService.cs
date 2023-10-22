@@ -79,7 +79,7 @@ public class UserAuthHelperService
         };
     }
 
-    public string GenerateAccessTokenForUserAsync(Guid userId,Role role)
+    public string GenerateJwtTokenForUser(Guid userId,Role role)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var jwtSecurityKey = Encoding.ASCII.GetBytes(
