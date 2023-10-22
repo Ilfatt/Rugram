@@ -1,4 +1,4 @@
-namespace Auth.Models;
+namespace Auth.Data.Models;
 
 public class User
 {
@@ -7,14 +7,14 @@ public class User
         Id = Guid.NewGuid();
     }
 
-    public Guid Id { get; set; }
-    public required string Email { get; set; }
-    public required Role Role { get; set; }
+    public Guid Id { get; init; }
+    public required string Email { get; init; }
+    public required Role Role { get; init; }
     public required string Password { get; set; }
 
     #region Navigation
 
-    public required List<RefreshToken> RefreshTokens { get; set; }
+    public required List<RefreshToken> RefreshTokens { get; init; }
 
     #endregion
 }

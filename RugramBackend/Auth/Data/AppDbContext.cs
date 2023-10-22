@@ -1,4 +1,4 @@
-using Auth.Models;
+using Auth.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Data;
@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+    public DbSet<MailConfirmationToken> MailConfirmationTokens { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

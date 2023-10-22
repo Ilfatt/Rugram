@@ -1,5 +1,5 @@
 using Auth.Data;
-using Auth.Models;
+using Auth.Data.Models;
 using Auth.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,12 +21,14 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, Register
 
     public async Task<RegisterUserResponse> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
     {
-        var countUserWithSameEmail = await _dbContext.Users.AsNoTracking()
-            .CountAsync(user => user.Email == request.Email, cancellationToken: cancellationToken);
+        var mailConfirmationToken = await _dbContext.MailConfirmationTokens.AsNoTracking()
+            .FirstOrDefaultAsync(token => token.Email == request.Email &&
+                                          token.ValidTo > DateTime.UtcNow &&
+                                          token.Value == request.MailConfirmationToken, cancellationToken);
 
-        if (countUserWithSameEmail > 0)
+        if (mailConfirmationToken == null)
         {
-            return new RegisterUserResponse("", "", StatusCodes.Status409Conflict);
+            return new RegisterUserResponse("", "", StatusCodes.Status404NotFound);
         }
 
         var user = new User
@@ -37,15 +39,18 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, Register
             Role = Role.User,
         };
 
-        var refreshToken = await _userAuthHelperService.CreateRefreshToken(user.Id);
-        user.RefreshTokens.Add(refreshToken);
+        var result = await _userAuthHelperService.CreateRefreshToken(user.Id);
+        user.RefreshTokens.Add(result.RefreshToken);
 
         _dbContext.Users.Add(user);
-        _dbContext.RefreshTokens.Add(refreshToken);
+        _dbContext.RefreshTokens.Add(result.RefreshToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var jwtToken = _userAuthHelperService.GenerateJwtTokenForUser(user.Id, user.Role);
+        var jwtToken = _userAuthHelperService.GenerateJwtToken(user.Id, user.Role);
 
-        return new RegisterUserResponse(jwtToken, refreshToken.Token, StatusCodes.Status200OK);
+        return new RegisterUserResponse(
+            jwtToken,
+            result.UnhashedTokenValue,
+            StatusCodes.Status200OK);
     }
 }

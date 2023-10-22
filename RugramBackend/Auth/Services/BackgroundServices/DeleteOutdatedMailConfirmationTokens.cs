@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Services.BackgroundServices;
 
-public class DeleteOutdatedRefreshTokens : BackgroundService
+public class DeleteOutdatedMailConfirmationTokens : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
 
-    public DeleteOutdatedRefreshTokens(
+    public DeleteOutdatedMailConfirmationTokens(
         IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
@@ -16,8 +16,8 @@ public class DeleteOutdatedRefreshTokens : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        const string command = $"DELETE FROM \"{nameof(AppDbContext.RefreshTokens)}\" AS t " +
-                               $"WHERE t.\"{nameof(RefreshToken.ValidTo)}\" > now()";
+        const string command = $"DELETE FROM \"{nameof(AppDbContext.MailConfirmationTokens)}\" AS t " +
+                               $"WHERE t.\"{nameof(MailConfirmationToken.ValidTo)}\" > now()";
 
         while (!cancellationToken.IsCancellationRequested)
         {

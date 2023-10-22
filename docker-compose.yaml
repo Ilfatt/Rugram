@@ -36,7 +36,14 @@ services:
       - AuthOptions__JwtSecretKey=123
       - AuthOptions__AccessTokenLifetimeInMinutes=2
       - AuthOptions__RefreshTokenLifetimeInHours=168
-      - AuthOptions__SlidingExpirationInCacheForRefreshTokenInMinutes=5
+      - Cache__SlidingExpirationForRefreshTokenInMinutes=5
+      - MailConfirmationToken__LifetimeInHours=24
+      - EmailConfig__Sender=alinaagro@inbox.ru
+      - EmailConfig__SenderName=RugramES
+      - EmailConfig__SenderPassword=RugramES
+      - SmtpSettings__Port=587
+      - SmtpSettings__SmtpAddress=smtp.mail.ru
+      - Domain__AppUrl=http://localhost:3001
       - ConnectionStrings__PostreSQL=Server=dbAuth;Port=5432;Database=RugramAuth;User Id=dev;Password=111;Include Error Detail=true;
       - ConnectionStrings__Redis=redisAuth:6379,password=111
     depends_on:

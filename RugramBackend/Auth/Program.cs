@@ -11,8 +11,11 @@ builder.ConfigureRedisConnection();
 builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddGrpc();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
+
 builder.Services.AddScoped<UserAuthHelperService>();
+
 builder.Services.AddHostedService<DeleteOutdatedRefreshTokens>();
+builder.Services.AddHostedService<DeleteOutdatedMailConfirmationTokens>();
 
 var app = builder.Build();
 

@@ -28,7 +28,7 @@ namespace Auth.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Token")
+                    b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("text");
 
