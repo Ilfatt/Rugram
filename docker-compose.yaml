@@ -9,8 +9,8 @@ services:
       - "3000:80"
     restart: always
     build:
-      context: ./Gateway
-      dockerfile: Dockerfile
+      context: .RugramBackend/Gateway
+      dockerfile: /Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
@@ -27,7 +27,7 @@ services:
     image: rugramauth
     restart: always
     build:
-      context: ./Auth
+      context: .RugramBackend/Gateway
       dockerfile: Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
