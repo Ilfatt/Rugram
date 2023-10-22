@@ -16,7 +16,7 @@ public static class DbConfigureAndInitHelper
             options =>
             {
                 options.UseNpgsql(
-                    builder.Configuration.GetConnectionString("PostreSQLConnectionString"),
+                    builder.Configuration.GetConnectionString("PostreSQL"),
                     opt =>
                     {
                         opt.MigrationsAssembly(typeof(AppDbContext).GetTypeInfo().Assembly.GetName().Name);

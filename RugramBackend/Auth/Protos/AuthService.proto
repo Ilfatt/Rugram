@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message RegisterUserGrpcRequest{
+  string email = 1;
+  string password = 2;
+} 
+ 
+message RegisterUserGrpcResponse{
+    string refreshToken = 1;
+    string jwtToken = 2;
+    int32 statusCode = 3;
+}
+ 
+service AuthMicroservice{
+  rpc RegisterUser (RegisterUserGrpcRequest) returns (RegisterUserGrpcResponse);
+}
