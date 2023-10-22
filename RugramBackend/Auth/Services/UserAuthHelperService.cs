@@ -75,7 +75,7 @@ public class UserAuthHelperService
         await _cache.SetStringAsync(
             userId.ToString(),
             tokenFromDb.Value,
-            new DistributedCacheEntryOptions()
+            new DistributedCacheEntryOptions
             {
                 SlidingExpiration = TimeSpan.FromMinutes(slidingExpiration)
             });
@@ -86,8 +86,8 @@ public class UserAuthHelperService
     public async Task<CreateRefreshTokenResponse> CreateRefreshToken(Guid userId)
     {
         var token = HashSha256(GenerateSecureToken());
-        var slidingExpiration = int.Parse(_configuration.GetValue<string>(
-            "Cache:SlidingExpirationForRefreshTokenInMinutes")!);
+        var slidingExpiration = int.Parse(
+            _configuration["Cache:SlidingExpirationForRefreshTokenInMinutes"]!);
 
         await _cache.SetStringAsync(
             userId.ToString(),
@@ -98,7 +98,7 @@ public class UserAuthHelperService
             });
 
         var refreshTokenLifetimeInHours = int.Parse(
-            _configuration.GetValue<string>("AuthOptions:RefreshTokenLifetimeInHours")!);
+            _configuration["AuthOptions:RefreshTokenLifetimeInHours"]!);
 
         return new CreateRefreshTokenResponse(
             token,
@@ -114,7 +114,7 @@ public class UserAuthHelperService
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var jwtSecurityKey = Encoding.ASCII.GetBytes(
-            _configuration.GetValue<string>("AuthOptions:JwtSecretKey")!);
+            _configuration["AuthOptions:JwtSecretKey"]!);
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, userId.ToString()),
@@ -123,11 +123,11 @@ public class UserAuthHelperService
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Audience = _configuration.GetValue<string>("AuthOptions:Audience"),
-            Issuer = _configuration.GetValue<string>("AuthOptions:Issuer"),
+            Audience = _configuration["AuthOptions:Audience"],
+            Issuer = _configuration["AuthOptions:Issuer"],
             Subject = new ClaimsIdentity(claims.ToArray()),
             Expires = DateTime.UtcNow.AddMinutes(int.Parse(
-                _configuration.GetValue<string>("AuthOptions:AccessTokenLifetimeInMinutes")!)),
+                _configuration["AuthOptions:AccessTokenLifetimeInMinutes"]!)),
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(jwtSecurityKey),
                     SecurityAlgorithms.HmacSha256Signature)

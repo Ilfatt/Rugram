@@ -12,8 +12,6 @@ public static class AuthorizationConfiguration
     /// <param name="builder">WebApplicationBuilder</param>
     public static void AddAuthorization(this WebApplicationBuilder builder)
     {
-        var authConf = builder.Configuration.GetSection("AuthOptions");
-
         builder.Services.AddAuthorization();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -23,12 +21,12 @@ public static class AuthorizationConfiguration
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = authConf.GetValue<string>("Issuer"),
+                    ValidIssuer = builder.Configuration["AuthOptions:Issuer"],
                     ValidateAudience = true,
-                    ValidAudience = authConf.GetValue<string>("Audience"),
+                    ValidAudience = builder.Configuration["AuthOptions:Audience"],
                     ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.ASCII.GetBytes(authConf.GetValue<string>("JwtSecretKey")!)),
+                        Encoding.ASCII.GetBytes(builder.Configuration["AuthOptions:JwtSecretKey"]!)),
                     ValidateIssuerSigningKey = true
                 };
             });
