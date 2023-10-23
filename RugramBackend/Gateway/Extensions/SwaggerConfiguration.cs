@@ -14,12 +14,13 @@ public static class SwaggerConfiguration
         builder.Services.AddSwaggerGen(options =>
         {
             options.EnableAnnotations();
-            options.SwaggerDoc($"v{builder.Configuration["ApiData:Version"]}", new OpenApiInfo
-            {
-                Title = "Rugram API",
-                Version = $"v{builder.Configuration["ApiData:Version"]}",
-                Description = ""
-            });
+            options.SwaggerDoc($"v{builder.Configuration["Api:Version"]}",
+                new OpenApiInfo
+                {
+                    Title = "Rugram API",
+                    Version = $"v{builder.Configuration["Api:Version"]}",
+                    Description = "Rugram API"
+                });
             options.AddSecurityDefinition(
                 "bearerAuth",
                 new OpenApiSecurityScheme

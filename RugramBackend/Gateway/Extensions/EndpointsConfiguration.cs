@@ -8,7 +8,7 @@ public static class EndpointsConfiguration
     /// Роут всех реализаций интерфейса IEndpoint
     /// </summary>
     /// <param name="app">WebApplication</param>
-    public static void RouteEndpoints(this WebApplication app)
+    public static void RouteEndpoints(this IEndpointRouteBuilder app)
     {
         var endpoints = typeof(Program).Assembly.GetTypes()
             .Where(type => type.IsAssignableTo(typeof(IEndpoint)) &&

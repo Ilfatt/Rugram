@@ -10,6 +10,7 @@ public class MapperProfile : Profile
     {
         CreateMap<RegisterUserGrpcRequest, RegisterUserRequest>();
         CreateMap<RegisterUserGrpcResponse, RegisterUserResponse>();
+        
         CreateMap<SendEmailConfirmationGrpcRequest, SendEmailConfirmationRequest>();
         CreateMap<SendEmailConfirmationGrpcResponse, SendEmailConfirmationResponse>();
     }

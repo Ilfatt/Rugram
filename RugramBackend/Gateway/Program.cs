@@ -1,3 +1,4 @@
+using Gateway.AutoMapper;
 using Gateway.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,10 +6,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddSwagger();
 builder.AddAuthorization();
 
+builder.Services.AddGrpc();
+builder.AddGrpcClients();
+
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+
 var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 if (app.Environment.IsDevelopment())
 {

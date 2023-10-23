@@ -6,7 +6,7 @@ using Auth.Services.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.ConfigureDbConnection();
+builder.ConfigurePostgresqlConnection();
 builder.ConfigureRedisConnection();
 
 builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssemblyContaining<Program>());
@@ -23,5 +23,5 @@ var app = builder.Build();
 await app.MigrateDb();
 
 app.MapGrpcService<AuthGrpcService>();
-    
+
 app.Run();

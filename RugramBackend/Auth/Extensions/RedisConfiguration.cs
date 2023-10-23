@@ -1,6 +1,6 @@
 namespace Auth.Extensions;
 
-public static class RedisConfigureHelper
+public static class RedisConfiguration
 {
     /// <summary>
     /// Конфигурация подключения к redis

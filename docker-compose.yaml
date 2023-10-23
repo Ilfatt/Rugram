@@ -6,7 +6,7 @@ services:
     container_name: Gateway
     image: rugramgateway
     ports:
-      - "3000:80"
+      - "3001:80"
     restart: always
     build:
       context: .RugramBackend/Gateway
@@ -18,12 +18,13 @@ services:
       - AuthOptions__Audience=Rugram
       - AuthOptions__JwtSecretKey=123
       - AuthOptions__AccessTokenLifetimeInMinutes=2
+      - Microservices__AuthAddress=https://auth:7057
     networks:
       rugram:
         aliases:
           - gateway
-  Auth:
-    container_name: Auth
+  auth:
+    container_name: auth
     image: rugramauth
     restart: always
     build:

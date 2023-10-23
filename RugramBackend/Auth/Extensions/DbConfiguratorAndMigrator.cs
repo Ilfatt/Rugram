@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Extensions;
 
-public static class DbConfigureAndInitHelper
+public static class DbConfiguratorAndMigrator
 {
     /// <summary>
     ///     Создание и настройка подключения к бд
     /// </summary>
     /// <param name="builder">WebApplicationBuilder</param>
-    public static void ConfigureDbConnection(this WebApplicationBuilder builder)
+    public static void ConfigurePostgresqlConnection(this WebApplicationBuilder builder)
     {
         builder.Services.AddDbContext<AppDbContext>(
             options =>
