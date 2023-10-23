@@ -6,6 +6,9 @@ using Auth.Services.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables();
+builder.Configuration.AddUserSecrets<Program>();
+
 builder.ConfigurePostgresqlConnection();
 builder.ConfigureRedisConnection();
 

@@ -1,9 +1,9 @@
 syntax = "proto3";
 
 message RegisterUserGrpcRequest{
-  string email = 1;
-  string password = 2;
-  string mailConfirmationToken = 3;
+  string mailConfirmationToken = 1;
+  string email = 2;
+  string password = 3;
 }
 
 message RegisterUserGrpcResponse{
@@ -11,7 +11,7 @@ message RegisterUserGrpcResponse{
   string jwtToken = 2;
   int32 statusCode = 3;
 }
-
+    
 message SendEmailConfirmationGrpcRequest{
   string email = 1;
 }
@@ -21,8 +21,6 @@ message SendEmailConfirmationGrpcResponse{
     int32 statusCode = 1;
 }
 
-
- 
 service AuthMicroservice{
   rpc RegisterUser (RegisterUserGrpcRequest) returns (RegisterUserGrpcResponse);
   rpc SendEmailConfirmation (SendEmailConfirmationGrpcRequest) returns (SendEmailConfirmationGrpcResponse);

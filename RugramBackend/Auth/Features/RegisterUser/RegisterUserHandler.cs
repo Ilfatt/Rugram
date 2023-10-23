@@ -3,6 +3,7 @@ using Auth.Data.Models;
 using Auth.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static Auth.Services.UserAuthHelperService;
 
 namespace Auth.Features.RegisterUser;
 
@@ -21,10 +22,19 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, Register
 
     public async Task<RegisterUserResponse> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
     {
+        var userWithThisEmailExist = await _dbContext.Users.AsNoTracking()
+            .AnyAsync(user => user.Email == request.Email, cancellationToken: cancellationToken);
+
+        if (userWithThisEmailExist)
+        {
+            return new RegisterUserResponse("", "", StatusCodes.Status409Conflict);
+        }
+
+        var hashedToken = HashSha256(request.MailConfirmationToken);
         var mailConfirmationToken = await _dbContext.MailConfirmationTokens.AsNoTracking()
             .FirstOrDefaultAsync(token => token.Email == request.Email &&
                                           token.ValidTo > DateTime.UtcNow &&
-                                          token.Value == request.MailConfirmationToken, cancellationToken);
+                                          token.Value == hashedToken, cancellationToken);
 
         if (mailConfirmationToken == null)
         {

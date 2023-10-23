@@ -1,3 +1,3 @@
 namespace Auth.Features.SendEmailConfirmation;
 
-public record SendEmailConfirmationResponse(int StatusCodes);
+public record SendEmailConfirmationResponse(int StatusCode);

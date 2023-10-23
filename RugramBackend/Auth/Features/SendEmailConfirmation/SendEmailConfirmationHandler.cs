@@ -3,6 +3,7 @@ using Auth.Data.Models;
 using Auth.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static Auth.Services.UserAuthHelperService;
 
 namespace Auth.Features.SendEmailConfirmation;
 
@@ -34,13 +35,13 @@ public class SendEmailConfirmationHandler
             return new SendEmailConfirmationResponse(StatusCodes.Status409Conflict);
         }
 
-        var token = UserAuthHelperService.GenerateSecureToken();
+        var token = GenerateSecureToken();
         var mailConfirmationToken = new MailConfirmationToken
         {
             Email = request.Email,
-            Value = UserAuthHelperService.HashSha256(token),
+            Value = HashSha256(token),
             ValidTo = DateTime.UtcNow + TimeSpan.FromHours(int.Parse(
-                _configuration["MailConfirmationToken__LifetimeInHours"]!))
+                _configuration["MailConfirmationToken:LifetimeInHours"]!))
         };
 
         _dbContext.MailConfirmationTokens.Add(mailConfirmationToken);
@@ -108,8 +109,8 @@ public class SendEmailConfirmationHandler
             <div class=""container"">
                 <h1>Подтверждение почты</h1>
                 <p>Спасибо вам за выбор Rugram! Пожалуйста, нажмите на кнопку ниже, чтобы продолжить регистрацию</p>
-                <a class=""button"" href=" +
-               _configuration["Domain__AppUrl"] +
+                <a class=""button"" href=""" +
+               _configuration["Domain:AppUrl"] +
                $"/auth/confirm-email?token={emailConfirmationToken}&email={email}" +
                @""">Продолжить регистрацию</a>
             </div>

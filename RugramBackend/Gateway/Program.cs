@@ -3,6 +3,9 @@ using Gateway.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables();
+builder.Configuration.AddUserSecrets<Program>();
+
 builder.AddSwagger();
 builder.AddAuthorization();
 

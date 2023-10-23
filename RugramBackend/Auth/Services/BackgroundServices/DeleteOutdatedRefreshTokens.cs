@@ -17,7 +17,7 @@ public class DeleteOutdatedRefreshTokens : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         const string command = $"DELETE FROM \"{nameof(AppDbContext.RefreshTokens)}\" AS t " +
-                               $"WHERE t.\"{nameof(RefreshToken.ValidTo)}\" > now()";
+                               $"WHERE t.\"{nameof(RefreshToken.ValidTo)}\" < now()";
 
         while (!cancellationToken.IsCancellationRequested)
         {

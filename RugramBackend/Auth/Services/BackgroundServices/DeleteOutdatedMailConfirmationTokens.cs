@@ -17,7 +17,7 @@ public class DeleteOutdatedMailConfirmationTokens : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         const string command = $"DELETE FROM \"{nameof(AppDbContext.MailConfirmationTokens)}\" AS t " +
-                               $"WHERE t.\"{nameof(MailConfirmationToken.ValidTo)}\" > now()";
+                               $"WHERE t.\"{nameof(MailConfirmationToken.ValidTo)}\" < now()";
 
         while (!cancellationToken.IsCancellationRequested)
         {

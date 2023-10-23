@@ -19,6 +19,7 @@ public class SendEmailConfirmationEndpoint : IEndpoint
                 return response.StatusCode switch
                 {
                     202 => Results.Accepted(),
+                    404 => Results.NotFound(),
                     409 => Results.Conflict(),
                     _ => Results.Problem(statusCode: 500)
                 };
