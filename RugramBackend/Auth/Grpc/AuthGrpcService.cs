@@ -21,8 +21,9 @@ public class AuthGrpcService : AuthMicroservice.AuthMicroserviceBase
         RegisterUserGrpcRequest request,
         ServerCallContext context)
     {
-        return _mapper.Map<RegisterUserGrpcResponse>(
+        var d =  _mapper.Map<RegisterUserGrpcResponse>(
             await _mediator.Send(_mapper.Map<RegisterUserRequest>(request)));
+        return d;
     }
 
     public override async Task<SendEmailConfirmationGrpcResponse> SendEmailConfirmation(

@@ -20,14 +20,16 @@ public class RegisterUserHandler : IGrpcRequestHandler<RegisterUserRequest, Regi
         _dbContext = dbContext;
     }
 
-    public async Task<RegisterUserResponse> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
+    public async Task<GrpcResult<RegisterUserResponse>> Handle(
+        RegisterUserRequest request,
+        CancellationToken cancellationToken)
     {
         var userWithThisEmailExist = await _dbContext.Users.AsNoTracking()
             .AnyAsync(user => user.Email == request.Email, cancellationToken: cancellationToken);
 
         if (userWithThisEmailExist)
         {
-            return new RegisterUserResponse("", "", StatusCodes.Status409Conflict);
+            return StatusCodes.Status409Conflict;
         }
 
         var hashedToken = HashSha256(request.MailConfirmationToken);
@@ -38,7 +40,7 @@ public class RegisterUserHandler : IGrpcRequestHandler<RegisterUserRequest, Regi
 
         if (mailConfirmationToken == null)
         {
-            return new RegisterUserResponse("", "", StatusCodes.Status404NotFound);
+            return StatusCodes.Status404NotFound;
         }
 
         var user = new User
@@ -61,7 +63,6 @@ public class RegisterUserHandler : IGrpcRequestHandler<RegisterUserRequest, Regi
 
         return new RegisterUserResponse(
             jwtToken,
-            result.UnhashedTokenValue,
-            StatusCodes.Status200OK);
+            result.UnhashedTokenValue);
     }
 }

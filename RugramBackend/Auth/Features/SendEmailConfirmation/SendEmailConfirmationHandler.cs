@@ -24,7 +24,8 @@ public class SendEmailConfirmationHandler
         _dbContext = dbContext;
     }
 
-    public async Task<SendEmailConfirmationResponse> Handle(SendEmailConfirmationRequest request,
+    public async Task<GrpcResult<SendEmailConfirmationResponse>> Handle(
+        SendEmailConfirmationRequest request,
         CancellationToken cancellationToken)
     {
         var alreadyExistUserWithThisEmail = await _dbContext.Users.AsNoTracking()
@@ -32,7 +33,7 @@ public class SendEmailConfirmationHandler
 
         if (alreadyExistUserWithThisEmail)
         {
-            return new SendEmailConfirmationResponse(StatusCodes.Status409Conflict);
+            return StatusCodes.Status409Conflict;
         }
 
         var token = GenerateSecureToken();
@@ -52,7 +53,7 @@ public class SendEmailConfirmationHandler
 
         await _emailSenderService.SendMessageAsync(messageSubject, messageBody, request.Email);
 
-        return new SendEmailConfirmationResponse(StatusCodes.Status202Accepted);
+        return StatusCodes.Status202Accepted;
     }
 
     private string GetEmailConfirmationHtmlMessageBody(string email, string emailConfirmationToken)

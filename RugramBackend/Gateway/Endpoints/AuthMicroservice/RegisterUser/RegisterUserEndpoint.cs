@@ -20,6 +20,7 @@ public class RegisterUserEndpoint : IEndpoint
                 {
                     200 => Results.Ok(mapper.Map<RegisterUserResponse>(response)),
                     404 => Results.NotFound(),
+                    409 => Results.Conflict(),
                     _ => Results.Problem(statusCode: 500)
                 };
             })
