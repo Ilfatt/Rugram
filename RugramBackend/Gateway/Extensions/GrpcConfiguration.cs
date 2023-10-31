@@ -9,6 +9,10 @@ public static class GrpcConfiguration
     public static void AddGrpcClients(this WebApplicationBuilder builder)
     {
         builder.Services.AddGrpcClient<AuthMicroservice.AuthMicroserviceClient>(conf =>
-            conf.Address = new Uri(builder.Configuration["Microservices:AuthAddress"]!));
+        {
+            conf.Address = new Uri(builder.Configuration["Microservices:AuthAddress"]
+                                   ?? throw new ApplicationException(
+                                       "Enviroment variable Microservices:AuthAddress not found "));
+        });
     }
 }

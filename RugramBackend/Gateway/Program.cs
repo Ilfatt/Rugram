@@ -1,7 +1,13 @@
 using Gateway.AutoMapper;
 using Gateway.Extensions;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ConfigureEndpointDefaults(options => options.Protocols = HttpProtocols.Http2);
+});
 
 builder.Configuration.AddEnvironmentVariables();
 builder.Configuration.AddUserSecrets<Program>();

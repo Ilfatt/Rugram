@@ -1,6 +1,4 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
-using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -27,30 +25,6 @@ public class UserAuthHelperService
         _cache = cache;
         _dbContext = dbContext;
         _configuration = configuration;
-    }
-
-    public void SendMessage(string subject, string body, string sendTo)
-    {
-        var from = new MailAddress(_configuration["EmailConfig:Sender"]!,
-            _configuration["EmailConfig:SenderName"]!);
-        var to = new MailAddress(sendTo);
-        var message = new MailMessage(from, to)
-        {
-            Subject = subject,
-            Body = body,
-            IsBodyHtml = true
-        };
-
-        var smtp = new SmtpClient(_configuration["SmtpSettings:SmtpAddress"],
-            int.Parse(_configuration["SmtpSettings:Port"]!))
-        {
-            Credentials = new NetworkCredential(_configuration["EmailConfig:Sender"]!,
-                _configuration["EmailConfig:SenderPassword"]!),
-            EnableSsl = true,
-            UseDefaultCredentials = false,
-        };
-
-        smtp.SendMailAsync(message);
     }
 
     public async Task<bool> IsValidRefreshToken(string inputToken, Guid userId)

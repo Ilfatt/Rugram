@@ -9,7 +9,7 @@ services:
       - "3001:443"
     restart: always
     build:
-      context: .RugramBackend/Gateway
+      context: RugramBackend/Gateway
       dockerfile: /Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -20,25 +20,21 @@ services:
       - AuthOptions__Audience=Rugram
       - AuthOptions__JwtSecretKey=${JwtSecretKey}
       - AuthOptions__AccessTokenLifetimeInMinutes=2
-      - Microservices__AuthAddress=https://localhost:7057
+      - Microservices__AuthAddress=http://auth:80
     networks:
       rugram:
         aliases:
           - gateway
   Auth:
     container_name: Auth
-    ports:
-      - "7057:443"
     image: rugramauth
     restart: always
     build:
-      context: .RugramBackend/Gateway
+      context: RugramBackend/Gateway
       dockerfile: Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KestrelCertifyPass}
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_URLS=http://+:80
       - AuthOptions__Issuer=RugramAuthd
       - AuthOptions__Audience=Rugram
       - AuthOptions__JwtSecretKey=${JwtSecretKey}

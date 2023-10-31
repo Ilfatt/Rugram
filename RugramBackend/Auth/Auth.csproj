@@ -19,7 +19,7 @@
         <PackageReference Include="Grpc.AspNetCore" Version="2.58.0" />
         <PackageReference Include="MediatR.Extensions.FluentValidation.AspNetCore" Version="5.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.12">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.13">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

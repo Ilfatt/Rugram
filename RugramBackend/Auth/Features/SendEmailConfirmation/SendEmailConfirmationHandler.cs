@@ -1,6 +1,6 @@
 using Auth.Data;
 using Auth.Data.Models;
-using Auth.Services;
+using Auth.Services.Infrastructure.EmailSenderService;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using static Auth.Services.UserAuthHelperService;
@@ -10,17 +10,17 @@ namespace Auth.Features.SendEmailConfirmation;
 public class SendEmailConfirmationHandler
     : IRequestHandler<SendEmailConfirmationRequest, SendEmailConfirmationResponse>
 {
-    private readonly UserAuthHelperService _userAuthHelperService;
     private readonly AppDbContext _dbContext;
     private readonly IConfiguration _configuration;
+    private readonly IEmailSenderService _emailSenderService;
 
     public SendEmailConfirmationHandler(
         AppDbContext dbContext,
-        UserAuthHelperService userAuthHelperService,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IEmailSenderService emailSenderService)
     {
+        _emailSenderService = emailSenderService;
         _configuration = configuration;
-        _userAuthHelperService = userAuthHelperService;
         _dbContext = dbContext;
     }
 
@@ -50,7 +50,7 @@ public class SendEmailConfirmationHandler
         const string messageSubject = "Потверждение почты";
         var messageBody = GetEmailConfirmationHtmlMessageBody(request.Email, token);
 
-        _userAuthHelperService.SendMessage(messageSubject, messageBody, request.Email);
+        await _emailSenderService.SendMessageAsync(messageSubject, messageBody, request.Email);
 
         return new SendEmailConfirmationResponse(StatusCodes.Status202Accepted);
     }
