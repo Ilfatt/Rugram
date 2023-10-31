@@ -11,7 +11,7 @@ public class EmailSenderService : IEmailSenderService
     {
         _configuration = configuration;
     }
-    
+
     public async Task SendMessageAsync(string subject, string body, string sendTo)
     {
         var from = new MailAddress(_configuration["EmailConfig:Sender"]!,

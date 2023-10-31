@@ -16,7 +16,7 @@ public class RegisterUserEndpoint : IEndpoint
                 var response = await authClient.RegisterUserAsync(
                     mapper.Map<RegisterUserGrpcRequest>(request));
 
-                return response.StatusCode switch
+                return response.HttpStatusCode switch
                 {
                     200 => Results.Ok(mapper.Map<RegisterUserResponse>(response)),
                     404 => Results.NotFound(),

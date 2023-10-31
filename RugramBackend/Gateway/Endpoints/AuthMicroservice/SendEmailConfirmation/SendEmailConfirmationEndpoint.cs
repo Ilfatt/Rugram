@@ -16,7 +16,7 @@ public class SendEmailConfirmationEndpoint : IEndpoint
                 var response = await authClient.SendEmailConfirmationAsync(
                     mapper.Map<SendEmailConfirmationGrpcRequest>(request));
 
-                return response.StatusCode switch
+                return response.HttpStatusCode switch
                 {
                     202 => Results.Accepted(),
                     404 => Results.NotFound(),

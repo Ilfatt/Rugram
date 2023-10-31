@@ -1,14 +1,14 @@
 using Auth.Data;
 using Auth.Data.Models;
 using Auth.Services.Infrastructure.EmailSenderService;
-using MediatR;
+using Contracts;
 using Microsoft.EntityFrameworkCore;
 using static Auth.Services.UserAuthHelperService;
 
 namespace Auth.Features.SendEmailConfirmation;
 
 public class SendEmailConfirmationHandler
-    : IRequestHandler<SendEmailConfirmationRequest, SendEmailConfirmationResponse>
+    : IGrpcRequestHandler<SendEmailConfirmationRequest, SendEmailConfirmationResponse>
 {
     private readonly AppDbContext _dbContext;
     private readonly IConfiguration _configuration;

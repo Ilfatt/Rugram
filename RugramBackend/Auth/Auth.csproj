@@ -33,4 +33,13 @@
         </Protobuf>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\Login\" />
+      <Folder Include="Features\UpdateRefreshToken\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Contracts\Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

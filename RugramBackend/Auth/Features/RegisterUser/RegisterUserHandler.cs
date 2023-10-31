@@ -1,13 +1,13 @@
 using Auth.Data;
 using Auth.Data.Models;
 using Auth.Services;
-using MediatR;
+using Contracts;
 using Microsoft.EntityFrameworkCore;
 using static Auth.Services.UserAuthHelperService;
 
 namespace Auth.Features.RegisterUser;
 
-public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, RegisterUserResponse>
+public class RegisterUserHandler : IGrpcRequestHandler<RegisterUserRequest, RegisterUserResponse>
 {
     private readonly AppDbContext _dbContext;
     private readonly UserAuthHelperService _userAuthHelperService;
@@ -36,7 +36,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, Register
                                           token.ValidTo > DateTime.UtcNow &&
                                           token.Value == hashedToken, cancellationToken);
 
-            if (mailConfirmationToken == null)
+        if (mailConfirmationToken == null)
         {
             return new RegisterUserResponse("", "", StatusCodes.Status404NotFound);
         }
@@ -50,9 +50,9 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, Register
         };
 
         var result = await _userAuthHelperService.CreateRefreshToken(user.Id);
-        
+
         user.RefreshTokens.Add(result.RefreshToken);
-        
+
         _dbContext.Users.Add(user);
         _dbContext.RefreshTokens.Add(result.RefreshToken);
         await _dbContext.SaveChangesAsync(cancellationToken);

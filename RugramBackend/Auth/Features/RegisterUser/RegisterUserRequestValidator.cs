@@ -9,6 +9,7 @@ public class RegisterUserRequestValidator : AbstractValidator<RegisterUserReques
         RuleFor(request => request.Email)
             .EmailAddress();
         RuleFor(request => request.Password)
-            .MinimumLength(6);
+            .MinimumLength(5)
+            .MaximumLength(25);
     }
 }

@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway", "Gateway\Gateway.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth", "Auth\Auth.csproj", "{4881424B-93CA-4FC0-8A72-CA306A704B9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{BD71258E-C639-4921-815B-A55EAECBFF0C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{6873F25F-EA43-4FA0-B866-35CDB241863F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,7 +22,13 @@ Global
 		{4881424B-93CA-4FC0-8A72-CA306A704B9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4881424B-93CA-4FC0-8A72-CA306A704B9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4881424B-93CA-4FC0-8A72-CA306A704B9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD71258E-C639-4921-815B-A55EAECBFF0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD71258E-C639-4921-815B-A55EAECBFF0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD71258E-C639-4921-815B-A55EAECBFF0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD71258E-C639-4921-815B-A55EAECBFF0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{4881424B-93CA-4FC0-8A72-CA306A704B9E} = {6873F25F-EA43-4FA0-B866-35CDB241863F}
+		{1AA5F3FF-9776-43E5-91CA-C42403E9F947} = {6873F25F-EA43-4FA0-B866-35CDB241863F}
 	EndGlobalSection
 EndGlobal

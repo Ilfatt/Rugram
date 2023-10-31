@@ -9,7 +9,7 @@ message RegisterUserGrpcRequest{
 message RegisterUserGrpcResponse{
   string refreshToken = 1;
   string jwtToken = 2;
-  int32 statusCode = 3;
+  int32 httpStatusCode = 3;
 }
 
 message SendEmailConfirmationGrpcRequest{
@@ -18,7 +18,7 @@ message SendEmailConfirmationGrpcRequest{
 
 
 message SendEmailConfirmationGrpcResponse{
-  int32 statusCode = 1;
+  int32 httpStatusCode = 1;
 }
 
 service AuthMicroservice{
