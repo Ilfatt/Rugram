@@ -19,7 +19,6 @@ message LoginGrpcResponse{
   int32 httpStatusCode = 1;
   string refreshToken = 2;
   string jwtToken = 3;
-  string userId = 4;
 }
 
 message RegisterUserGrpcRequest{
