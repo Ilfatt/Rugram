@@ -1,5 +1,7 @@
+using Auth.Features.Login;
 using Auth.Features.RegisterUser;
 using Auth.Features.SendEmailConfirmation;
+using Auth.Features.UpdateJwtToken;
 using AutoMapper;
 using Grpc.Core;
 using MediatR;
@@ -31,5 +33,21 @@ public class AuthGrpcService : AuthMicroservice.AuthMicroserviceBase
     {
         return _mapper.Map<SendEmailConfirmationGrpcResponse>(
             await _mediator.Send(_mapper.Map<SendEmailConfirmationRequest>(request)));
+    }
+
+    public override async Task<LoginGrpcResponse> Login(
+        LoginGrpcRequest request,
+        ServerCallContext context)
+    {
+        return _mapper.Map<LoginGrpcResponse>(
+            await _mediator.Send(_mapper.Map<LoginRequest>(request)));
+    }
+
+    public override async Task<UpdateJwtTokenGrpcResponse> UpdateJwtTokenGrpc(
+        UpdateJwtTokenGrpcRequest request,
+        ServerCallContext context)
+    {
+        return _mapper.Map<UpdateJwtTokenGrpcResponse>(
+            await _mediator.Send(_mapper.Map<UpdateJwtTokenRequest>(request)));
     }
 }

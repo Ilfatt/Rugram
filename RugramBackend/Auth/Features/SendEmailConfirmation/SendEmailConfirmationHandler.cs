@@ -3,7 +3,7 @@ using Auth.Data.Models;
 using Auth.Services.Infrastructure.EmailSenderService;
 using Infrastructure.MediatR.Contracts;
 using Microsoft.EntityFrameworkCore;
-using static Auth.Services.UserAuthHelperService;
+using static Auth.Features.UserAuthHelper;
 
 namespace Auth.Features.SendEmailConfirmation;
 
@@ -40,7 +40,7 @@ public class SendEmailConfirmationHandler
         var mailConfirmationToken = new MailConfirmationToken
         {
             Email = request.Email,
-            Value = HashSha256(token),
+            Value = token.HashSha256(),
             ValidTo = DateTime.UtcNow + TimeSpan.FromHours(int.Parse(
                 _configuration["MailConfirmationToken:LifetimeInHours"]!))
         };
@@ -53,7 +53,7 @@ public class SendEmailConfirmationHandler
 
         await _emailSenderService.SendMessageAsync(messageSubject, messageBody, request.Email);
 
-        return StatusCodes.Status202Accepted;
+        return StatusCodes.Status204NoContent;
     }
 
     private string GetEmailConfirmationHtmlMessageBody(string email, string emailConfirmationToken)

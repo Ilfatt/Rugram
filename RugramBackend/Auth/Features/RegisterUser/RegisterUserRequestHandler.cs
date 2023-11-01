@@ -1,23 +1,26 @@
 using Auth.Data;
 using Auth.Data.Models;
-using Auth.Services;
 using Infrastructure.MediatR.Contracts;
 using Microsoft.EntityFrameworkCore;
-using static Auth.Services.UserAuthHelperService;
+using Microsoft.Extensions.Caching.Distributed;
+using static Auth.Features.UserAuthHelper;
 
 namespace Auth.Features.RegisterUser;
 
-public class RegisterUserHandler : IGrpcRequestHandler<RegisterUserRequest, RegisterUserResponse>
+public class RegisterUserRequestHandler : IGrpcRequestHandler<RegisterUserRequest, RegisterUserResponse>
 {
     private readonly AppDbContext _dbContext;
-    private readonly UserAuthHelperService _userAuthHelperService;
+    private readonly IConfiguration _configuration;
+    private readonly IDistributedCache _cache;
 
-    public RegisterUserHandler(
+    public RegisterUserRequestHandler(
         AppDbContext dbContext,
-        UserAuthHelperService userAuthHelperService)
+        IConfiguration configuration,
+        IDistributedCache cache)
     {
-        _userAuthHelperService = userAuthHelperService;
         _dbContext = dbContext;
+        _configuration = configuration;
+        _cache = cache;
     }
 
     public async Task<GrpcResult<RegisterUserResponse>> Handle(
@@ -32,10 +35,9 @@ public class RegisterUserHandler : IGrpcRequestHandler<RegisterUserRequest, Regi
             return StatusCodes.Status409Conflict;
         }
 
-        var hashedToken = HashSha256(request.MailConfirmationToken);
+        var hashedToken = request.MailConfirmationToken.HashSha256();
         var mailConfirmationToken = await _dbContext.MailConfirmationTokens.AsNoTracking()
             .FirstOrDefaultAsync(token => token.Email == request.Email &&
-                                          token.ValidTo > DateTime.UtcNow &&
                                           token.Value == hashedToken, cancellationToken);
 
         if (mailConfirmationToken == null)
@@ -43,15 +45,28 @@ public class RegisterUserHandler : IGrpcRequestHandler<RegisterUserRequest, Regi
             return StatusCodes.Status404NotFound;
         }
 
+        if (mailConfirmationToken.ValidTo < DateTime.UtcNow)
+        {
+            return StatusCodes.Status403Forbidden;
+        }
+
         var user = new User
         {
             Email = request.Email,
-            Password = request.Password,
+            Password = request.Password.HashSha256(),
             RefreshTokens = new List<RefreshToken>(),
             Role = Role.User,
         };
 
-        var result = await _userAuthHelperService.CreateRefreshToken(user.Id);
+        var result = CreateRefreshToken(_configuration, user.Id);
+
+        await PutInCacheRefreshToken(
+            _configuration,
+            _cache,
+            result.RefreshToken.Value,
+            result.RefreshToken.ValidTo,
+            user.Id,
+            cancellationToken);
 
         user.RefreshTokens.Add(result.RefreshToken);
 
@@ -59,10 +74,10 @@ public class RegisterUserHandler : IGrpcRequestHandler<RegisterUserRequest, Regi
         _dbContext.RefreshTokens.Add(result.RefreshToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var jwtToken = _userAuthHelperService.GenerateJwtToken(user.Id, user.Role);
+        var jwtToken = GenerateJwtToken(_configuration, user.Id, user.Role);
 
         return new RegisterUserResponse(
-            jwtToken,
-            result.UnhashedTokenValue);
+            result.UnhashedTokenValue,
+            jwtToken);
     }
 }

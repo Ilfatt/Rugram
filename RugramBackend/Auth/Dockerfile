@@ -6,7 +6,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["Auth/Auth.csproj", "Auth/"]
-COPY ["Contracts/Contracts.csproj", "Contracts/"]
+COPY ["Infrastructure.MediatR/Infrastructure.MediatR.csproj", "Infrastructure.MediatR/"]
 RUN dotnet restore "Auth/Auth.csproj"
 COPY . .
 WORKDIR "/src/Auth"

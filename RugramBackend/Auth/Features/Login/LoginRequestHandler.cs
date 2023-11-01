@@ -1,22 +1,25 @@
 using Auth.Data;
-using Auth.Services;
 using Infrastructure.MediatR.Contracts;
 using Microsoft.EntityFrameworkCore;
-using static Auth.Services.UserAuthHelperService;
+using Microsoft.Extensions.Caching.Distributed;
+using static Auth.Features.UserAuthHelper;
 
 namespace Auth.Features.Login;
 
 public class LoginRequestHandler : IGrpcRequestHandler<LoginRequest, LoginResponse>
 {
     private readonly AppDbContext _dbContext;
-    private readonly UserAuthHelperService _userAuthHelperService;
+    private readonly IConfiguration _configuration;
+    private readonly IDistributedCache _cache;
 
     public LoginRequestHandler(
-        AppDbContext dbContext, 
-        UserAuthHelperService userAuthHelperService)
+        AppDbContext dbContext,
+        IConfiguration configuration,
+        IDistributedCache cache)
     {
+        _configuration = configuration;
+        _cache = cache;
         _dbContext = dbContext;
-        _userAuthHelperService = userAuthHelperService;
     }
 
     public async Task<GrpcResult<LoginResponse>> Handle(LoginRequest request, CancellationToken cancellationToken)
@@ -26,14 +29,22 @@ public class LoginRequestHandler : IGrpcRequestHandler<LoginRequest, LoginRespon
             .FirstOrDefaultAsync(user => user.Email == request.Email, cancellationToken);
 
         if (user == null) return 404;
-        if (user.Password != HashSha256(request.Password)) return 403;
+        if (user.Password != request.Password.HashSha256()) return 403;
 
-        var jwtToken = _userAuthHelperService.GenerateJwtToken(user.Id, user.Role);
-        var result = await _userAuthHelperService.CreateRefreshToken(user.Id);
+        var jwtToken = GenerateJwtToken(_configuration, user.Id, user.Role);
+        var result = CreateRefreshToken(_configuration, user.Id);
+
+        await PutInCacheRefreshToken(
+            _configuration,
+            _cache,
+            result.RefreshToken.Value,
+            result.RefreshToken.ValidTo,
+            user.Id,
+            cancellationToken);
 
         _dbContext.RefreshTokens.Add(result.RefreshToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return new LoginResponse(jwtToken,result.UnhashedTokenValue);
+        return new LoginResponse(jwtToken, result.UnhashedTokenValue);
     }
 }

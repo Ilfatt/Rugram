@@ -1,5 +1,6 @@
 using AutoMapper;
 using Gateway.Contracts;
+using Swashbuckle.AspNetCore.Annotations;
 using static AuthMicroservice;
 
 namespace Gateway.Endpoints.AuthMicroservice.SendEmailConfirmation;
@@ -15,18 +16,26 @@ public class SendEmailConfirmationEndpoint : IEndpoint
             {
                 var response = await authClient.SendEmailConfirmationAsync(
                     mapper.Map<SendEmailConfirmationGrpcRequest>(request));
-
+                
                 return response.HttpStatusCode switch
                 {
-                    202 => Results.Accepted(),
+                    204 => Results.NoContent(),
                     400 => Results.BadRequest(),
-                    404 => Results.NotFound(),
                     409 => Results.Conflict(),
                     _ => Results.Problem(statusCode: 500)
                 };
             })
             .AllowAnonymous()
             .WithOpenApi()
-            .WithTags("auth");
+            .WithTags("Auth")
+            .WithSummary("Скинуть на почту письмо для подтверждения почты")
+            .WithDescription("Доступ: все")
+            .WithMetadata(
+                new SwaggerResponseAttribute(StatusCodes.Status500InternalServerError),
+                new SwaggerResponseAttribute(StatusCodes.Status204NoContent, "OK"),
+                new SwaggerResponseAttribute(StatusCodes.Status400BadRequest,
+                    "Не пройдена валидация. email должен быть валиден. "),
+                new SwaggerResponseAttribute(StatusCodes.Status409Conflict,
+                    "Пользователь с таким email уже существует. "));
     }
 }

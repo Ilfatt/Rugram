@@ -1,7 +1,6 @@
 using Auth.AutoMapper;
 using Auth.Extensions;
 using Auth.Grpc;
-using Auth.Services;
 using Auth.Services.BackgroundServices;
 using Auth.Services.Infrastructure.EmailSenderService;
 using FluentValidation;
@@ -27,7 +26,6 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddGrpc();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 
-builder.Services.AddScoped<UserAuthHelperService>();
 builder.Services.AddSingleton<IEmailSenderService, EmailSenderService>();
 
 builder.Services.AddHostedService<DeleteOutdatedRefreshTokens>();
