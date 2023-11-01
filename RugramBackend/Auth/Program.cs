@@ -27,9 +27,7 @@ builder.ConfigurePostgresqlConnection();
 builder.ConfigureRedisConnection();
 
 builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssemblyContaining<Program>());
-builder.Services.AddBehaviorsReturningGrpcResultFromAssembly(
-    typeof(Program).Assembly,
-    typeof(ValidationBehavior<,>));
+builder.Services.AddValidationBehaviorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddGrpc();
 builder.Services.AddAutoMapper(typeof(MapperProfile));

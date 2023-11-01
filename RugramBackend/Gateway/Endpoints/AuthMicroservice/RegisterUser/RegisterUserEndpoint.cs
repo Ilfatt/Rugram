@@ -19,6 +19,7 @@ public class RegisterUserEndpoint : IEndpoint
                 return response.HttpStatusCode switch
                 {
                     200 => Results.Ok(mapper.Map<RegisterUserResponse>(response)),
+                    400 => Results.BadRequest(),
                     404 => Results.NotFound(),
                     409 => Results.Conflict(),
                     _ => Results.Problem(statusCode: 500)
