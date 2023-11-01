@@ -1,7 +1,7 @@
 using Auth.Features.RegisterUser;
 using Auth.Features.SendEmailConfirmation;
 using AutoMapper;
-using Contracts;
+using Infrastructure.MediatR.Contracts;
 
 namespace Auth.AutoMapper;
 

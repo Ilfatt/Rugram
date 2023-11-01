@@ -1,7 +1,7 @@
 using Auth.Data;
 using Auth.Data.Models;
 using Auth.Services.Infrastructure.EmailSenderService;
-using Contracts;
+using Infrastructure.MediatR.Contracts;
 using Microsoft.EntityFrameworkCore;
 using static Auth.Services.UserAuthHelperService;
 

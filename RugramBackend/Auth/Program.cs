@@ -1,10 +1,16 @@
+using Auth;
 using Auth.AutoMapper;
 using Auth.Extensions;
+using Auth.Features.SendEmailConfirmation;
 using Auth.Grpc;
 using Auth.Services;
 using Auth.Services.BackgroundServices;
 using Auth.Services.Infrastructure.EmailSenderService;
-using MediatR.Extensions.FluentValidation.AspNetCore;
+using Infrastructure.MediatR;
+using FluentValidation;
+using Infrastructure.MediatR.Behaviors;
+using Infrastructure.MediatR.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +27,10 @@ builder.ConfigurePostgresqlConnection();
 builder.ConfigureRedisConnection();
 
 builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssemblyContaining<Program>());
-builder.Services.AddFluentValidation(new[] { typeof(Program).Assembly });
+builder.Services.AddBehaviorsReturningGrpcResultFromAssembly(
+    typeof(Program).Assembly,
+    typeof(ValidationBehavior<,>));
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddGrpc();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 

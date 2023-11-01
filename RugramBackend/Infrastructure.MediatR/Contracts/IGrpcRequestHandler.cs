@@ -1,8 +1,8 @@
 using MediatR;
 
-namespace Contracts;
+namespace Infrastructure.MediatR.Contracts;
 
 public interface IGrpcRequestHandler<in TRequest, TResponse> : IRequestHandler<TRequest, GrpcResult<TResponse>>
-    where TRequest : IGrpcRequest<GrpcResult<TResponse>>
+    where TRequest : IGrpcRequest<TResponse>
 {
 }

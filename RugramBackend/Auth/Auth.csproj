@@ -10,8 +10,8 @@
 
     <ItemGroup>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.0" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.58.0" />
-        <PackageReference Include="MediatR.Extensions.FluentValidation.AspNetCore" Version="5.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.12" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.13">
             <PrivateAssets>all</PrivateAssets>
@@ -28,18 +28,17 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Features\Login\" />
       <Folder Include="Features\UpdateRefreshToken\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Contracts\Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Infrastructure.MediatR\Infrastructure.MediatR.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-namespace Contracts;
+namespace Infrastructure.MediatR.Contracts;
 
 public class GrpcResult<TBody>
 {
