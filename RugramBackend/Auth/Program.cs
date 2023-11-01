@@ -1,16 +1,11 @@
-using Auth;
 using Auth.AutoMapper;
 using Auth.Extensions;
-using Auth.Features.SendEmailConfirmation;
 using Auth.Grpc;
 using Auth.Services;
 using Auth.Services.BackgroundServices;
 using Auth.Services.Infrastructure.EmailSenderService;
-using Infrastructure.MediatR;
 using FluentValidation;
-using Infrastructure.MediatR.Behaviors;
 using Infrastructure.MediatR.Extensions;
-using MediatR;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);

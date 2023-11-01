@@ -20,11 +20,13 @@ public static class ServiceCollectionExtensions
     /// <param name="assembly">Assembly</param>
     /// <param name="behaviorType">реализация бехейвора</param>
     /// <param name="constraintType">Маркерный интерфейс</param>
+    /// <param name="behaviorLifetime">Время жизни бехейвора</param>
     public static void AddBehaviorsReturningGrpcResultFromAssembly(
         this IServiceCollection serviceCollection,
         Assembly assembly,
         Type behaviorType,
-        Type? constraintType = null)
+        Type? constraintType = null,
+        ServiceLifetime behaviorLifetime = ServiceLifetime.Transient)
     {
         var requests = assembly.GetTypes()
             .Where(type => constraintType == null || type.IsAssignableTo(constraintType))
@@ -38,9 +40,14 @@ public static class ServiceCollectionExtensions
 
         for (var i = 0; i < requests.Count; i++)
         {
-            serviceCollection.AddTransient(
-                PipelineBehaviorType.MakeGenericType(requests[i], ResultType.MakeGenericType(responses[i])),
-                behaviorType.MakeGenericType(requests[i], responses[i]));
+            var genericResultType = ResultType.MakeGenericType(responses[i]);
+            var genericServiceType = PipelineBehaviorType.MakeGenericType(requests[i], genericResultType);
+            var genericServiceImplementationType = behaviorType.MakeGenericType(requests[i], responses[i]);
+
+            serviceCollection.Add(new ServiceDescriptor(
+                genericServiceType,
+                genericServiceImplementationType,
+                behaviorLifetime));
         }
     }
 
@@ -66,9 +73,14 @@ public static class ServiceCollectionExtensions
 
         for (var i = 0; i < requests.Count; i++)
         {
+            var validationBehaviorType = typeof(ValidationBehavior<,>);
+            var genericResultType = ResultType.MakeGenericType(responses[i]);
+            var genericPipelineBehaviorType = PipelineBehaviorType.MakeGenericType(requests[i], genericResultType);
+            var genericValidationBehaviorType = validationBehaviorType.MakeGenericType(requests[i], responses[i]);
+
             serviceCollection.AddTransient(
-                PipelineBehaviorType.MakeGenericType(requests[i], ResultType.MakeGenericType(responses[i])),
-                typeof(ValidationBehavior<,>).MakeGenericType(requests[i], responses[i]));
+                genericPipelineBehaviorType,
+                genericValidationBehaviorType);
         }
     }
 
