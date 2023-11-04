@@ -59,7 +59,7 @@ services:
           - auth
   RedisAuth:
     container_name: RedisAuth
-    image: redis:6.2-alpine
+    image: redis:7.2.3-alpine3.18
     restart: always
     command: redis-server --save 20 1 --loglevel warning --requirepass ${AuthRedisPassword}
     ports:
@@ -70,13 +70,13 @@ services:
           - redisAuth
   DbAuth:
     container_name: DbAuth
-    image: postgres:alpine
+    image: postgres:16.0-alpine3.18
     restart: always
     ports:
       - "3003:5432"
     environment:
       POSTGRES_USER: dev
-      POSTGRES_PASSWORD: 111
+      POSTGRES_PASSWORD: ${DbAuthPassword}
       POSTGRES_DB: RugramAuth
     networks:
       rugram:

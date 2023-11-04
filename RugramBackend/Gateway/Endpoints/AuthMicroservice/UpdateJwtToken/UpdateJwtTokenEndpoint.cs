@@ -16,7 +16,7 @@ public class UpdateJwtTokenEndpoint : IEndpoint
             {
                 var response = await authClient.UpdateJwtTokenGrpcAsync(
                     mapper.Map<UpdateJwtTokenGrpcRequest>(request));
-                
+
                 return response.HttpStatusCode switch
                 {
                     200 => Results.Ok(mapper.Map<UpdateJwtTokenResponse>(response)),

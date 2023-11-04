@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Auth.Data.Models;
-using Auth.Extensions;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.IdentityModel.Tokens;
 
@@ -52,7 +51,7 @@ public static class UserAuthHelper
             });
     }
 
-    
+
     public static string GenerateJwtToken(
         IConfiguration configuration,
         Guid userId,
@@ -80,7 +79,7 @@ public static class UserAuthHelper
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        
+
         return tokenHandler.WriteToken(token);
     }
 
@@ -99,5 +98,10 @@ public static class UserAuthHelper
         var hashedBytes = SHA256.HashData(inputBytes);
 
         return Convert.ToBase64String(hashedBytes);
+    }
+
+    private static int GetSlidingExpirationForRefreshToken(this IConfiguration configuration)
+    {
+        return int.Parse(configuration["Cache:SlidingExpirationForRefreshTokenInMinutes"]!);
     }
 }

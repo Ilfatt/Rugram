@@ -2,12 +2,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Auth.Data;
 using Auth.Data.Models;
-using Auth.Extensions;
 using Infrastructure.MediatR.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using static Auth.Features.UserAuthHelper;
-using InvalidOperationException = System.InvalidOperationException;
 
 namespace Auth.Features.UpdateJwtToken;
 
@@ -34,7 +32,7 @@ public class UpdateJwtTokenRequestHandler : IGrpcRequestHandler<UpdateJwtTokenRe
         var handler = new JwtSecurityTokenHandler();
 
         if (!handler.CanReadToken(request.OldJwtToken)) return 400;
-        
+
         var claims = handler.ReadJwtToken(request.OldJwtToken).Claims.ToList();
         var roleClaimContains = claims.Any(claim => claim.Type == nameof(ClaimTypes.Role));
         var idClaimContains = claims.Any(claim => claim.Type == nameof(ClaimTypes.NameIdentifier));
@@ -43,7 +41,7 @@ public class UpdateJwtTokenRequestHandler : IGrpcRequestHandler<UpdateJwtTokenRe
 
         var roleClaim = claims.First(claim => claim.Type == nameof(ClaimTypes.Role));
         var userIdClaim = claims.First(claim => claim.Type == nameof(ClaimTypes.NameIdentifier));
-        
+
         var role = Enum.Parse<Role>(roleClaim!.Value);
         if (!Guid.TryParse(userIdClaim.Value, out var userId)) return 400;
 
