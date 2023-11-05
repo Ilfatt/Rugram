@@ -5,7 +5,14 @@
   <div class="triangle"></div>
   <div class="outline-cube1"></div>
   <div class="outline-cube2"></div>
-  {{component}}
 </div>
+
 <div class="title">Rugram</div>
+
+<div *ngIf="showRegister">
+  <app-register></app-register>
+</div>
+<div *ngIf="showLogin">
+  <app-login></app-login>
+</div>
 

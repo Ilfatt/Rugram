@@ -6,5 +6,6 @@ import {Component} from '@angular/core';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent {
-  component: string = "<app-login></app-login>"
+  showLogin: boolean = true;
+  showRegister: boolean = false;
 }
