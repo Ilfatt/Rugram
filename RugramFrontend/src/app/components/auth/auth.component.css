@@ -3,10 +3,11 @@
   height: 100%;
   background-color: #000000;
   position: fixed;
-  animation: move-left 1.5s ease-in-out 2.3s forwards;
+  animation: move-left 1.5s ease-in-out 1.5s forwards;
   animation-iteration-count: 1;
   margin-top: 0;
   margin-left: 0;
+  z-index: 1;
 }
 
 .login:after {
@@ -15,34 +16,34 @@
   height: 0;
   border-top: 50vh solid transparent;
   border-bottom: 50vh solid transparent;
-  border-left: 150px solid #000000;
+  border-left: 20vh solid #000000;
   position: absolute;
   left: 100%;
-  z-index: -1;
+  z-index: 0;
 }
 
 .cube {
   content: "";
-  height: 90px;
-  width: 90px;
+  height: 12.3vh;
+  width: 12.3vh;
   background-color: #894dc2;
-  position: fixed;
-  margin-left: 78%;
-  margin-top: 44%;
+  position: absolute;
+  left: 90.1%;
+  top: 87.7%;
   z-index: 2;
 }
 
 .triangle {
   content: "";
-  margin-left: 1067px;
-  margin-top: 644px;
+  left: 83%;
+  top: 86.8%;
   width: 0;
   height: 0;
-  border-left: 50px solid transparent;
-  border-right: 50px solid transparent;
-  border-bottom: 80px solid #32c98f;
+  border-left: 7vh solid transparent;
+  border-right: 7vh solid transparent;
+  border-bottom: 11vh solid #32c98f;
   position: absolute;
-  rotate: z 83grad;
+  rotate: 85grad;
   z-index: 2;
 }
 
@@ -87,6 +88,7 @@
   position: fixed;
   margin-top: 225px;
   margin-left: 65px;
+  animation: invisibility 3s ease-in-out 3s forwards;;
 }
 
 .title {
@@ -97,6 +99,7 @@
   position: fixed;
   margin-top: 95px;
   margin-left: 65px;
+  z-index: 3;
 }
 
 @keyframes move-left {
@@ -105,5 +108,14 @@
   }
   100% {
     left: -60%;
+  }
+}
+
+@keyframes invisibility {
+  0% {
+    visibility: visible;
+  }
+  100% {
+    visibility: hidden;
   }
 }

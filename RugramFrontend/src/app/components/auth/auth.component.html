@@ -10,9 +10,12 @@
 <div class="title">Rugram</div>
 
 <div *ngIf="showRegister">
-  <app-register></app-register>
+  <app-register (onPressReturn)="onPressReturn()" (onPressNext)="onPressNext()"></app-register>
 </div>
 <div *ngIf="showLogin">
-  <app-login></app-login>
+  <app-login (onPressRegister)="onPressRegister()"></app-login>
+</div>
+<div *ngIf="showRegisterEnd">
+  <app-register-end></app-register-end>
 </div>
 
