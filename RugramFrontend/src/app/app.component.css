@@ -1,0 +1,50 @@
+.login {
+  width: 86.5%;
+  height: 800px;
+  background-color: #000000;
+  position: fixed;
+  animation: move-left 1.5s ease-in-out 2.3s forwards;
+  animation-iteration-count: 1;
+  margin-top: 0;
+  margin-left: 0;
+}
+
+.login:after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 50vh solid transparent;
+  border-bottom: 50vh solid transparent;
+  border-left: 150px solid #000000;
+  position: absolute;
+  left: 100%;
+}
+
+.description{
+  color: white;
+  font-family: Inter, sans-serif;
+  font-size: 25px;
+  font-weight: bold;
+  position: fixed;
+  margin-top: 250px;
+  margin-left: 65px;
+}
+
+.title {
+  color: white;
+  font-family: Inter, sans-serif;
+  font-size: 85px;
+  font-weight: bold;
+  position: fixed;
+  margin-top: 95px;
+  margin-left: 65px;
+}
+
+@keyframes move-left {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: -60%;
+  }
+}
