@@ -9,6 +9,8 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.ConfigureEndpointDefaults(options => options.Protocols = HttpProtocols.Http2);
 });
 
+builder.Services.AddCors();
+
 builder.Configuration.AddEnvironmentVariables();
 builder.Configuration.AddUserSecrets<Program>();
 
@@ -33,5 +35,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.RouteEndpoints();
+
+app.UseCors(option =>
+{
+    option.AllowAnyHeader();
+    option.AllowAnyHeader();
+    option.AllowAnyMethod();
+});
 
 app.Run();
