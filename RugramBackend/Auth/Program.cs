@@ -35,7 +35,6 @@ var app = builder.Build();
 
 await app.MigrateDb();
 
-
 app.MapGrpcService<AuthGrpcService>();
 
 app.Run();
