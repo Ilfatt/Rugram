@@ -25,6 +25,7 @@ message RegisterUserGrpcRequest{
   string mailConfirmationToken = 1;
   string email = 2;
   string password = 3;
+  string profileName = 4;
 }
 
 message RegisterUserGrpcResponse{

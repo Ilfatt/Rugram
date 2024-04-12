@@ -4,31 +4,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Services.BackgroundServices;
 
-public class DeleteOutdatedMailConfirmationTokens : BackgroundService
+public class DeleteOutdatedMailConfirmationTokens(IServiceProvider serviceProvider) : BackgroundService
 {
-    private readonly IServiceProvider _serviceProvider;
+	protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+	{
+		const string command = $"DELETE FROM \"{nameof(AppDbContext.MailConfirmationTokens)}\" AS t " +
+		                       $"WHERE t.\"{nameof(MailConfirmationToken.ValidTo)}\" < now()";
 
-    public DeleteOutdatedMailConfirmationTokens(
-        IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
+		while (!cancellationToken.IsCancellationRequested)
+		{
+			await using var scope = serviceProvider.CreateAsyncScope();
+			await using var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
-    {
-        const string command = $"DELETE FROM \"{nameof(AppDbContext.MailConfirmationTokens)}\" AS t " +
-                               $"WHERE t.\"{nameof(MailConfirmationToken.ValidTo)}\" < now()";
+			await dbContext.Database.ExecuteSqlRawAsync(
+				command,
+				cancellationToken: cancellationToken);
 
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            await using var scope = _serviceProvider.CreateAsyncScope();
-            await using var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-            await dbContext.Database.ExecuteSqlRawAsync(
-                command,
-                cancellationToken: cancellationToken);
-
-            await Task.Delay(1000 * 60 * 60, cancellationToken);
-        }
-    }
+			await Task.Delay(1000 * 60 * 60, cancellationToken);
+		}
+	}
 }

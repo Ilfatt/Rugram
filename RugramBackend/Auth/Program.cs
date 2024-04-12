@@ -11,11 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
-    serverOptions.ConfigureEndpointDefaults(options => options.Protocols = HttpProtocols.Http2);
+	serverOptions.ConfigureEndpointDefaults(options => options.Protocols = HttpProtocols.Http2);
 });
 
 builder.Configuration.AddEnvironmentVariables();
-builder.Configuration.AddUserSecrets<Program>();
 
 builder.ConfigurePostgresqlConnection();
 builder.ConfigureRedisConnection();
@@ -33,7 +32,7 @@ builder.Services.AddHostedService<DeleteOutdatedMailConfirmationTokens>();
 
 var app = builder.Build();
 
-await app.MigrateDb();
+await app.MigrateDbAsync();
 
 app.MapGrpcService<AuthGrpcService>();
 

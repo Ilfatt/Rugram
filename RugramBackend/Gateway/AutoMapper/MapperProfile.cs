@@ -8,17 +8,17 @@ namespace Gateway.AutoMapper;
 
 public class MapperProfile : Profile
 {
-    public MapperProfile()
-    {
-        CreateMap<RegisterUserRequest, RegisterUserGrpcRequest>();
-        CreateMap<RegisterUserGrpcResponse, RegisterUserResponse>();
+	public MapperProfile()
+	{
+		CreateMap<RegisterUserRequest, RegisterUserGrpcRequest>();
+		CreateMap<RegisterUserGrpcResponse, RegisterUserResponse>();
 
-        CreateMap<SendEmailConfirmationRequest, SendEmailConfirmationGrpcRequest>();
+		CreateMap<SendEmailConfirmationRequest, SendEmailConfirmationGrpcRequest>();
 
-        CreateMap<LoginRequest, LoginGrpcRequest>();
-        CreateMap<LoginGrpcResponse, LoginResponse>();
+		CreateMap<LoginRequest, LoginGrpcRequest>();
+		CreateMap<LoginGrpcResponse, LoginResponse>();
 
-        CreateMap<UpdateJwtTokenRequest, UpdateJwtTokenGrpcRequest>();
-        CreateMap<UpdateJwtTokenGrpcResponse, UpdateJwtTokenResponse>();
-    }
+		CreateMap<UpdateJwtTokenRequest, UpdateJwtTokenGrpcRequest>();
+		CreateMap<UpdateJwtTokenGrpcResponse, UpdateJwtTokenResponse>();
+	}
 }

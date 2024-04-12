@@ -8,46 +8,37 @@ using MediatR;
 
 namespace Auth.Grpc;
 
-public class AuthGrpcService : AuthMicroservice.AuthMicroserviceBase
+public class AuthGrpcService(IMediator mediator, IMapper mapper) : AuthMicroservice.AuthMicroserviceBase
 {
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
+	public override async Task<RegisterUserGrpcResponse> RegisterUser(
+		RegisterUserGrpcRequest request,
+		ServerCallContext context)
+	{
+		return mapper.Map<RegisterUserGrpcResponse>(
+			await mediator.Send(mapper.Map<RegisterUserRequest>(request)));
+	}
 
-    public AuthGrpcService(IMediator mediator, IMapper mapper)
-    {
-        _mediator = mediator;
-        _mapper = mapper;
-    }
+	public override async Task<SendEmailConfirmationGrpcResponse> SendEmailConfirmation(
+		SendEmailConfirmationGrpcRequest request,
+		ServerCallContext context)
+	{
+		return mapper.Map<SendEmailConfirmationGrpcResponse>(
+			await mediator.Send(mapper.Map<SendEmailConfirmationRequest>(request)));
+	}
 
-    public override async Task<RegisterUserGrpcResponse> RegisterUser(
-        RegisterUserGrpcRequest request,
-        ServerCallContext context)
-    {
-        return _mapper.Map<RegisterUserGrpcResponse>(
-            await _mediator.Send(_mapper.Map<RegisterUserRequest>(request)));
-    }
+	public override async Task<LoginGrpcResponse> Login(
+		LoginGrpcRequest request,
+		ServerCallContext context)
+	{
+		return mapper.Map<LoginGrpcResponse>(
+			await mediator.Send(mapper.Map<LoginRequest>(request)));
+	}
 
-    public override async Task<SendEmailConfirmationGrpcResponse> SendEmailConfirmation(
-        SendEmailConfirmationGrpcRequest request,
-        ServerCallContext context)
-    {
-        return _mapper.Map<SendEmailConfirmationGrpcResponse>(
-            await _mediator.Send(_mapper.Map<SendEmailConfirmationRequest>(request)));
-    }
-
-    public override async Task<LoginGrpcResponse> Login(
-        LoginGrpcRequest request,
-        ServerCallContext context)
-    {
-        return _mapper.Map<LoginGrpcResponse>(
-            await _mediator.Send(_mapper.Map<LoginRequest>(request)));
-    }
-
-    public override async Task<UpdateJwtTokenGrpcResponse> UpdateJwtTokenGrpc(
-        UpdateJwtTokenGrpcRequest request,
-        ServerCallContext context)
-    {
-        return _mapper.Map<UpdateJwtTokenGrpcResponse>(
-            await _mediator.Send(_mapper.Map<UpdateJwtTokenRequest>(request)));
-    }
+	public override async Task<UpdateJwtTokenGrpcResponse> UpdateJwtTokenGrpc(
+		UpdateJwtTokenGrpcRequest request,
+		ServerCallContext context)
+	{
+		return mapper.Map<UpdateJwtTokenGrpcResponse>(
+			await mediator.Send(mapper.Map<UpdateJwtTokenRequest>(request)));
+	}
 }

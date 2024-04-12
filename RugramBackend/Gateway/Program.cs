@@ -6,13 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
-    serverOptions.ConfigureEndpointDefaults(options => options.Protocols = HttpProtocols.Http2);
+	serverOptions.ConfigureEndpointDefaults(options => options.Protocols = HttpProtocols.Http2);
 });
 
 builder.Services.AddCors();
 
 builder.Configuration.AddEnvironmentVariables();
-builder.Configuration.AddUserSecrets<Program>();
 
 builder.AddSwagger();
 builder.AddAuthorization();
@@ -30,17 +29,17 @@ app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 
 app.RouteEndpoints();
 
 app.UseCors(option =>
 {
-    option.AllowAnyHeader();
-    option.AllowAnyHeader();
-    option.AllowAnyMethod();
+	option.AllowAnyHeader();
+	option.AllowAnyMethod();
+	option.AllowAnyOrigin();
 });
 
 app.Run();
