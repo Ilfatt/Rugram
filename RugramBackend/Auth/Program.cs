@@ -25,6 +25,7 @@ builder.Services.AddValidationBehaviorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddGrpc();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSingleton<IEmailSenderService, EmailSenderService>();
 

@@ -11,7 +11,7 @@ message SubscribeGrpcResponse{
 
 message UnsubscribeGrpcRequest{
   string SubscriberId = 1;
-  int32 IdOfProfileUnsubscribedTo = 2;
+  string IdOfProfileUnsubscribedTo = 2;
 
 }
 
