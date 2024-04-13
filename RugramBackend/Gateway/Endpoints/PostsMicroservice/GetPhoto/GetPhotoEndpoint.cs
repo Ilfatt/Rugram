@@ -29,7 +29,6 @@ public class GetPhotoEndpoint : IEndpoint
 				{
 					200 => Results.Ok(mapper.Map<GetPhotoResponse>(response)),
 					400 => Results.BadRequest(),
-					403 => Results.Forbid(),
 					404 => Results.NotFound(),
 					_ => Results.Problem(statusCode: 500)
 				};
@@ -49,6 +48,9 @@ public class GetPhotoEndpoint : IEndpoint
 				new SwaggerResponseAttribute(
 					StatusCodes.Status404NotFound,
 					"Файл не найден"),
+				new SwaggerResponseAttribute(
+					StatusCodes.Status400BadRequest,
+					"Один из id имеет неккоректный формат"),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status401Unauthorized,
 					"Пользователь не авторизован"),
