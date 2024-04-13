@@ -14,5 +14,12 @@ public static class GrpcConfiguration
 			                       ?? throw new ApplicationException(
 				                       "Enviroment variable Microservices:AuthAddress not found "));
 		});
+		
+		builder.Services.AddGrpcClient<ProfileMicroservice.ProfileMicroserviceClient>(conf =>
+		{
+			conf.Address = new Uri(builder.Configuration["Microservices:ProfileAddress"]
+			                       ?? throw new ApplicationException(
+				                       "Enviroment variable Microservices:AuthAddress not found "));
+		});
 	}
 }
