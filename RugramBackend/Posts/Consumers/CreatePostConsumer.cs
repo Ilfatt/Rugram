@@ -16,7 +16,7 @@ public class CreatePostConsumer(AppDbContext appDbContext, IS3StorageService s3S
 
 		var post = new Post(context.Message.UserId, context.Message.PostId, context.Message.Description);
 		var photos = context.Message.Photos
-			.Select(x => new Photo(context.Message.PostId))
+			.Select(_ => new Photo(context.Message.PostId))
 			.ToList();
 		post.Photos = photos;
 
@@ -34,11 +34,13 @@ public class CreatePostConsumer(AppDbContext appDbContext, IS3StorageService s3S
 			for (var index = 0; index < photos.Count; index++)
 			{
 				await s3StorageService.PutFileInBucketAsync(
-					context.Message.Photos[index].File,
+					new MemoryStream(context.Message.Photos[index].File),
 					photos[index].Id,
 					context.Message.UserId);
 				indexSaver = index;
 			}
+
+			await transaction.CommitAsync(context.CancellationToken);
 		}
 		catch (Exception)
 		{

@@ -13,6 +13,7 @@ public static class RabbitMqConfiguration
 		{
 			config.AddConsumer<CreateBucketConsumer>();
 			config.AddConsumer<DeleteBucketConsumer>();
+			config.AddConsumer<CreatePostConsumer>();
 
 			config.UsingRabbitMq((ctx, cfg) =>
 			{

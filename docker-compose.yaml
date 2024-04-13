@@ -22,10 +22,13 @@ services:
       - AuthOptions__AccessTokenLifetimeInMinutes=2
       - Microservices__AuthAddress=http://auth:80
       - Microservices__ProfileAddress=http://profile:80
+      - Microservices__PostAddress=http://post:80
       - RabbitMqConfig__Username=${RabbitMqUser}
       - RabbitMqConfig__Password=${RabbitMqPassword}
       - RabbitMqConfig__Hostname=rabbitMq
       - RabbitMqConfig__Port=5672
+    depends_on:
+      - RabbitMq
     networks:
       rugram:
         aliases:
@@ -176,10 +179,11 @@ services:
         aliases:
           - postMinioS3
   RabbitMq:
-    image: rabbitmq:3-alpine
+    image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
       - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: ${RabbitMqUser}
       RABBITMQ_DEFAULT_PASS: ${RabbitMqPassword}
