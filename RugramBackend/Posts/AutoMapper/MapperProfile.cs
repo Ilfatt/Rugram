@@ -15,9 +15,9 @@ public class MapperProfile : Profile
 			.ForMember(x => x.PhotoId, x =>
 				x.MapFrom(request => new Guid(request.PhotoId)));
 		CreateMap<GrpcResult<GetPhotoResponse>, GetPhotoGrpcResponse>()
-			.ForMember(x => x.File,
-				x => x.MapFrom(x => 
-					x.Body != null ? ByteString.CopyFrom(x.Body.File) : ByteString.Empty));
+			.ForMember(x => x.Photo,
+				x => x.MapFrom(result => 
+					result.Body != null ? ByteString.CopyFrom(result.Body.Photo) : ByteString.Empty));
 	}
 
 	private void CreateMapFromResult<TSource, TDestination>()

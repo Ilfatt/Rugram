@@ -6,7 +6,7 @@ message GetPhotoGrpcRequest{
 }
 
 message GetPhotoGrpcResponse{
-  bytes file = 1;
+  bytes photo = 1;
   int32 httpStatusCode = 2;
 }
 

@@ -24,7 +24,7 @@ public class MapperProfile : Profile
 		CreateMap<UpdateJwtTokenGrpcResponse, UpdateJwtTokenResponse>();
 
 		CreateMap<GetPhotoGrpcResponse, GetPhotoResponse>()
-			.ForMember(x => x.File, x =>
-				x.MapFrom(response => response.File.ToArray()));
+			.ForMember(x => x.Photo, x =>
+				x.MapFrom(response => response.Photo.ToArray()));
 	}
 }
