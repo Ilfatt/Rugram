@@ -21,19 +21,19 @@ public class UpdateJwtTokenRequestHandler(
 	{
 		var handler = new JwtSecurityTokenHandler();
 
-		if (!handler.CanReadToken(request.OldJwtToken)) return 400;
+		if (!handler.CanReadToken(request.OldJwtToken)) return StatusCodes.Status400BadRequest;
 
 		var claims = handler.ReadJwtToken(request.OldJwtToken).Claims.ToList();
 		var roleClaimContains = claims.Any(claim => claim.Type == nameof(ClaimTypes.Role));
 		var idClaimContains = claims.Any(claim => claim.Type == nameof(ClaimTypes.NameIdentifier));
 
-		if (!roleClaimContains || !idClaimContains) return 400;
+		if (!roleClaimContains || !idClaimContains) return StatusCodes.Status400BadRequest;
 
 		var roleClaim = claims.First(claim => claim.Type == nameof(ClaimTypes.Role));
 		var userIdClaim = claims.First(claim => claim.Type == nameof(ClaimTypes.NameIdentifier));
 
 		var role = Enum.Parse<Role>(roleClaim!.Value);
-		if (!Guid.TryParse(userIdClaim.Value, out var userId)) return 400;
+		if (!Guid.TryParse(userIdClaim.Value, out var userId)) return StatusCodes.Status400BadRequest;
 
 		var hashedRefreshToken = request.RefreshToken.HashSha256();
 		var tokenFromCache = await cache.GetStringAsync(userId.ToString(), cancellationToken);
@@ -47,10 +47,10 @@ public class UpdateJwtTokenRequestHandler(
 				.Select(token => new { token.Value, token.ValidTo })
 				.FirstOrDefaultAsync(cancellationToken);
 
-			if (tokenFromDb == null) return 404;
-			if (tokenFromDb.ValidTo < DateTime.UtcNow) return 403;
+			if (tokenFromDb == null) return StatusCodes.Status404NotFound;
+			if (tokenFromDb.ValidTo < DateTime.UtcNow) return StatusCodes.Status403Forbidden;
 
-			await PutInCacheRefreshToken(
+			await PutInCacheRefreshTokenAsync(
 				configuration,
 				cache,
 				tokenFromDb.Value,

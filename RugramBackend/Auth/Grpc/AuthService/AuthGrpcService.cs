@@ -6,7 +6,7 @@ using AutoMapper;
 using Grpc.Core;
 using MediatR;
 
-namespace Auth.Grpc;
+namespace Auth.Grpc.AuthService;
 
 public class AuthGrpcService(IMediator mediator, IMapper mapper) : AuthMicroservice.AuthMicroserviceBase
 {

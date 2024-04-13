@@ -18,13 +18,13 @@ public class LoginRequestHandler(
 			.Select(user => new { user.Id, user.Email, user.Password, user.Role })
 			.FirstOrDefaultAsync(user => user.Email == request.Email, cancellationToken);
 
-		if (user == null) return 404;
-		if (user.Password != request.Password.HashSha256()) return 403;
+		if (user == null) return StatusCodes.Status404NotFound;
+		if (user.Password != request.Password.HashSha256()) return StatusCodes.Status403Forbidden;
 
 		var jwtToken = GenerateJwtToken(configuration, user.Id, user.Role);
 		var result = CreateRefreshToken(configuration, user.Id);
 
-		await PutInCacheRefreshToken(
+		await PutInCacheRefreshTokenAsync(
 			configuration,
 			cache,
 			result.RefreshToken.Value,

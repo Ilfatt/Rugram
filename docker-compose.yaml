@@ -50,6 +50,7 @@ services:
       - Domain__AppUrl=https://localhost:3010
       - ConnectionStrings__PostreSQL=${AuthConnectionStringPostreSQL}
       - ConnectionStrings__Redis=redisAuth:6379,password=${AuthRedisPassword}
+      - Microservices__ProfileAddress=http://profile:80
     depends_on:
       - DbAuth
       - RedisAuth

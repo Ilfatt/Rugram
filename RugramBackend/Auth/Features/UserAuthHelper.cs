@@ -10,7 +10,7 @@ namespace Auth.Features;
 
 public static class UserAuthHelper
 {
-	public static async Task PutInCacheRefreshToken(
+	public static async Task PutInCacheRefreshTokenAsync(
 		IConfiguration configuration,
 		IDistributedCache cache,
 		string refreshToken,

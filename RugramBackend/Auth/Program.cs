@@ -1,6 +1,6 @@
 using Auth.AutoMapper;
 using Auth.Extensions;
-using Auth.Grpc;
+using Auth.Grpc.AuthService;
 using Auth.Services.BackgroundServices;
 using Auth.Services.Infrastructure.EmailSenderService;
 using FluentValidation;

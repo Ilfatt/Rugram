@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 using Gateway.Contracts;
 using Swashbuckle.AspNetCore.Annotations;
@@ -5,6 +6,7 @@ using static AuthMicroservice;
 
 namespace Gateway.Endpoints.AuthMicroservice.CheckEmailAvailability;
 
+[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 public class CheckEmailAvailabilityEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)

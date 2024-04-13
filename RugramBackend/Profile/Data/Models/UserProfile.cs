@@ -7,8 +7,8 @@ public class UserProfile(Guid id, string profileName)
 
 	#region Navigation
 
-	public required List<UserProfile> Subscribers { get; init; }
-	public required List<UserProfile> SubscribedTo { get; init; }
+	public List<UserProfile> Subscribers { get; init; } = null!;
+	public List<UserProfile> SubscribedTo { get; init; } = null!;
 
 	#endregion
 }

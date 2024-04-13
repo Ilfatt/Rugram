@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 using Gateway.Contracts;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Gateway.Endpoints.ProfileMicroservice.CheckProfileNameAvailability;
 
+[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 public class CheckProfileNameAvailabilityEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)

@@ -9,8 +9,7 @@ public class User
 
 	#region Navigation
 
-	// ReSharper disable once CollectionNeverQueried.Global
-	public required List<RefreshToken> RefreshTokens { get; init; }
+	public List<RefreshToken> RefreshTokens { get; init; } = null!;
 
 	#endregion
 }
