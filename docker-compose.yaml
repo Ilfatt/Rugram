@@ -21,6 +21,7 @@ services:
       - AuthOptions__JwtSecretKey=${JwtSecretKey}
       - AuthOptions__AccessTokenLifetimeInMinutes=2
       - Microservices__AuthAddress=http://auth:80
+      - Microservices__ProfileAddress=http://profile:80
     networks:
       rugram:
         aliases:
