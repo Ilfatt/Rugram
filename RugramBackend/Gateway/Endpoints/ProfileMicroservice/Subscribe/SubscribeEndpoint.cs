@@ -1,5 +1,6 @@
 using Gateway.Contracts;
 using Gateway.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using static ProfileMicroservice;
 
@@ -9,17 +10,17 @@ public class SubscribeEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapPut("profile/subscribe{idOfProfileSubscribedTo}", async (
-				Guid idOfProfileSubscribedTo,
+		app.MapPut("profile/subscribe/{nameOfProfileSubscribedTo}", async (
+				string nameOfProfileSubscribedTo,
 				ProfileMicroserviceClient profileClient,
-				IHttpContextAccessor httpContextAccessor,
+				[FromServices] IHttpContextAccessor httpContextAccessor,
 				CancellationToken cancellationToken) =>
 			{
 				var response = await profileClient.SubscribeAsync(
 					new SubscribeGrpcRequest
 					{
 						SubscriberId = httpContextAccessor.HttpContext!.GetUserId().ToString(),
-						IdOfProfileSubscribedTo = idOfProfileSubscribedTo.ToString()
+						NameOfProfileSubscribedTo = nameOfProfileSubscribedTo
 					},
 					cancellationToken: cancellationToken);
 
@@ -35,7 +36,7 @@ public class SubscribeEndpoint : IEndpoint
 			.WithOpenApi(generatedOperation =>
 			{
 				var parameter = generatedOperation.Parameters[0];
-				parameter.Description = "Id профиля на который подписываются";
+				parameter.Description = "Ник профиля на который подписываются";
 				return generatedOperation;
 			})
 			.WithTags("Profile")
@@ -45,7 +46,7 @@ public class SubscribeEndpoint : IEndpoint
 				new SwaggerResponseAttribute(StatusCodes.Status500InternalServerError),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status400BadRequest,
-					$"Id профиля на который подписываются равен: '{Guid.Empty}' "),
+					"Не пройдена валидация. nameOfProfileSubscribedTo length от 5 до 25"),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status401Unauthorized,
 					"Пользователь не авторизован"),

@@ -36,7 +36,8 @@ public class RegisterUserEndpoint : IEndpoint
 			.WithMetadata(
 				new SwaggerResponseAttribute(StatusCodes.Status500InternalServerError),
 				new SwaggerResponseAttribute(StatusCodes.Status400BadRequest,
-					"Не пройдена валидация. email должен быть валиден, password length от 5 до 25 "),
+					"Не пройдена валидация. email должен быть валиден," +
+					" password length от 5 до 25, ProfileName length от 5 до 25"),
 				new SwaggerResponseAttribute(StatusCodes.Status404NotFound,
 					"Токен для подтверждения пароля не найден. "),
 				new SwaggerResponseAttribute(StatusCodes.Status403Forbidden,
