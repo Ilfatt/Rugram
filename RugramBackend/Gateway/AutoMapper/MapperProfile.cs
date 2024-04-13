@@ -3,6 +3,8 @@ using Gateway.Endpoints.AuthMicroservice.Login;
 using Gateway.Endpoints.AuthMicroservice.RegisterUser;
 using Gateway.Endpoints.AuthMicroservice.SendEmailConfirmation;
 using Gateway.Endpoints.AuthMicroservice.UpdateJwtToken;
+using Gateway.Endpoints.PostsMicroservice.GetPhoto;
+using Google.Protobuf;
 
 namespace Gateway.AutoMapper;
 
@@ -20,5 +22,9 @@ public class MapperProfile : Profile
 
 		CreateMap<UpdateJwtTokenRequest, UpdateJwtTokenGrpcRequest>();
 		CreateMap<UpdateJwtTokenGrpcResponse, UpdateJwtTokenResponse>();
+
+		CreateMap<GetPhotoGrpcResponse, GetPhotoResponse>()
+			.ForMember(x => x.File, x =>
+				x.MapFrom(response => response.File.ToArray()));
 	}
 }

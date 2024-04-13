@@ -14,7 +14,7 @@ public static class HttpContextExtensions
 	public static Guid GetUserId(this HttpContext httpContext)
 	{
 		if (httpContext.User.Identity is { IsAuthenticated: false })
-			throw new ArgumentException("User not authenticated");
+			throw new ArgumentException("Пользователь не авторизован");
 
 		var claim = httpContext.User.Claims
 			            .FirstOrDefault(claim => claim.Type == nameof(ClaimTypes.NameIdentifier))

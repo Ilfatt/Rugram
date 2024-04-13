@@ -12,8 +12,8 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddCors();
 builder.Services.AddGrpc();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
-
 
 builder.AddSwagger();
 builder.AddAuthorization();
@@ -32,7 +32,6 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
-app.RouteEndpoints();
 
 app.UseCors(option =>
 {
@@ -40,5 +39,7 @@ app.UseCors(option =>
 	option.AllowAnyMethod();
 	option.AllowAnyOrigin();
 });
+
+app.RouteEndpoints();
 
 app.Run();

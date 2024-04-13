@@ -1,13 +1,24 @@
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Minio;
+using Posts.AutoMapper;
 using Posts.Extensions;
+using Posts.Grpc.ProfileService;
 using Posts.Services.S3;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+	serverOptions.ConfigureEndpointDefaults(options => options.Protocols = HttpProtocols.Http2);
+});
+
 builder.ConfigurePostgresqlConnection();
 await builder.AddMasstransitRabbitMq();
 
+builder.Services.AddGrpc();
 builder.Services.AddSingleton<IS3StorageService, MinioS3StorageService>();
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddMinio(configuration =>
 {
 	configuration.WithSSL(false);
@@ -21,5 +32,7 @@ builder.Services.AddMinio(configuration =>
 var app = builder.Build();
 
 await app.MigrateDbAsync();
+
+app.MapGrpcService<PostGrpcService>();
 
 app.Run();

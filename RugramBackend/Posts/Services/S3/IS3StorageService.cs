@@ -1,3 +1,5 @@
+using Minio.Exceptions;
+
 namespace Posts.Services.S3;
 
 /// <summary>
@@ -45,6 +47,8 @@ public interface IS3StorageService
 	/// </summary>
 	/// <param name="fileIdentifier">уникальный идентификатор файла</param>
 	/// <param name="bucketIdentifier">уникальный идентификатор бакета</param>
-	/// <returns>Файл в виде <see cref="Stream"/> или null если бакет или файл не найден. </returns>
-	public Task<Stream> GetFileFromBucketAsync(Guid fileIdentifier, Guid bucketIdentifier);
+	/// <returns>Файл в виде <see cref="MemoryStream"/></returns>
+	/// <exception cref="BucketNotFoundException">бакет не найден</exception>
+	/// <exception cref="ObjectNotFoundException">файл не найден</exception>
+	public Task<MemoryStream> GetFileFromBucketAsync(Guid fileIdentifier, Guid bucketIdentifier);
 }
