@@ -6,3 +6,8 @@ public interface IGrpcRequestHandler<in TRequest, TResponse> : IRequestHandler<T
 	where TRequest : IGrpcRequest<TResponse>
 {
 }
+
+public interface IGrpcRequestHandler<in TRequest> : IRequestHandler<TRequest, GrpcResult>
+	where TRequest : IGrpcRequest
+{
+}

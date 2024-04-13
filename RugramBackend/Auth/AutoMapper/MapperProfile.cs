@@ -15,7 +15,7 @@ public class MapperProfile : Profile
 		CreateMapFromResult<RegisterUserResponse, RegisterUserGrpcResponse>();
 
 		CreateMap<SendEmailConfirmationGrpcRequest, SendEmailConfirmationRequest>();
-		CreateMapFromResult<SendEmailConfirmationResponse, SendEmailConfirmationGrpcResponse>();
+		CreateMapFromResult<SendEmailConfirmationGrpcResponse>();
 
 		CreateMap<LoginGrpcRequest, LoginRequest>();
 		CreateMapFromResult<LoginResponse, LoginGrpcResponse>();
@@ -33,4 +33,6 @@ public class MapperProfile : Profile
 				if (src.Body != null) context.Mapper.Map(src.Body, dest);
 			});
 	}
+
+	private void CreateMapFromResult<TDestination>() => CreateMap<GrpcResult, TDestination>();
 }

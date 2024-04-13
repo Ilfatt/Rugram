@@ -28,6 +28,9 @@ namespace Profile.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("DateOfCreation")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("ProfileName")
                         .IsRequired()
                         .HasMaxLength(25)

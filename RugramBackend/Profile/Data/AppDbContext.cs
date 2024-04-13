@@ -9,7 +9,7 @@ public class AppDbContext : DbContext
 	{
 	}
 
-	public DbSet<UserProfile> UserProfiles { get; set; } = null!;
+	public DbSet<UserProfile> UserProfiles { get; init; } = null!;
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{

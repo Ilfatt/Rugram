@@ -11,9 +11,9 @@ public class SendEmailConfirmationHandler(
 		AppDbContext dbContext,
 		IConfiguration configuration,
 		IEmailSenderService emailSenderService)
-	: IGrpcRequestHandler<SendEmailConfirmationRequest, SendEmailConfirmationResponse>
+	: IGrpcRequestHandler<SendEmailConfirmationRequest>
 {
-	public async Task<GrpcResult<SendEmailConfirmationResponse>> Handle(
+	public async Task<GrpcResult> Handle(
 		SendEmailConfirmationRequest request,
 		CancellationToken cancellationToken)
 	{

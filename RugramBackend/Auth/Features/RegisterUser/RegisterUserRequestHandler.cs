@@ -1,6 +1,8 @@
 using Auth.Data;
 using Auth.Data.Models;
+using Contracts.RabbitMq;
 using Infrastructure.MediatR.Contracts;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using static Auth.Features.UserAuthHelper;
@@ -13,7 +15,8 @@ public class RegisterUserRequestHandler(
 		AppDbContext dbContext,
 		IConfiguration configuration,
 		IDistributedCache cache,
-		ProfileForAuthMicroserviceClient profileClient)
+		ProfileForAuthMicroserviceClient profileClient,
+		IBus bus)
 	: IGrpcRequestHandler<RegisterUserRequest, RegisterUserResponse>
 {
 	public async Task<GrpcResult<RegisterUserResponse>> Handle(
@@ -50,6 +53,8 @@ public class RegisterUserRequestHandler(
 		dbContext.Users.Add(user);
 		dbContext.RefreshTokens.Add(result.RefreshToken);
 		await dbContext.SaveChangesAsync(cancellationToken);
+		
+		await bus.Publish(new CreateBucketMessage(user.Id), cancellationToken);
 
 		try
 		{
@@ -67,12 +72,13 @@ public class RegisterUserRequestHandler(
 				result.RefreshToken.ValidTo,
 				user.Id,
 				cancellationToken);
-
+			
 			var createProfileResponse = await createProfileTask;
 
-			if (createProfileResponse.HttpStatusCode != 200)
+			if (createProfileResponse.HttpStatusCode != StatusCodes.Status204NoContent)
 			{
 				await transaction.RollbackAsync(cancellationToken);
+				await bus.Publish(new DeleteBucketMessage(user.Id), cancellationToken);
 				return createProfileResponse.HttpStatusCode;
 			}
 
@@ -82,6 +88,7 @@ public class RegisterUserRequestHandler(
 		{
 			//TODO: implement outbox
 			await transaction.RollbackAsync(cancellationToken);
+			await bus.Publish(new DeleteBucketMessage(user.Id), cancellationToken);
 			throw;
 		}
 

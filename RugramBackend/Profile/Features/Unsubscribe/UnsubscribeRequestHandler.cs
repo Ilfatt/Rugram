@@ -5,9 +5,9 @@ using Profile.Data;
 namespace Profile.Features.Unsubscribe;
 
 public class UnsubscribeRequestHandler(AppDbContext appDbContext)
-	: IGrpcRequestHandler<UnsubscribeRequest, UnsubscribeResponse>
+	: IGrpcRequestHandler<UnsubscribeRequest>
 {
-	public async Task<GrpcResult<UnsubscribeResponse>> Handle(
+	public async Task<GrpcResult> Handle(
 		UnsubscribeRequest request,
 		CancellationToken cancellationToken)
 	{
@@ -26,6 +26,6 @@ public class UnsubscribeRequestHandler(AppDbContext appDbContext)
 			await appDbContext.SaveChangesAsync(cancellationToken);
 		}
 
-		return new UnsubscribeResponse();
+		return StatusCodes.Status204NoContent;
 	}
 }

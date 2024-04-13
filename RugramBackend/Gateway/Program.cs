@@ -9,17 +9,16 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 	serverOptions.ConfigureEndpointDefaults(options => options.Protocols = HttpProtocols.Http2);
 });
 
-builder.Services.AddCors();
-
 builder.Configuration.AddEnvironmentVariables();
+builder.Services.AddCors();
+builder.Services.AddGrpc();
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+
 
 builder.AddSwagger();
 builder.AddAuthorization();
-
-builder.Services.AddGrpc();
+await builder.AddMasstransitRabbitMq();
 builder.AddGrpcClients();
-
-builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 var app = builder.Build();
 
