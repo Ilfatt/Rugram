@@ -46,7 +46,7 @@ services:
       - AuthOptions__Issuer=RugramAuth
       - AuthOptions__Audience=Rugram
       - AuthOptions__JwtSecretKey=${JwtSecretKey}
-      - AuthOptions__AccessTokenLifetimeInMinutes=200
+      - AuthOptions__AccessTokenLifetimeInMinutes=2
       - AuthOptions__RefreshTokenLifetimeInHours=168
       - Cache__SlidingExpirationForRefreshTokenInMinutes=5
       - MailConfirmationToken__LifetimeInHours=24
