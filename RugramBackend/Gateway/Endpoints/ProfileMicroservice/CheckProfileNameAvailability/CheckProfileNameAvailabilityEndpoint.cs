@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 using Gateway.Contracts;
 using Swashbuckle.AspNetCore.Annotations;
-using static ProfileMicroservice;
 
 namespace Gateway.Endpoints.ProfileMicroservice.CheckProfileNameAvailability;
 

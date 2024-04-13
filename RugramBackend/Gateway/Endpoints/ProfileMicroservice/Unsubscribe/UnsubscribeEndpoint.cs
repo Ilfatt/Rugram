@@ -1,4 +1,3 @@
-using AutoMapper;
 using Gateway.Contracts;
 using Gateway.Extensions;
 using Swashbuckle.AspNetCore.Annotations;
@@ -11,8 +10,8 @@ public class UnsubscribeEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapPut("profile/unsubscribe/{idOfProfileSubscribedTo}", async (
-				Guid idOfProfileSubscribedTo,
+		app.MapPut("profile/unsubscribe/{idOfProfileUnsubscribedTo}", async (
+				Guid idOfProfileUnsubscribedTo,
 				ProfileMicroserviceClient profileClient,
 				IHttpContextAccessor httpContextAccessor,
 				CancellationToken cancellationToken) =>
@@ -20,11 +19,11 @@ public class UnsubscribeEndpoint : IEndpoint
 				var response = await profileClient.UnsubscribeAsync(
 					new UnsubscribeGrpcRequest
 					{
-						IdOfProfileUnsubscribedTo = idOfProfileSubscribedTo.ToString(), 
+						IdOfProfileUnsubscribedTo = idOfProfileUnsubscribedTo.ToString(),
 						SubscriberId = httpContextAccessor.HttpContext!.GetUserId().ToString()
 					},
 					cancellationToken: cancellationToken);
-				
+
 				return response.HttpStatusCode switch
 				{
 					204 => Results.NoContent(),
@@ -34,7 +33,12 @@ public class UnsubscribeEndpoint : IEndpoint
 				};
 			})
 			.RequireAuthorization()
-			.WithOpenApi()
+			.WithOpenApi(generatedOperation =>
+			{
+				var parameter = generatedOperation.Parameters[0];
+				parameter.Description = "Id профиля, от которого отписываются";
+				return generatedOperation;
+			})
 			.WithTags("Profile")
 			.WithSummary("Отписаться от профиля")
 			.WithDescription("Доступ: авторизованные пользователи")

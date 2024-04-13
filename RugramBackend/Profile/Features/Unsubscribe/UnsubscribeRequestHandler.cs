@@ -18,13 +18,13 @@ public class UnsubscribeRequestHandler(AppDbContext appDbContext)
 			.FirstOrDefaultAsync(x => x.Id == request.IdOfProfileUnsubscribedTo, cancellationToken);
 
 		if (subscriber is null || unsubscribedTo is null) return StatusCodes.Status404NotFound;
-		
+
 		if (subscriber.SubscribedTo.Any(x => x.Id == request.IdOfProfileUnsubscribedTo))
 		{
 			subscriber.SubscribedTo.Remove(unsubscribedTo);
 			await appDbContext.SaveChangesAsync(cancellationToken);
 		}
-		
+
 		return new UnsubscribeResponse();
 	}
 }
