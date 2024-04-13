@@ -5,9 +5,9 @@ using Profile.Data;
 namespace Profile.Features.Subscribe;
 
 public class SubscribeRequestHandler(AppDbContext appDbContext)
-	: IGrpcRequestHandler<SubscribeRequest, SubscribeResponse>
+	: IGrpcRequestHandler<SubscribeRequest>
 {
-	public async Task<GrpcResult<SubscribeResponse>> Handle(
+	public async Task<GrpcResult> Handle(
 		SubscribeRequest request,
 		CancellationToken cancellationToken)
 	{
@@ -26,6 +26,6 @@ public class SubscribeRequestHandler(AppDbContext appDbContext)
 			await appDbContext.SaveChangesAsync(cancellationToken);
 		}
 
-		return new SubscribeResponse();
+		return StatusCodes.Status204NoContent;
 	}
 }

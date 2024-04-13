@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Profile.Data.Models;
+using Posts.Data.Models;
 
-namespace Profile.Data;
+namespace Posts.Data;
 
 public class AppDbContext : DbContext
 {
@@ -9,7 +9,8 @@ public class AppDbContext : DbContext
 	{
 	}
 
-	public DbSet<UserProfile> UserProfiles { get; init; } = null!;
+	public DbSet<Post> Posts { get; set; } = null!;
+	public DbSet<Photo> Photos { get; set; } = null!;
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{

@@ -9,48 +9,11 @@ namespace Infrastructure.MediatR.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-	private static readonly Type RequestType = typeof(IGrpcRequest<>);
+	private static readonly Type RequestWithResponseType = typeof(IGrpcRequest<>);
 	private static readonly Type PipelineBehaviorType = typeof(IPipelineBehavior<,>);
-	private static readonly Type ResultType = typeof(GrpcResult<>);
-
-	/// <summary>
-	/// Добавление бехейворов возвращающих GrpcResult в IServiceCollection
-	/// </summary>
-	/// <param name="serviceCollection">IServiceCollection</param>
-	/// <param name="assembly">Assembly</param>
-	/// <param name="behaviorType">реализация бехейвора</param>
-	/// <param name="constraintType">Маркерный интерфейс</param>
-	/// <param name="behaviorLifetime">Время жизни бехейвора</param>
-	public static void AddBehaviorsReturningGrpcResultFromAssembly(
-		this IServiceCollection serviceCollection,
-		Assembly assembly,
-		Type behaviorType,
-		Type? constraintType = null,
-		ServiceLifetime behaviorLifetime = ServiceLifetime.Transient)
-	{
-		var requests = assembly.GetTypes()
-			.Where(type => constraintType == null || type.IsAssignableTo(constraintType))
-			.Where(type => IsAssignableToGenericType(type, RequestType) &&
-			               type is { IsClass: true, IsAbstract: false })
-			.ToList();
-
-		var responses = requests
-			.Select(request => request.GetInterface(RequestType.Name)!.GetGenericArguments()[0])
-			.ToList();
-
-		for (var i = 0; i < requests.Count; i++)
-		{
-			var genericResultType = ResultType.MakeGenericType(responses[i]);
-			var genericServiceType = PipelineBehaviorType.MakeGenericType(requests[i], genericResultType);
-			var genericServiceImplementationType = behaviorType.MakeGenericType(requests[i], responses[i]);
-
-			serviceCollection.Add(new ServiceDescriptor(
-				genericServiceType,
-				genericServiceImplementationType,
-				behaviorLifetime));
-		}
-	}
-
+	private static readonly Type GenericResultType = typeof(GrpcResult<>);
+	private static readonly Type ResultType = typeof(GrpcResult);
+	
 	/// <summary>
 	/// Добавление ValidationBehavior для всех запросов в сброке имеющих Validator : AbstractValidator
 	/// в IServiceCollection
@@ -68,15 +31,23 @@ public static class ServiceCollectionExtensions
 			.ToList();
 
 		var responses = requests
-			.Select(request => request.GetInterface(RequestType.Name)!.GetGenericArguments()[0])
+			.Select(request => request.GetInterface(RequestWithResponseType.Name) is null
+				? ResultType
+				: request.GetInterface(RequestWithResponseType.Name)!.GetGenericArguments()[0])
 			.ToList();
 
 		for (var i = 0; i < requests.Count; i++)
 		{
-			var validationBehaviorType = typeof(ValidationBehavior<,>);
-			var genericResultType = ResultType.MakeGenericType(responses[i]);
+			var validationBehaviorType = responses[i] == ResultType
+				? typeof(ValidationBehavior<>)
+				: typeof(ValidationBehavior<,>);
+			var genericResultType = responses[i] == ResultType
+				? ResultType
+				: GenericResultType.MakeGenericType(responses[i]);
 			var genericPipelineBehaviorType = PipelineBehaviorType.MakeGenericType(requests[i], genericResultType);
-			var genericValidationBehaviorType = validationBehaviorType.MakeGenericType(requests[i], responses[i]);
+			var genericValidationBehaviorType = responses[i] == ResultType
+				? validationBehaviorType.MakeGenericType(requests[i])
+				: validationBehaviorType.MakeGenericType(requests[i], responses[i]);
 
 			serviceCollection.AddTransient(
 				genericPipelineBehaviorType,

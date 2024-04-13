@@ -12,13 +12,13 @@ public class MapperProfile : global::AutoMapper.Profile
 		CreateMap<CreateProfileGrpcRequest, CreateProfileRequest>()
 			.ForMember(x => x.ProfileId, x =>
 				x.MapFrom(request => new Guid(request.ProfileId)));
-		CreateMapFromResult<CreateProfileResponse, CreateProfileGrpcResponse>();
+		CreateMapFromResult<CreateProfileGrpcResponse>();
 
 		CreateMap<SubscribeGrpcRequest, SubscribeRequest>();
-		CreateMapFromResult<SubscribeResponse, SubscribeGrpcResponse>();
+		CreateMapFromResult<SubscribeGrpcResponse>();
 
 		CreateMap<UnsubscribeGrpcRequest, UnsubscribeRequest>();
-		CreateMapFromResult<UnsubscribeResponse, UnsubscribeGrpcResponse>();
+		CreateMapFromResult<UnsubscribeGrpcResponse>();
 	}
 
 	private void CreateMapFromResult<TSource, TDestination>()
@@ -30,4 +30,6 @@ public class MapperProfile : global::AutoMapper.Profile
 				if (src.Body != null) context.Mapper.Map(src.Body, dest);
 			});
 	}
+
+	private void CreateMapFromResult<TDestination>() => CreateMap<GrpcResult, TDestination>();
 }
