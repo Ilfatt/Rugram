@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 using Gateway.Contracts;
 using Swashbuckle.AspNetCore.Annotations;
+using static ProfileMicroservice;
 
 namespace Gateway.Endpoints.ProfileMicroservice.CheckProfileNameAvailability;
 
@@ -13,7 +14,7 @@ public class CheckProfileNameAvailabilityEndpoint : IEndpoint
 		app.MapGet("profile/checkProfileNameAvailability/{profileName}", (
 				string profileName,
 				IMapper mapper,
-				CancellationToken cancellationToken) => Results.Ok())
+				CancellationToken cancellationToken) => Results.NoContent())
 			.AllowAnonymous()
 			.WithOpenApi(generatedOperation =>
 			{
@@ -33,7 +34,7 @@ public class CheckProfileNameAvailabilityEndpoint : IEndpoint
 					StatusCodes.Status409Conflict,
 					"Ник занят"),
 				new SwaggerResponseAttribute(
-					StatusCodes.Status200OK,
+					StatusCodes.Status204NoContent,
 					"Ник свободен")
 			);
 	}

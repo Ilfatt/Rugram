@@ -21,7 +21,7 @@ public class SendEmailConfirmationHandler(
 			.AnyAsync(user => user.Email == request.Email, cancellationToken);
 
 		if (alreadyExistUserWithThisEmail) return StatusCodes.Status409Conflict;
-		
+
 
 		var token = GenerateSecureToken();
 		var mailConfirmationToken = new MailConfirmationToken

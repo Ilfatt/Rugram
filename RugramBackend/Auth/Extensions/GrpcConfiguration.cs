@@ -8,7 +8,7 @@ public static class GrpcConfiguration
 	/// <param name="builder">IWebHostBuilder</param>
 	public static void AddGrpcClients(this WebApplicationBuilder builder)
 	{
-		builder.Services.AddGrpcClient<ProfileMicroservice.ProfileMicroserviceClient>(conf =>
+		builder.Services.AddGrpcClient<ProfileForAuthMicroservice.ProfileForAuthMicroserviceClient>(conf =>
 		{
 			conf.Address = new Uri(builder.Configuration["Microservices:ProfileAddress"]
 			                       ?? throw new ApplicationException(

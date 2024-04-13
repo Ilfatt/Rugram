@@ -4,7 +4,7 @@ using Infrastructure.MediatR.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using static Auth.Features.UserAuthHelper;
-using static ProfileMicroservice;
+using static ProfileForAuthMicroservice;
 
 
 namespace Auth.Features.RegisterUser;
@@ -13,7 +13,7 @@ public class RegisterUserRequestHandler(
 		AppDbContext dbContext,
 		IConfiguration configuration,
 		IDistributedCache cache,
-		ProfileMicroserviceClient profileClient)
+		ProfileForAuthMicroserviceClient profileClient)
 	: IGrpcRequestHandler<RegisterUserRequest, RegisterUserResponse>
 {
 	public async Task<GrpcResult<RegisterUserResponse>> Handle(
@@ -31,9 +31,9 @@ public class RegisterUserRequestHandler(
 			                              token.Value == hashedToken, cancellationToken);
 
 		if (mailConfirmationToken == null) return StatusCodes.Status404NotFound;
-		
+
 		if (mailConfirmationToken.ValidTo < DateTime.UtcNow) return StatusCodes.Status403Forbidden;
-		
+
 		var user = new User
 		{
 			Email = request.Email,
@@ -44,7 +44,7 @@ public class RegisterUserRequestHandler(
 
 		var result = CreateRefreshToken(configuration, user.Id);
 		var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
-		
+
 		user.RefreshTokens.Add(result.RefreshToken);
 
 		dbContext.Users.Add(user);
@@ -80,11 +80,11 @@ public class RegisterUserRequestHandler(
 		}
 		catch (Exception)
 		{
+			//TODO: implement outbox
 			await transaction.RollbackAsync(cancellationToken);
 			throw;
 		}
-		
-		
+
 		var jwtToken = GenerateJwtToken(configuration, user.Id, user.Role);
 
 		return new RegisterUserResponse(

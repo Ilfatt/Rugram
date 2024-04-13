@@ -16,8 +16,7 @@ public class RegisterUserEndpoint : IEndpoint
 				CancellationToken cancellationToken) =>
 			{
 				var response = await authClient.RegisterUserAsync(
-					mapper.Map<RegisterUserGrpcRequest>(request),
-					cancellationToken: cancellationToken);
+					mapper.Map<RegisterUserGrpcRequest>(request), cancellationToken: cancellationToken);
 
 				return response.HttpStatusCode switch
 				{

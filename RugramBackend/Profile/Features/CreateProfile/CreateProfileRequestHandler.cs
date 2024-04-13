@@ -5,7 +5,7 @@ using Profile.Data.Models;
 
 namespace Profile.Features.CreateProfile;
 
-public class CreateProfileRequestHandler(AppDbContext appDbContext) 
+public class CreateProfileRequestHandler(AppDbContext appDbContext)
 	: IGrpcRequestHandler<CreateProfileRequest, CreateProfileResponse>
 {
 	public async Task<GrpcResult<CreateProfileResponse>> Handle(
@@ -16,7 +16,7 @@ public class CreateProfileRequestHandler(AppDbContext appDbContext)
 			.AnyAsync(x => x.ProfileName == request.ProfileName, cancellationToken);
 
 		if (existUserWithThisProfileName) return 409;
-		
+
 		var profile = new UserProfile(request.ProfileId, request.ProfileName);
 
 		appDbContext.UserProfiles.Add(profile);

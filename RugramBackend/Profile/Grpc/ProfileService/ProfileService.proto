@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+message SubscribeGrpcRequest{
+  string SubscriberId = 1;
+  string IdOfProfileSubscribedTo = 2;
+}
+
+message SubscribeGrpcResponse{
+  int32 httpStatusCode = 1;
+}
+
+message UnsubscribeGrpcRequest{
+  string SubscriberId = 1;
+  int32 IdOfProfileUnsubscribedTo = 2;
+
+}
+
+message UnsubscribeGrpcResponse{
+  int32 httpStatusCode = 1;
+}
+
+service ProfileMicroservice{
+  rpc Subscribe (SubscribeGrpcRequest) returns (SubscribeGrpcResponse);
+  rpc Unsubscribe (UnsubscribeGrpcRequest) returns (UnsubscribeGrpcResponse);
+}

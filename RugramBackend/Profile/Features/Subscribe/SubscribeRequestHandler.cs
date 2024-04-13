@@ -4,7 +4,7 @@ using Profile.Data;
 
 namespace Profile.Features.Subscribe;
 
-public class SubscribeRequestHandler(AppDbContext appDbContext) 
+public class SubscribeRequestHandler(AppDbContext appDbContext)
 	: IGrpcRequestHandler<SubscribeRequest, SubscribeResponse>
 {
 	public async Task<GrpcResult<SubscribeResponse>> Handle(
@@ -18,10 +18,12 @@ public class SubscribeRequestHandler(AppDbContext appDbContext)
 			.FirstOrDefaultAsync(x => x.Id == request.IdOfProfileSubscribedTo, cancellationToken);
 
 		if (subscriber is null || subscribedTo is null) return StatusCodes.Status404NotFound;
-		
-		subscriber.SubscribedTo.Add(subscribedTo);
 
-		await appDbContext.SaveChangesAsync(cancellationToken);
+		if (subscriber.SubscribedTo.All(x => x.Id != request.IdOfProfileSubscribedTo))
+		{
+			subscriber.SubscribedTo.Add(subscribedTo);
+			await appDbContext.SaveChangesAsync(cancellationToken);
+		}
 
 		return new SubscribeResponse();
 	}

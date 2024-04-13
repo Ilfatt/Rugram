@@ -43,7 +43,7 @@
     </ItemGroup>
     
     <ItemGroup>
-      <Protobuf Include="Grpc\ProfileService\ProfileService.proto">
+      <Protobuf Include="Grpc\ProfileService\ProfileForAuthService.proto">
         <GrpcServices>Both</GrpcServices>
         <Access>Public</Access>
         <ProtoCompile>True</ProtoCompile>

@@ -16,8 +16,7 @@ public class SendEmailConfirmationEndpoint : IEndpoint
 				CancellationToken cancellationToken) =>
 			{
 				var response = await authClient.SendEmailConfirmationAsync(
-					mapper.Map<SendEmailConfirmationGrpcRequest>(request),
-					cancellationToken: cancellationToken);
+					mapper.Map<SendEmailConfirmationGrpcRequest>(request), cancellationToken: cancellationToken);
 
 				return response.HttpStatusCode switch
 				{
