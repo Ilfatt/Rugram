@@ -6,8 +6,8 @@ public class SubscribeRequestValidator : AbstractValidator<SubscribeRequest>
 {
 	public SubscribeRequestValidator()
 	{
-		RuleFor(x => x.IdOfProfileSubscribedTo)
-			.NotEqual(Guid.Empty);
+		RuleFor(x => x.NameOfProfileSubscribedTo)
+			.Must(x => x.Length is >= 5 and <= 25);
 		RuleFor(x => x.SubscriberId)
 			.NotEqual(Guid.Empty);
 	}

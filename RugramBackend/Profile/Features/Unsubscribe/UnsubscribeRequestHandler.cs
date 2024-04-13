@@ -12,14 +12,15 @@ public class UnsubscribeRequestHandler(AppDbContext appDbContext)
 		CancellationToken cancellationToken)
 	{
 		var subscriber = await appDbContext.UserProfiles
-			.Include(x => x.SubscribedTo)
-			.FirstOrDefaultAsync(x => x.Id == request.SubscriberId, cancellationToken);
+			                 .Include(x => x.SubscribedTo)
+			                 .FirstOrDefaultAsync(x => x.Id == request.SubscriberId, cancellationToken)
+		                 ?? throw new ApplicationException("Пользоваетль не найден");
 		var unsubscribedTo = await appDbContext.UserProfiles
-			.FirstOrDefaultAsync(x => x.Id == request.IdOfProfileUnsubscribedTo, cancellationToken);
+			.FirstOrDefaultAsync(x => x.ProfileName == request.NameOfProfileUnsubscribedTo, cancellationToken);
 
-		if (subscriber is null || unsubscribedTo is null) return StatusCodes.Status404NotFound;
+		if (unsubscribedTo is null) return StatusCodes.Status404NotFound;
 
-		if (subscriber.SubscribedTo.Any(x => x.Id == request.IdOfProfileUnsubscribedTo))
+		if (subscriber.SubscribedTo.Any(x => x.ProfileName == request.NameOfProfileUnsubscribedTo))
 		{
 			subscriber.SubscribedTo.Remove(unsubscribedTo);
 			await appDbContext.SaveChangesAsync(cancellationToken);
