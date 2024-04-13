@@ -1,5 +1,6 @@
 using AutoMapper;
 using Gateway.Contracts;
+using Gateway.Extensions;
 using Swashbuckle.AspNetCore.Annotations;
 using static ProfileMicroservice;
 
@@ -10,14 +11,19 @@ public class UnsubscribeEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapPut("profile/unsubscribe", async (
-				UnsubscribeRequest request,
-				IMapper mapper,
+		app.MapPut("profile/unsubscribe/{idOfProfileSubscribedTo}", async (
+				Guid idOfProfileSubscribedTo,
 				ProfileMicroserviceClient profileClient,
+				IHttpContextAccessor httpContextAccessor,
 				CancellationToken cancellationToken) =>
 			{
 				var response = await profileClient.UnsubscribeAsync(
-					mapper.Map<UnsubscribeGrpcRequest>(request), cancellationToken: cancellationToken);
+					new UnsubscribeGrpcRequest
+					{
+						IdOfProfileUnsubscribedTo = idOfProfileSubscribedTo.ToString(), 
+						SubscriberId = httpContextAccessor.HttpContext!.GetUserId().ToString()
+					},
+					cancellationToken: cancellationToken);
 				
 				return response.HttpStatusCode switch
 				{
@@ -36,13 +42,13 @@ public class UnsubscribeEndpoint : IEndpoint
 				new SwaggerResponseAttribute(StatusCodes.Status500InternalServerError),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status400BadRequest,
-					$"Один из id равен {Guid.Empty}"),
+					$"Id профиля, от которого отписываются, равен: '{Guid.Empty}' "),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status401Unauthorized,
 					"Пользователь не авторизован"),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status404NotFound,
-					"Пользователь, как минимум с одним из id, не найден"),
+					"Профиль, от которого отписываются, не найден"),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status204NoContent,
 					"Отписка произошла успешно или пользоваетль уже был отписан")

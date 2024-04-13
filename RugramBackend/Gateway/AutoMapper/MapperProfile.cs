@@ -22,9 +22,5 @@ public class MapperProfile : Profile
 
 		CreateMap<UpdateJwtTokenRequest, UpdateJwtTokenGrpcRequest>();
 		CreateMap<UpdateJwtTokenGrpcResponse, UpdateJwtTokenResponse>();
-		
-		CreateMap<UnsubscribeRequest,UnsubscribeGrpcRequest>();
-		
-		CreateMap<SubscribeRequest, SubscribeGrpcRequest>();
 	}
 }

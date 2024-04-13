@@ -50,8 +50,7 @@ public static class UserAuthHelper
 				UserId = userId
 			});
 	}
-
-
+	
 	public static string GenerateJwtToken(
 		IConfiguration configuration,
 		Guid userId,
