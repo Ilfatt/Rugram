@@ -22,6 +22,10 @@ services:
       - AuthOptions__AccessTokenLifetimeInMinutes=2
       - Microservices__AuthAddress=http://auth:80
       - Microservices__ProfileAddress=http://profile:80
+      - RabbitMqConfig__Username=${RabbitMqUser}
+      - RabbitMqConfig__Password=${RabbitMqPassword}
+      - RabbitMqConfig__Hostname=rabbitMq
+      - RabbitMqConfig__Port=5672
     networks:
       rugram:
         aliases:
@@ -36,10 +40,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - AuthOptions__Issuer=RugramAuthd
+      - AuthOptions__Issuer=RugramAuth
       - AuthOptions__Audience=Rugram
       - AuthOptions__JwtSecretKey=${JwtSecretKey}
-      - AuthOptions__AccessTokenLifetimeInMinutes=2
+      - AuthOptions__AccessTokenLifetimeInMinutes=200
       - AuthOptions__RefreshTokenLifetimeInHours=168
       - Cache__SlidingExpirationForRefreshTokenInMinutes=5
       - MailConfirmationToken__LifetimeInHours=24

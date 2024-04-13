@@ -2,6 +2,7 @@ using Contracts.RabbitMq;
 using Gateway.Contracts;
 using Gateway.Extensions;
 using MassTransit;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Gateway.Endpoints.PostsMicroservice.CreatePost;
@@ -13,7 +14,7 @@ public class CreatePostEndpoint : IEndpoint
 		app.MapPost("post/create", async (
 				CreatePostRequest request,
 				IBus bus,
-				IHttpContextAccessor httpContextAccessor,
+				[FromServices] IHttpContextAccessor httpContextAccessor,
 				CancellationToken cancellationToken) =>
 			{
 				if (request.Description.Length > 3000) return Results.BadRequest();

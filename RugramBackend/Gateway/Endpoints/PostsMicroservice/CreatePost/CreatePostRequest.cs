@@ -6,5 +6,5 @@ public record CreatePostRequest(
 	[property: SwaggerSchema("Описание поста")]
 	string Description,
 	[property: SwaggerSchema("Фотки")]
-	List<IFormFile> Photos);
+	List<FormFile> Photos);
 	
