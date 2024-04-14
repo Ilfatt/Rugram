@@ -10,8 +10,8 @@ public class SubscribeEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapPut("profile/subscribe/{nameOfProfileSubscribedTo}", async (
-				string nameOfProfileSubscribedTo,
+		app.MapPut("profile/subscribe/{idOfProfileSubscribedTo}", async (
+				Guid idOfProfileSubscribedTo,
 				ProfileMicroserviceClient profileClient,
 				[FromServices] IHttpContextAccessor httpContextAccessor,
 				CancellationToken cancellationToken) =>
@@ -20,7 +20,7 @@ public class SubscribeEndpoint : IEndpoint
 					new SubscribeGrpcRequest
 					{
 						SubscriberId = httpContextAccessor.HttpContext!.GetUserId().ToString(),
-						NameOfProfileSubscribedTo = nameOfProfileSubscribedTo
+						IdOfProfileSubscribedTo = idOfProfileSubscribedTo.ToString()
 					},
 					cancellationToken: cancellationToken);
 
@@ -36,7 +36,7 @@ public class SubscribeEndpoint : IEndpoint
 			.WithOpenApi(generatedOperation =>
 			{
 				var parameter = generatedOperation.Parameters[0];
-				parameter.Description = "Ник профиля на который подписываются";
+				parameter.Description = "Id профиля на который подписываются";
 				return generatedOperation;
 			})
 			.WithTags("Profile")
@@ -44,9 +44,8 @@ public class SubscribeEndpoint : IEndpoint
 			.WithDescription("Доступ: авторизованные пользователи")
 			.WithMetadata(
 				new SwaggerResponseAttribute(StatusCodes.Status500InternalServerError),
-				new SwaggerResponseAttribute(
-					StatusCodes.Status400BadRequest,
-					"Не пройдена валидация. nameOfProfileSubscribedTo length от 5 до 25"),
+				new SwaggerResponseAttribute(StatusCodes.Status400BadRequest,
+					"Id неккоректный"),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status401Unauthorized,
 					"Пользователь не авторизован"),

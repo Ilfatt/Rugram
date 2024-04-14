@@ -2,7 +2,7 @@ syntax = "proto3";
 
 message SubscribeGrpcRequest{
   string SubscriberId = 1;
-  string NameOfProfileSubscribedTo = 2;
+  string IdOfProfileSubscribedTo = 2;
 }
 
 message SubscribeGrpcResponse{
@@ -11,7 +11,7 @@ message SubscribeGrpcResponse{
 
 message UnsubscribeGrpcRequest{
   string SubscriberId = 1;
-  string NameOfProfileUnsubscribedTo = 2;
+  string IdOfProfileUnsubscribedTo = 2;
 
 }
 

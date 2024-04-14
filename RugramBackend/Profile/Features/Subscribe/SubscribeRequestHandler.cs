@@ -16,15 +16,15 @@ public class SubscribeRequestHandler(AppDbContext appDbContext)
 			                 .FirstOrDefaultAsync(x => x.Id == request.SubscriberId, cancellationToken)
 		                 ?? throw new ApplicationException("Пользоваетль не найден");
 		var subscribedTo = await appDbContext.UserProfiles
-			.FirstOrDefaultAsync(x => x.ProfileName == request.NameOfProfileSubscribedTo, cancellationToken);
+			.FirstOrDefaultAsync(x => x.Id == request.IdOfProfileSubscribedTo, cancellationToken);
 
 		if (subscribedTo is null) return StatusCodes.Status404NotFound;
 
-		if (subscriber.SubscribedTo.All(x => x.ProfileName != request.NameOfProfileSubscribedTo))
-		{
-			subscriber.SubscribedTo.Add(subscribedTo);
-			await appDbContext.SaveChangesAsync(cancellationToken);
-		}
+		if (subscriber.SubscribedTo.Any(x => x.Id == request.IdOfProfileSubscribedTo))
+			return StatusCodes.Status204NoContent;
+		
+		subscriber.SubscribedTo.Add(subscribedTo);
+		await appDbContext.SaveChangesAsync(cancellationToken);
 
 		return StatusCodes.Status204NoContent;
 	}
