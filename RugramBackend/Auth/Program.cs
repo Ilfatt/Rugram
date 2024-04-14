@@ -19,7 +19,7 @@ builder.Configuration.AddEnvironmentVariables();
 builder.ConfigurePostgresqlConnection();
 builder.ConfigureRedisConnection();
 builder.AddGrpcClients();
-await builder.AddMasstransitRabbitMq();
+builder.AddMasstransitRabbitMq();
 
 builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddValidationBehaviorsFromAssembly(typeof(Program).Assembly);

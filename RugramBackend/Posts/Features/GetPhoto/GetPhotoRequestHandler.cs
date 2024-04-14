@@ -2,7 +2,7 @@ using Infrastructure.MediatR.Contracts;
 using Minio.Exceptions;
 using Posts.Services.S3;
 
-namespace Posts.Features;
+namespace Posts.Features.GetPhoto;
 
 public class GetPhotoRequestHandler(IS3StorageService s3StorageService)
 	: IGrpcRequestHandler<GetPhotoRequest, GetPhotoResponse>
@@ -27,7 +27,7 @@ public class GetPhotoRequestHandler(IS3StorageService s3StorageService)
 		{
 			return StatusCodes.Status404NotFound;
 		}
-
+		
 		return new GetPhotoResponse(fileStream.ToArray());
 	}
 }

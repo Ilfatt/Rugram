@@ -53,7 +53,7 @@ public class RegisterUserRequestHandler(
 		dbContext.Users.Add(user);
 		dbContext.RefreshTokens.Add(result.RefreshToken);
 		await dbContext.SaveChangesAsync(cancellationToken);
-		
+
 		await bus.Publish(new CreateBucketMessage(user.Id), cancellationToken);
 
 		try
@@ -72,7 +72,7 @@ public class RegisterUserRequestHandler(
 				result.RefreshToken.ValidTo,
 				user.Id,
 				cancellationToken);
-			
+
 			var createProfileResponse = await createProfileTask;
 
 			if (createProfileResponse.HttpStatusCode != StatusCodes.Status204NoContent)

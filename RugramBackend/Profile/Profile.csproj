@@ -26,6 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Infrastructure.AutoMapper\Infrastructure.AutoMapper.csproj" />
         <ProjectReference Include="..\Infrastructure.MediatR\Infrastructure.MediatR.csproj" />
     </ItemGroup>
 

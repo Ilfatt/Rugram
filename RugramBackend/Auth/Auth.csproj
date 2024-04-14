@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Contracts.RabbitMq\Contracts.RabbitMq.csproj" />
+      <ProjectReference Include="..\Infrastructure.AutoMapper\Infrastructure.AutoMapper.csproj" />
       <ProjectReference Include="..\Infrastructure.MediatR\Infrastructure.MediatR.csproj" />
     </ItemGroup>
 

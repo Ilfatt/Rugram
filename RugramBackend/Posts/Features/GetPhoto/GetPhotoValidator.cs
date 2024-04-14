@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Posts.Features;
+namespace Posts.Features.GetPhoto;
 
 public class GetPhotoValidator : AbstractValidator<GetPhotoRequest>
 {
