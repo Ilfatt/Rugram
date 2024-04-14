@@ -1,9 +1,9 @@
+using Infrastructure.S3;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Minio;
 using Posts.AutoMapper;
 using Posts.Extensions;
 using Posts.Grpc.ProfileService;
-using Posts.Services.S3;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +13,7 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 });
 
 builder.ConfigurePostgresqlConnection();
-builder.AddMasstransitRabbitMq();
+await builder.AddMasstransitRabbitMq();
 
 builder.Services.AddGrpc();
 builder.Services.AddSingleton<IS3StorageService, MinioS3StorageService>();

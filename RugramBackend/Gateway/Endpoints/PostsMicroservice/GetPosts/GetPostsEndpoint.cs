@@ -31,6 +31,7 @@ public class GetPostsEndpoint : IEndpoint
 					_ => Results.Problem(statusCode: 500)
 				};
 			})
+			.RequireAuthorization()
 			.WithOpenApi(generatedOperation =>
 			{
 				generatedOperation.Parameters[0].Description = "Id профиля";

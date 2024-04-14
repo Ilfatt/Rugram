@@ -1,6 +1,6 @@
 using Infrastructure.MediatR.Contracts;
+using Infrastructure.S3;
 using Minio.Exceptions;
-using Posts.Services.S3;
 
 namespace Posts.Features.GetPhoto;
 
@@ -17,7 +17,8 @@ public class GetPhotoRequestHandler(IS3StorageService s3StorageService)
 		{
 			fileStream = await s3StorageService.GetFileFromBucketAsync(
 				request.PhotoId,
-				request.ProfileId);
+				request.ProfileId,
+				cancellationToken);
 		}
 		catch (BucketNotFoundException)
 		{
@@ -27,7 +28,7 @@ public class GetPhotoRequestHandler(IS3StorageService s3StorageService)
 		{
 			return StatusCodes.Status404NotFound;
 		}
-		
+
 		return new GetPhotoResponse(fileStream.ToArray());
 	}
 }

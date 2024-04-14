@@ -33,7 +33,7 @@ public class GetPhotoEndpoint : IEndpoint
 					_ => Results.Problem(statusCode: 500)
 				};
 			})
-			.AllowAnonymous()
+			.RequireAuthorization()
 			.WithOpenApi(generatedOperation =>
 			{
 				generatedOperation.Parameters[0].Description = "Id фотки";

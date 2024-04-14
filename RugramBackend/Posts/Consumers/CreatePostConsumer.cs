@@ -1,9 +1,9 @@
 using Contracts.RabbitMq;
+using Infrastructure.S3;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Posts.Data;
 using Posts.Data.Models;
-using Posts.Services.S3;
 
 namespace Posts.Consumers;
 
@@ -36,7 +36,8 @@ public class CreatePostConsumer(AppDbContext appDbContext, IS3StorageService s3S
 				await s3StorageService.PutFileInBucketAsync(
 					new MemoryStream(context.Message.Photos[index].File),
 					photos[index].Id,
-					context.Message.UserId);
+					context.Message.UserId,
+					context.CancellationToken);
 				indexSaver = index;
 			}
 
@@ -52,7 +53,8 @@ public class CreatePostConsumer(AppDbContext appDbContext, IS3StorageService s3S
 			{
 				await s3StorageService.RemoveFileFromBucketAsync(
 					photos[index].Id,
-					context.Message.UserId);
+					context.Message.UserId,
+					context.CancellationToken);
 				indexSaver = index;
 			}
 
