@@ -10,18 +10,10 @@ public class EditProfilePhotoConsumer(IS3StorageService s3StorageService)
 {
 	public async Task Consume(ConsumeContext<EditProfilePhotoMessage> context)
 	{
-		try
-		{
-			await s3StorageService.RemoveFileFromBucketAsync(
-				context.Message.ProfileId,
-				context.Message.ProfileId,
-				context.CancellationToken);
-		}
-		catch (BucketNotFoundException)
-		{
-			await s3StorageService.CreateBucketAsync(context.Message.ProfileId, context.CancellationToken);
-			throw;
-		}
+		await s3StorageService.RemoveFileFromBucketAsync(
+			context.Message.ProfileId,
+			context.Message.ProfileId,
+			context.CancellationToken);
 
 		await s3StorageService.PutFileInBucketAsync(
 			new MemoryStream(context.Message.Photo),

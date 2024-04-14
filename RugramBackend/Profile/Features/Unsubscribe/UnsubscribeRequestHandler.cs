@@ -16,15 +16,15 @@ public class UnsubscribeRequestHandler(AppDbContext appDbContext)
 			                 .FirstOrDefaultAsync(x => x.Id == request.SubscriberId, cancellationToken)
 		                 ?? throw new ApplicationException("Пользоваетль не найден");
 		var unsubscribedTo = await appDbContext.UserProfiles
-			.FirstOrDefaultAsync(x => x.ProfileName == request.NameOfProfileUnsubscribedTo, cancellationToken);
+			.FirstOrDefaultAsync(x => x.Id == request.IdOfProfileUnsubscribedTo, cancellationToken);
 
 		if (unsubscribedTo is null) return StatusCodes.Status404NotFound;
 
-		if (subscriber.SubscribedTo.Any(x => x.ProfileName == request.NameOfProfileUnsubscribedTo))
-		{
-			subscriber.SubscribedTo.Remove(unsubscribedTo);
-			await appDbContext.SaveChangesAsync(cancellationToken);
-		}
+		if (subscriber.SubscribedTo.All(x => x.Id != request.IdOfProfileUnsubscribedTo))
+			return StatusCodes.Status204NoContent;
+		
+		subscriber.SubscribedTo.Remove(unsubscribedTo);
+		await appDbContext.SaveChangesAsync(cancellationToken);
 
 		return StatusCodes.Status204NoContent;
 	}

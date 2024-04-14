@@ -17,7 +17,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.AddSwagger();
 builder.AddAuthorization();
-await builder.AddMasstransitRabbitMq();
+builder.AddMasstransitRabbitMq();
 builder.AddGrpcClients();
 
 var app = builder.Build();
@@ -41,5 +41,7 @@ app.UseCors(option =>
 });
 
 app.RouteEndpoints();
+
+await Task.Delay(1000 * 10);
 
 app.Run();

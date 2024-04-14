@@ -11,8 +11,8 @@ public class UnsubscribeEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapPut("profile/unsubscribe/{nameOfProfileUnsubscribedTo}", async (
-				string nameOfProfileUnsubscribedTo,
+		app.MapPut("profile/unsubscribe/{idOfProfileUnsubscribedTo}", async (
+				Guid idOfProfileUnsubscribedTo,
 				ProfileMicroserviceClient profileClient,
 				[FromServices] IHttpContextAccessor httpContextAccessor,
 				CancellationToken cancellationToken) =>
@@ -20,7 +20,7 @@ public class UnsubscribeEndpoint : IEndpoint
 				var response = await profileClient.UnsubscribeAsync(
 					new UnsubscribeGrpcRequest
 					{
-						NameOfProfileUnsubscribedTo = nameOfProfileUnsubscribedTo,
+						IdOfProfileUnsubscribedTo = idOfProfileUnsubscribedTo.ToString(),
 						SubscriberId = httpContextAccessor.HttpContext!.GetUserId().ToString()
 					},
 					cancellationToken: cancellationToken);
@@ -37,7 +37,7 @@ public class UnsubscribeEndpoint : IEndpoint
 			.WithOpenApi(generatedOperation =>
 			{
 				var parameter = generatedOperation.Parameters[0];
-				parameter.Description = "Ник профиля, от которого отписываются";
+				parameter.Description = "Id профиля, от которого отписываются";
 				return generatedOperation;
 			})
 			.WithTags("Profile")
@@ -45,9 +45,8 @@ public class UnsubscribeEndpoint : IEndpoint
 			.WithDescription("Доступ: авторизованные пользователи")
 			.WithMetadata(
 				new SwaggerResponseAttribute(StatusCodes.Status500InternalServerError),
-				new SwaggerResponseAttribute(
-					StatusCodes.Status400BadRequest,
-					"Не пройдена валидация. nameOfProfileSubscribedTo length от 5 до 25"),
+				new SwaggerResponseAttribute(StatusCodes.Status400BadRequest,
+					"Id неккоректный"),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status401Unauthorized,
 					"Пользователь не авторизован"),

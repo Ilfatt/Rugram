@@ -19,7 +19,7 @@ builder.Configuration.AddEnvironmentVariables();
 builder.ConfigurePostgresqlConnection();
 builder.ConfigureRedisConnection();
 builder.AddGrpcClients();
-await builder.AddMasstransitRabbitMq();
+builder.AddMasstransitRabbitMq();
 
 builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddValidationBehaviorsFromAssembly(typeof(Program).Assembly);
@@ -37,5 +37,7 @@ var app = builder.Build();
 await app.MigrateDbAsync();
 
 app.MapGrpcService<AuthGrpcService>();
+
+await Task.Delay(1000 * 10);
 
 app.Run();

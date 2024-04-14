@@ -19,7 +19,7 @@ services:
       - AuthOptions__Issuer=RugramAuth
       - AuthOptions__Audience=Rugram
       - AuthOptions__JwtSecretKey=${JwtSecretKey}
-      - AuthOptions__AccessTokenLifetimeInMinutes=2
+      - AuthOptions__AccessTokenLifetimeInMinutes=2000
       - Microservices__AuthAddress=http://auth:80
       - Microservices__ProfileAddress=http://profile:80
       - Microservices__PostAddress=http://post:80
@@ -46,7 +46,7 @@ services:
       - AuthOptions__Issuer=RugramAuth
       - AuthOptions__Audience=Rugram
       - AuthOptions__JwtSecretKey=${JwtSecretKey}
-      - AuthOptions__AccessTokenLifetimeInMinutes=2
+      - AuthOptions__AccessTokenLifetimeInMinutes=2000
       - AuthOptions__RefreshTokenLifetimeInHours=168
       - Cache__SlidingExpirationForRefreshTokenInMinutes=5
       - MailConfirmationToken__LifetimeInHours=24
@@ -66,6 +66,7 @@ services:
     depends_on:
       - DbAuth
       - RedisAuth
+      - RabbitMq
     networks:
       rugram:
         aliases:
@@ -113,10 +114,11 @@ services:
       - MinioS3__AccessKey=${MinioS3AccessKey}
       - MinioS3__SecretKey=${MinioS3SecretKey}
       - MinioS3__Timeout=5000
-      - MinioS3__Endpoint=profileMinioS3:9002
+      - MinioS3__Endpoint=profileMinioS3:9000
     depends_on:
       - DbProfile
       - ProfileMinioS3
+      - RabbitMq
     networks:
       rugram:
         aliases:

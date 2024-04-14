@@ -5,23 +5,7 @@ namespace Posts.Extensions;
 
 public static class RabbitMqConfiguration
 {
-	public static async Task AddMasstransitRabbitMq(this WebApplicationBuilder builder, int attemptsCount = 20)
-	{
-		while (attemptsCount >= 0)
-		{
-			try
-			{
-				ConfigureRabbitMq(builder);
-			}
-			catch (Exception)
-			{
-				await Task.Delay(1000);
-				attemptsCount--;
-			}
-		}
-	}
-
-	private static void ConfigureRabbitMq(WebApplicationBuilder builder)
+	public static void AddMasstransitRabbitMq(this WebApplicationBuilder builder, int attemptsCount = 20)
 	{
 		builder.Services.AddMassTransit(config =>
 		{

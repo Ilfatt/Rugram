@@ -12,13 +12,13 @@ public class EditProfilePhotoEndpoint : IEndpoint
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
 		app.MapPost("profile/editProfilePhoto/", async (
-				[FromForm] IFormFile profilePhoto,
+				[FromForm] EditProfilePhotoRequest request,
 				[FromServices] IHttpContextAccessor httpContextAccessor,
 				IBus bus,
 				CancellationToken cancellationToken) =>
 			{
 				var memoryStream = new MemoryStream();
-				await profilePhoto.CopyToAsync(memoryStream, cancellationToken);
+				await request.ProfilePhoto.CopyToAsync(memoryStream, cancellationToken);
 
 				await bus.Publish(
 					new EditProfilePhotoMessage(
