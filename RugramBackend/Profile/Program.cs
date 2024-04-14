@@ -32,7 +32,7 @@ builder.Services.AddMinio(configuration =>
 		builder.Configuration["MinioS3:SecretKey"]!);
 });
 
-await builder.AddMasstransitRabbitMq();
+builder.AddMasstransitRabbitMq();
 builder.ConfigurePostgresqlConnection();
 
 var app = builder.Build();
@@ -40,5 +40,7 @@ var app = builder.Build();
 await app.MigrateDbAsync();
 
 app.MapGrpcService<ProfileForAuthGrpcService>();
+
+await Task.Delay(1000 * 10);
 
 app.Run();

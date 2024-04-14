@@ -66,6 +66,7 @@ services:
     depends_on:
       - DbAuth
       - RedisAuth
+      - RabbitMq
     networks:
       rugram:
         aliases:
@@ -117,6 +118,7 @@ services:
     depends_on:
       - DbProfile
       - ProfileMinioS3
+      - RabbitMq
     networks:
       rugram:
         aliases:
