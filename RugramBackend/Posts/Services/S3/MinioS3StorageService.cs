@@ -18,7 +18,7 @@ public class MinioS3StorageService(IMinioClient minioClient) : IS3StorageService
 	{
 		var args = new MakeBucketArgs()
 			.WithBucket(bucketIdentifier.ToString());
-		
+
 		await minioClient.MakeBucketAsync(args);
 	}
 
@@ -76,7 +76,7 @@ public class MinioS3StorageService(IMinioClient minioClient) : IS3StorageService
 			.WithCallbackStream(stream => stream.CopyTo(response));
 
 		await minioClient.GetObjectAsync(args);
-		
+
 		response.Position = 0;
 		return response;
 	}

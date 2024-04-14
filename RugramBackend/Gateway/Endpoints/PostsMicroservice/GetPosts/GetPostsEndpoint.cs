@@ -1,62 +1,58 @@
 using AutoMapper;
 using Gateway.Contracts;
-using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using static PostMicroservice;
 
-namespace Gateway.Endpoints.PostsMicroservice.GetPhoto;
+namespace Gateway.Endpoints.PostsMicroservice.GetPosts;
 
-public class GetPhotoEndpoint : IEndpoint
+public class GetPostsEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapGet("post/get/{photoId}&{profileId}", async (
-				Guid photoId,
+		app.MapGet("post/getAll{profileId}&{pageNumber}&{pageSize}", async (
 				Guid profileId,
-				PostMicroserviceClient postClient,
-				[FromServices] IHttpContextAccessor httpContextAccessor,
+				int pageNumber,
+				int pageSize,
+				PostMicroservice.PostMicroserviceClient postClient,
 				IMapper mapper,
 				CancellationToken cancellationToken) =>
 			{
-				var response = await postClient.GetPhotoAsync(new GetPhotoGrpcRequest()
+				var response = await postClient.GetPostsAsync(new GetPostsGrpcRequest()
 					{
 						ProfileId = profileId.ToString(),
-						PhotoId = photoId.ToString()
+						PageSize = pageSize,
+						PageNumber = pageNumber
 					},
 					cancellationToken: cancellationToken);
 
 				return response.HttpStatusCode switch
 				{
-					200 => Results.Ok(mapper.Map<GetPhotoResponse>(response)),
+					200 => Results.Ok(mapper.Map<GetPostsResponse>(response)),
 					400 => Results.BadRequest(),
-					404 => Results.NotFound(),
 					_ => Results.Problem(statusCode: 500)
 				};
 			})
-			.AllowAnonymous()
 			.WithOpenApi(generatedOperation =>
 			{
-				generatedOperation.Parameters[0].Description = "Id фотки";
-				generatedOperation.Parameters[1].Description = "Id профиля";
+				generatedOperation.Parameters[0].Description = "Id профиля";
+				generatedOperation.Parameters[1].Description = "Номер страницы";
+				generatedOperation.Parameters[2].Description = "Размер страницы";
 				return generatedOperation;
 			})
 			.WithTags("Post")
-			.WithSummary("Получить фото по id профиля и id фото")
+			.WithSummary("Получить все посты пользователя в порядке публикации с пагинацией")
 			.WithDescription("Доступ: авторизованные пользователи")
 			.WithMetadata(
 				new SwaggerResponseAttribute(StatusCodes.Status500InternalServerError),
 				new SwaggerResponseAttribute(
-					StatusCodes.Status404NotFound,
-					"Файл не найден"),
-				new SwaggerResponseAttribute(
 					StatusCodes.Status400BadRequest,
-					"Один из id имеет неккоректный формат"),
+					$"Не пройдена валидация. pageSize is > -1 and <= 1000," +
+					$" pageNumber is > -1 and < 100000, {int.MaxValue} / pageNumber <= pageSize"),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status401Unauthorized,
 					"Пользователь не авторизован"),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status200OK,
 					"",
-					typeof(GetPhotoResponse)));
+					typeof(GetPostsResponse)));
 	}
 }

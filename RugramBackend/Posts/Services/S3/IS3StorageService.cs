@@ -13,7 +13,7 @@ public interface IS3StorageService
 	/// <param name="bucketIdentifier">уникальный идентификатор бакета</param>
 	/// <returns>true если существует</returns>
 	public Task<bool> BucketExistAsync(Guid bucketIdentifier);
-	
+
 	/// <summary>
 	/// Созать бакет
 	/// </summary>

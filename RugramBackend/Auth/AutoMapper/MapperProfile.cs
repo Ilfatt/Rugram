@@ -2,12 +2,11 @@ using Auth.Features.Login;
 using Auth.Features.RegisterUser;
 using Auth.Features.SendEmailConfirmation;
 using Auth.Features.UpdateJwtToken;
-using AutoMapper;
-using Infrastructure.MediatR.Contracts;
+using Infrastructure.AutoMapper;
 
 namespace Auth.AutoMapper;
 
-public class MapperProfile : Profile
+public class MapperProfile : BaseMappingProfile
 {
 	public MapperProfile()
 	{
@@ -23,16 +22,4 @@ public class MapperProfile : Profile
 		CreateMap<UpdateJwtTokenGrpcRequest, UpdateJwtTokenRequest>();
 		CreateMapFromResult<UpdateJwtTokenResponse, UpdateJwtTokenGrpcResponse>();
 	}
-
-	private void CreateMapFromResult<TSource, TDestination>()
-	{
-		CreateMap<TSource, TDestination>();
-		CreateMap<GrpcResult<TSource>, TDestination>()
-			.AfterMap((src, dest, context) =>
-			{
-				if (src.Body != null) context.Mapper.Map(src.Body, dest);
-			});
-	}
-
-	private void CreateMapFromResult<TDestination>() => CreateMap<GrpcResult, TDestination>();
 }

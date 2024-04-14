@@ -1,3 +1,3 @@
-namespace Posts.Features;
+namespace Posts.Features.GetPhoto;
 
 public record GetPhotoResponse(byte[] Photo);

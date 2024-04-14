@@ -4,10 +4,8 @@ namespace Gateway.Extensions;
 
 public static class RabbitMqConfiguration
 {
-	public static async Task AddMasstransitRabbitMq(this WebApplicationBuilder builder)
+	public static void AddMasstransitRabbitMq(this WebApplicationBuilder builder)
 	{
-		await Task.Delay(1000 * 15);
-
 		builder.Services.AddMassTransit(config =>
 		{
 			config.UsingRabbitMq((ctx, cfg) =>

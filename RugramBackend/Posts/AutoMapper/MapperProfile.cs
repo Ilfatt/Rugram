@@ -1,34 +1,19 @@
-using AutoMapper;
-using Google.Protobuf;
-using Infrastructure.MediatR.Contracts;
-using Posts.Features;
+using Infrastructure.AutoMapper;
+using Posts.Features.GetPhoto;
+using Posts.Features.GetPosts;
 
 namespace Posts.AutoMapper;
 
-public class MapperProfile : Profile
+public class MapperProfile : BaseMappingProfile
 {
 	public MapperProfile()
 	{
-		CreateMap<GetPhotoGrpcRequest, GetPhotoRequest>()
-			.ForMember(x => x.ProfileId, x =>
-				x.MapFrom(request => new Guid(request.ProfileId)))
-			.ForMember(x => x.PhotoId, x =>
-				x.MapFrom(request => new Guid(request.PhotoId)));
-		CreateMap<GrpcResult<GetPhotoResponse>, GetPhotoGrpcResponse>()
-			.ForMember(x => x.Photo,
-				x => x.MapFrom(result => 
-					result.Body != null ? ByteString.CopyFrom(result.Body.Photo) : ByteString.Empty));
-	}
+		CreateMap<GetPhotoGrpcRequest, GetPhotoRequest>();
+		CreateMapFromResult<GetPhotoResponse, GetPhotoGrpcResponse>();
 
-	private void CreateMapFromResult<TSource, TDestination>()
-	{
-		CreateMap<TSource, TDestination>();
-		CreateMap<GrpcResult<TSource>, TDestination>()
-			.AfterMap((src, dest, context) =>
-			{
-				if (src.Body != null) context.Mapper.Map(src.Body, dest);
-			});
-	}
+		CreateMap<GetPostsGrpcRequest, GetPostsRequest>();
 
-	private void CreateMapFromResult<TDestination>() => CreateMap<GrpcResult, TDestination>();
+		CreateMap<PostDto, PostGrpc>();
+		CreateMapFromResult<GetPostsResponse, GetPostsGrpcResponse>();
+	}
 }

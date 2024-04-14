@@ -55,6 +55,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Contracts.RabbitMq\Contracts.RabbitMq.csproj" />
+      <ProjectReference Include="..\Infrastructure.AutoMapper\Infrastructure.AutoMapper.csproj" />
     </ItemGroup>
 
 </Project>

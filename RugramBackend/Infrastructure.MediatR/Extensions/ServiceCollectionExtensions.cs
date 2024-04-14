@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
 	private static readonly Type PipelineBehaviorType = typeof(IPipelineBehavior<,>);
 	private static readonly Type GenericResultType = typeof(GrpcResult<>);
 	private static readonly Type ResultType = typeof(GrpcResult);
-	
+
 	/// <summary>
 	/// Добавление ValidationBehavior для всех запросов в сброке имеющих Validator : AbstractValidator
 	/// в IServiceCollection

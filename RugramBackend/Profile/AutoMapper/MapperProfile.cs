@@ -1,17 +1,15 @@
-using Infrastructure.MediatR.Contracts;
+using Infrastructure.AutoMapper;
 using Profile.Features.CreateProfile;
 using Profile.Features.Subscribe;
 using Profile.Features.Unsubscribe;
 
 namespace Profile.AutoMapper;
 
-public class MapperProfile : global::AutoMapper.Profile
+public class MapperProfile : BaseMappingProfile
 {
 	public MapperProfile()
 	{
-		CreateMap<CreateProfileGrpcRequest, CreateProfileRequest>()
-			.ForMember(x => x.ProfileId, x =>
-				x.MapFrom(request => new Guid(request.ProfileId)));
+		CreateMap<CreateProfileGrpcRequest, CreateProfileRequest>();
 		CreateMapFromResult<CreateProfileGrpcResponse>();
 
 		CreateMap<SubscribeGrpcRequest, SubscribeRequest>();
@@ -20,16 +18,4 @@ public class MapperProfile : global::AutoMapper.Profile
 		CreateMap<UnsubscribeGrpcRequest, UnsubscribeRequest>();
 		CreateMapFromResult<UnsubscribeGrpcResponse>();
 	}
-
-	private void CreateMapFromResult<TSource, TDestination>()
-	{
-		CreateMap<TSource, TDestination>();
-		CreateMap<GrpcResult<TSource>, TDestination>()
-			.AfterMap((src, dest, context) =>
-			{
-				if (src.Body != null) context.Mapper.Map(src.Body, dest);
-			});
-	}
-
-	private void CreateMapFromResult<TDestination>() => CreateMap<GrpcResult, TDestination>();
 }

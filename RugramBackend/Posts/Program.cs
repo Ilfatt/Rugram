@@ -13,7 +13,7 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 });
 
 builder.ConfigurePostgresqlConnection();
-await builder.AddMasstransitRabbitMq();
+builder.AddMasstransitRabbitMq();
 
 builder.Services.AddGrpc();
 builder.Services.AddSingleton<IS3StorageService, MinioS3StorageService>();
