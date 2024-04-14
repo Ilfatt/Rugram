@@ -12,12 +12,15 @@ public static class RabbitMqConfiguration
 			try
 			{
 				ConfigureRabbitMq(builder);
-				break;
+				return;
 			}
 			catch (Exception)
 			{
 				await Task.Delay(1000);
 				attemptsCount--;
+				
+				if (attemptsCount <= 0)
+					throw;
 			}
 		}
 	}
