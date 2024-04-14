@@ -1,11 +1,12 @@
 using Infrastructure.MediatR.Contracts;
+using Infrastructure.S3;
 using Microsoft.EntityFrameworkCore;
 using Profile.Data;
 using Profile.Data.Models;
 
 namespace Profile.Features.CreateProfile;
 
-public class CreateProfileRequestHandler(AppDbContext appDbContext)
+public class CreateProfileRequestHandler(AppDbContext appDbContext, IS3StorageService s3StorageService)
 	: IGrpcRequestHandler<CreateProfileRequest>
 {
 	public async Task<GrpcResult> Handle(
@@ -19,8 +20,20 @@ public class CreateProfileRequestHandler(AppDbContext appDbContext)
 
 		var profile = new UserProfile(request.ProfileId, request.ProfileName);
 
+		var transaction = await appDbContext.Database.BeginTransactionAsync(cancellationToken);
+
 		appDbContext.UserProfiles.Add(profile);
 		await appDbContext.SaveChangesAsync(cancellationToken);
+
+		try
+		{
+			await s3StorageService.CreateBucketAsync(profile.Id, cancellationToken);
+		}
+		catch (Exception)
+		{
+			await transaction.RollbackAsync(cancellationToken);
+			throw;
+		}
 
 		return StatusCodes.Status204NoContent;
 	}

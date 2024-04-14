@@ -49,7 +49,6 @@ public interface IS3StorageService
 	/// <param name="fileIdentifier">уникальный идентификатор файла</param>
 	/// <param name="bucketIdentifier">уникальный идентификатор бакета</param>
 	/// <param name="cancellationToken">Токен отмены</param>
-	/// <exception cref="BucketNotFoundException">бакет не найден</exception>
 	public Task RemoveFileFromBucketAsync(Guid fileIdentifier,
 		Guid bucketIdentifier,
 		CancellationToken cancellationToken);

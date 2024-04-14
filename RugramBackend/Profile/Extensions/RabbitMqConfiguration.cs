@@ -12,6 +12,7 @@ public static class RabbitMqConfiguration
 			try
 			{
 				ConfigureRabbitMq(builder);
+				break;
 			}
 			catch (Exception)
 			{
