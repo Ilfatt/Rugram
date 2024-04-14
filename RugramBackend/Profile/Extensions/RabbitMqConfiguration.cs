@@ -1,6 +1,7 @@
 using MassTransit;
+using Profile.Consumers;
 
-namespace Gateway.Extensions;
+namespace Profile.Extensions;
 
 public static class RabbitMqConfiguration
 {
@@ -24,6 +25,8 @@ public static class RabbitMqConfiguration
 	{
 		builder.Services.AddMassTransit(config =>
 		{
+			config.AddConsumer<EditProfilePhotoConsumer>();
+
 			config.UsingRabbitMq((ctx, cfg) =>
 			{
 				cfg.Host(

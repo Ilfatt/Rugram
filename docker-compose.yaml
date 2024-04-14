@@ -106,8 +106,17 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__PostreSQL=${ProfileConnectionStringPostreSQL}
+      - RabbitMqConfig__Username=${RabbitMqUser}
+      - RabbitMqConfig__Password=${RabbitMqPassword}
+      - RabbitMqConfig__Hostname=rabbitMq
+      - RabbitMqConfig__Port=5672
+      - MinioS3__AccessKey=${MinioS3AccessKey}
+      - MinioS3__SecretKey=${MinioS3SecretKey}
+      - MinioS3__Timeout=5000
+      - MinioS3__Endpoint=profileMinioS3:9002
     depends_on:
       - DbProfile
+      - ProfileMinioS3
     networks:
       rugram:
         aliases:
@@ -126,6 +135,17 @@ services:
       rugram:
         aliases:
           - dbProfile
+  ProfileMinioS3:
+    image: minio/minio
+    container_name: profileMinioS3
+    ports:
+      - "9002:9000"
+      - "9003:9001"
+    command: server --console-address ":9001" /data/
+    networks:
+      rugram:
+        aliases:
+          - profileMinioS3
   Post:
     container_name: Post
     image: rugrampost

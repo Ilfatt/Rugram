@@ -12,7 +12,7 @@ public abstract class BaseMappingProfile : Profile
 		BaseConfiguration();
 	}
 
-	void BaseConfiguration()
+	private void BaseConfiguration()
 	{
 		CreateMap<ByteString, byte[]>()
 			.ConvertUsing(x => x.ToArray());

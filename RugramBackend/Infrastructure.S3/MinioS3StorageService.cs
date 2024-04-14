@@ -2,33 +2,33 @@ using System.Reactive.Linq;
 using Minio;
 using Minio.DataModel.Args;
 
-namespace Posts.Services.S3;
+namespace Infrastructure.S3;
 
 public class MinioS3StorageService(IMinioClient minioClient) : IS3StorageService
 {
-	public async Task<bool> BucketExistAsync(Guid bucketIdentifier)
+	public async Task<bool> BucketExistAsync(Guid bucketIdentifier, CancellationToken cancellationToken)
 	{
 		var args = new BucketExistsArgs()
 			.WithBucket(bucketIdentifier.ToString());
 
-		return await minioClient.BucketExistsAsync(args);
+		return await minioClient.BucketExistsAsync(args, cancellationToken);
 	}
 
-	public async Task CreateBucketAsync(Guid bucketIdentifier)
+	public async Task CreateBucketAsync(Guid bucketIdentifier, CancellationToken cancellationToken)
 	{
 		var args = new MakeBucketArgs()
 			.WithBucket(bucketIdentifier.ToString());
 
-		await minioClient.MakeBucketAsync(args);
+		await minioClient.MakeBucketAsync(args, cancellationToken);
 	}
 
-	public async Task RemoveBucketAsync(Guid bucketIdentifier)
+	public async Task RemoveBucketAsync(Guid bucketIdentifier, CancellationToken cancellationToken)
 	{
 		var listObjectsArgs = new ListObjectsArgs()
 			.WithBucket(bucketIdentifier.ToString());
 
 		var objectNames = await minioClient
-			.ListObjectsAsync(listObjectsArgs)
+			.ListObjectsAsync(listObjectsArgs, cancellationToken)
 			.Select(x => x.Key)
 			.ToList();
 
@@ -38,16 +38,20 @@ public class MinioS3StorageService(IMinioClient minioClient) : IS3StorageService
 				.WithBucket(bucketIdentifier.ToString())
 				.WithObjects(objectNames);
 
-			await minioClient.RemoveObjectsAsync(removeObjectsArgs);
+			await minioClient.RemoveObjectsAsync(removeObjectsArgs, cancellationToken);
 		}
 
 		var removeBucketArgs = new RemoveBucketArgs()
 			.WithBucket(bucketIdentifier.ToString());
 
-		await minioClient.RemoveBucketAsync(removeBucketArgs);
+		await minioClient.RemoveBucketAsync(removeBucketArgs, cancellationToken);
 	}
 
-	public async Task PutFileInBucketAsync(Stream fileStream, Guid fileIdentifier, Guid bucketIdentifier)
+	public async Task PutFileInBucketAsync(
+		Stream fileStream,
+		Guid fileIdentifier,
+		Guid bucketIdentifier,
+		CancellationToken cancellationToken)
 	{
 		var args = new PutObjectArgs()
 			.WithBucket(bucketIdentifier.ToString())
@@ -55,19 +59,24 @@ public class MinioS3StorageService(IMinioClient minioClient) : IS3StorageService
 			.WithObject(fileIdentifier.ToString())
 			.WithObjectSize(fileStream.Length);
 
-		await minioClient.PutObjectAsync(args);
+		await minioClient.PutObjectAsync(args, cancellationToken);
 	}
 
-	public async Task RemoveFileFromBucketAsync(Guid fileIdentifier, Guid bucketIdentifier)
+	public async Task RemoveFileFromBucketAsync(Guid fileIdentifier,
+		Guid bucketIdentifier,
+		CancellationToken cancellationToken)
 	{
 		var args = new RemoveObjectArgs()
 			.WithBucket(bucketIdentifier.ToString())
 			.WithObject(fileIdentifier.ToString());
 
-		await minioClient.RemoveObjectAsync(args);
+		await minioClient.RemoveObjectAsync(args, cancellationToken);
 	}
 
-	public async Task<MemoryStream> GetFileFromBucketAsync(Guid fileIdentifier, Guid bucketIdentifier)
+	public async Task<MemoryStream> GetFileFromBucketAsync(
+		Guid fileIdentifier,
+		Guid bucketIdentifier,
+		CancellationToken cancellationToken)
 	{
 		var response = new MemoryStream();
 		var args = new GetObjectArgs()
@@ -75,7 +84,7 @@ public class MinioS3StorageService(IMinioClient minioClient) : IS3StorageService
 			.WithObject(fileIdentifier.ToString())
 			.WithCallbackStream(stream => stream.CopyTo(response));
 
-		await minioClient.GetObjectAsync(args);
+		await minioClient.GetObjectAsync(args, cancellationToken);
 
 		response.Position = 0;
 		return response;

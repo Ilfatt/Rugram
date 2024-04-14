@@ -17,7 +17,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.AddSwagger();
 builder.AddAuthorization();
-builder.AddMasstransitRabbitMq();
+await builder.AddMasstransitRabbitMq();
 builder.AddGrpcClients();
 
 var app = builder.Build();

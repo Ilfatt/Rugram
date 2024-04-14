@@ -30,6 +30,7 @@
       <ProjectReference Include="..\Contracts.RabbitMq\Contracts.RabbitMq.csproj" />
       <ProjectReference Include="..\Infrastructure.AutoMapper\Infrastructure.AutoMapper.csproj" />
       <ProjectReference Include="..\Infrastructure.MediatR\Infrastructure.MediatR.csproj" />
+      <ProjectReference Include="..\Infrastructure.S3\Infrastructure.S3.csproj" />
     </ItemGroup>
 
     <ItemGroup>
