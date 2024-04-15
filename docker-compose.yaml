@@ -114,3 +114,11 @@ services:
       rugram:
         aliases:
           - dbProfile
+  RugramFrontend:
+    image: rugramfrontend
+    container_name: rugramfrontend
+    ports:
+      - "3000:5173"
+    build:
+      context: ./RugramFrontend
+      dockerfile: Dockerfile
