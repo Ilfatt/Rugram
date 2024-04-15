@@ -35,6 +35,6 @@ await app.MigrateDbAsync();
 
 app.MapGrpcService<PostGrpcService>();
 
-await Task.Delay(1000 * 10);
+await Task.Delay(1000 * 15);
 
 app.Run();

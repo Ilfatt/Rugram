@@ -42,6 +42,6 @@ app.UseCors(option =>
 
 app.RouteEndpoints();
 
-await Task.Delay(1000 * 10);
+await Task.Delay(1000 * 15);
 
 app.Run();
