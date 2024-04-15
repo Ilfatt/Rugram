@@ -28,6 +28,7 @@ public class CreateProfileRequestHandler(AppDbContext appDbContext, IS3StorageSe
 		try
 		{
 			await s3StorageService.CreateBucketAsync(profile.Id, cancellationToken);
+			await transaction.CommitAsync(cancellationToken);
 		}
 		catch (Exception)
 		{

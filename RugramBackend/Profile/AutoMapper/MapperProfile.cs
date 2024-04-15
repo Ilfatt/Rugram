@@ -1,5 +1,8 @@
 using Infrastructure.AutoMapper;
 using Profile.Features.CreateProfile;
+using Profile.Features.GetProfileIndicators;
+using Profile.Features.GetProfileName;
+using Profile.Features.GetProfilePhoto;
 using Profile.Features.Subscribe;
 using Profile.Features.Unsubscribe;
 
@@ -17,5 +20,14 @@ public class MapperProfile : BaseMappingProfile
 
 		CreateMap<UnsubscribeGrpcRequest, UnsubscribeRequest>();
 		CreateMapFromResult<UnsubscribeGrpcResponse>();
+
+		CreateMap<GetProfileNameGrpcRequest, GetProfileNameRequest>();
+		CreateMapFromResult<GetProfileNameResponse, GetProfileNameGrpcResponse>();
+		
+		CreateMap<GetProfilePhotoGrpcRequest, GetProfilePhotoRequest>();
+		CreateMapFromResult<GetProfilePhotoResponse, GetProfilePhotoGrpcResponse>();
+		
+		CreateMap<GetProfileIndicatorsGrpcRequest, GetProfileIndicatorsRequest>();
+		CreateMapFromResult<GetProfileIndicatorsResponse, GetProfileIndicatorsGrpcResponse>();
 	}
 }

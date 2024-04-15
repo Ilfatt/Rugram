@@ -1,6 +1,9 @@
 using AutoMapper;
 using Grpc.Core;
 using MediatR;
+using Profile.Features.GetProfileIndicators;
+using Profile.Features.GetProfileName;
+using Profile.Features.GetProfilePhoto;
 using Profile.Features.Subscribe;
 using Profile.Features.Unsubscribe;
 
@@ -23,5 +26,29 @@ public class ProfileGrpcService(IMapper mapper, IMediator mediator)
 	{
 		return mapper.Map<UnsubscribeGrpcResponse>(
 			await mediator.Send(mapper.Map<UnsubscribeRequest>(request), context.CancellationToken));
+	}
+
+	public override async Task<GetProfileNameGrpcResponse> GetProfileName(
+		GetProfileNameGrpcRequest request,
+		ServerCallContext context)
+	{
+		return mapper.Map<GetProfileNameGrpcResponse>(
+			await mediator.Send(mapper.Map<GetProfileNameRequest>(request), context.CancellationToken));
+	}
+
+	public override async Task<GetProfilePhotoGrpcResponse> GetProfilePhoto(
+		GetProfilePhotoGrpcRequest request,
+		ServerCallContext context)
+	{
+		return mapper.Map<GetProfilePhotoGrpcResponse>(
+			await mediator.Send(mapper.Map<GetProfilePhotoRequest>(request), context.CancellationToken));
+	}
+
+	public override async Task<GetProfileIndicatorsGrpcResponse> GetProfileIndicators(
+		GetProfileIndicatorsGrpcRequest request,
+		ServerCallContext context)
+	{
+		return mapper.Map<GetProfileIndicatorsGrpcResponse>(
+			await mediator.Send(mapper.Map<GetProfileIndicatorsRequest>(request), context.CancellationToken));
 	}
 }

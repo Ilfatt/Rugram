@@ -1,5 +1,33 @@
 syntax = "proto3";
 
+message GetProfileIndicatorsGrpcRequest{
+  string profileId = 1;
+}
+
+message GetProfileIndicatorsGrpcResponse{
+  int32 httpStatusCode = 1;
+  int32 SubscribersCount = 2;
+  int32 SubscriptionsCount = 3;
+}
+
+message GetProfileNameGrpcRequest{
+  string profileId = 1;
+}
+
+message GetProfileNameGrpcResponse{
+  int32 httpStatusCode = 1;
+  string profileName = 2;
+}
+
+message GetProfilePhotoGrpcRequest{
+  string profileId = 1;
+}
+
+message GetProfilePhotoGrpcResponse{
+  int32 httpStatusCode = 1;
+  bytes profilePhoto = 2;
+}
+
 message SubscribeGrpcRequest{
   string SubscriberId = 1;
   string IdOfProfileSubscribedTo = 2;
@@ -22,4 +50,7 @@ message UnsubscribeGrpcResponse{
 service ProfileMicroservice{
   rpc Subscribe (SubscribeGrpcRequest) returns (SubscribeGrpcResponse);
   rpc Unsubscribe (UnsubscribeGrpcRequest) returns (UnsubscribeGrpcResponse);
+  rpc GetProfileName (GetProfileNameGrpcRequest) returns (GetProfileNameGrpcResponse);
+  rpc GetProfilePhoto (GetProfilePhotoGrpcRequest) returns (GetProfilePhotoGrpcResponse);
+  rpc GetProfileIndicators (GetProfileIndicatorsGrpcRequest) returns (GetProfileIndicatorsGrpcResponse);
 }

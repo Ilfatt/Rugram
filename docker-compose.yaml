@@ -19,7 +19,7 @@ services:
       - AuthOptions__Issuer=RugramAuth
       - AuthOptions__Audience=Rugram
       - AuthOptions__JwtSecretKey=${JwtSecretKey}
-      - AuthOptions__AccessTokenLifetimeInMinutes=2000
+      - AuthOptions__AccessTokenLifetimeInMinutes=2
       - Microservices__AuthAddress=http://auth:80
       - Microservices__ProfileAddress=http://profile:80
       - Microservices__PostAddress=http://post:80
@@ -46,7 +46,7 @@ services:
       - AuthOptions__Issuer=RugramAuth
       - AuthOptions__Audience=Rugram
       - AuthOptions__JwtSecretKey=${JwtSecretKey}
-      - AuthOptions__AccessTokenLifetimeInMinutes=2000
+      - AuthOptions__AccessTokenLifetimeInMinutes=2
       - AuthOptions__RefreshTokenLifetimeInHours=168
       - Cache__SlidingExpirationForRefreshTokenInMinutes=5
       - MailConfirmationToken__LifetimeInHours=24

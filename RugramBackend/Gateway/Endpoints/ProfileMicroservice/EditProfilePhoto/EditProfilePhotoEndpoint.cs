@@ -11,7 +11,7 @@ public class EditProfilePhotoEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapPost("profile/editProfilePhoto/", async (
+		app.MapPost("profile/getProfilePhoto/", async (
 				[FromForm] EditProfilePhotoRequest request,
 				[FromServices] IHttpContextAccessor httpContextAccessor,
 				IBus bus,
