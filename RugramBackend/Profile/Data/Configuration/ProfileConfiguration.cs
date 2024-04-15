@@ -15,7 +15,7 @@ public class ProfileConfiguration : IEntityTypeConfiguration<UserProfile>
 		builder
 			.Property(x => x.ProfileName)
 			.HasMaxLength(25);
-			
+
 		builder
 			.HasIndex(x => x.ProfileName)
 			.IsUnique();

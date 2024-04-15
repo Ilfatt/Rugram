@@ -11,9 +11,9 @@ public class SendEmailConfirmationHandler(
 		AppDbContext dbContext,
 		IConfiguration configuration,
 		IEmailSenderService emailSenderService)
-	: IGrpcRequestHandler<SendEmailConfirmationRequest, SendEmailConfirmationResponse>
+	: IGrpcRequestHandler<SendEmailConfirmationRequest>
 {
-	public async Task<GrpcResult<SendEmailConfirmationResponse>> Handle(
+	public async Task<GrpcResult> Handle(
 		SendEmailConfirmationRequest request,
 		CancellationToken cancellationToken)
 	{
@@ -21,7 +21,7 @@ public class SendEmailConfirmationHandler(
 			.AnyAsync(user => user.Email == request.Email, cancellationToken);
 
 		if (alreadyExistUserWithThisEmail) return StatusCodes.Status409Conflict;
-		
+
 
 		var token = GenerateSecureToken();
 		var mailConfirmationToken = new MailConfirmationToken

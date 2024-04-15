@@ -23,7 +23,7 @@ public class AuthGrpcService(IMediator mediator, IMapper mapper) : AuthMicroserv
 		ServerCallContext context)
 	{
 		return mapper.Map<SendEmailConfirmationGrpcResponse>(
-			await mediator.Send(mapper.Map<SendEmailConfirmationRequest>(request)));
+			await mediator.Send(mapper.Map<SendEmailConfirmationRequest>(request), context.CancellationToken));
 	}
 
 	public override async Task<LoginGrpcResponse> Login(
@@ -31,7 +31,7 @@ public class AuthGrpcService(IMediator mediator, IMapper mapper) : AuthMicroserv
 		ServerCallContext context)
 	{
 		return mapper.Map<LoginGrpcResponse>(
-			await mediator.Send(mapper.Map<LoginRequest>(request)));
+			await mediator.Send(mapper.Map<LoginRequest>(request), context.CancellationToken));
 	}
 
 	public override async Task<UpdateJwtTokenGrpcResponse> UpdateJwtTokenGrpc(
@@ -39,6 +39,6 @@ public class AuthGrpcService(IMediator mediator, IMapper mapper) : AuthMicroserv
 		ServerCallContext context)
 	{
 		return mapper.Map<UpdateJwtTokenGrpcResponse>(
-			await mediator.Send(mapper.Map<UpdateJwtTokenRequest>(request)));
+			await mediator.Send(mapper.Map<UpdateJwtTokenRequest>(request), context.CancellationToken));
 	}
 }

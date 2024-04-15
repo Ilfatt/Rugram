@@ -16,8 +16,7 @@ public class UpdateJwtTokenEndpoint : IEndpoint
 				CancellationToken cancellationToken) =>
 			{
 				var response = await authClient.UpdateJwtTokenGrpcAsync(
-					mapper.Map<UpdateJwtTokenGrpcRequest>(request),
-					cancellationToken: cancellationToken);
+					mapper.Map<UpdateJwtTokenGrpcRequest>(request), cancellationToken: cancellationToken);
 
 				return response.HttpStatusCode switch
 				{

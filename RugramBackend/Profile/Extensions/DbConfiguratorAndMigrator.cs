@@ -20,10 +20,6 @@ public static class DbConfiguratorAndMigrator
 					opt =>
 					{
 						opt.MigrationsAssembly(typeof(AppDbContext).GetTypeInfo().Assembly.GetName().Name);
-						opt.EnableRetryOnFailure(
-							15,
-							TimeSpan.FromSeconds(30),
-							null);
 					});
 			});
 	}

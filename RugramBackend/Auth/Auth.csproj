@@ -9,9 +9,10 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+        <PackageReference Include="AutoMapper" Version="13.0.1" />
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.62.0" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
             <PrivateAssets>all</PrivateAssets>
@@ -22,6 +23,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Contracts.RabbitMq\Contracts.RabbitMq.csproj" />
+      <ProjectReference Include="..\Infrastructure.AutoMapper\Infrastructure.AutoMapper.csproj" />
       <ProjectReference Include="..\Infrastructure.MediatR\Infrastructure.MediatR.csproj" />
     </ItemGroup>
 
@@ -43,7 +46,7 @@
     </ItemGroup>
     
     <ItemGroup>
-      <Protobuf Include="Grpc\ProfileService\ProfileService.proto">
+      <Protobuf Include="Grpc\ProfileService\ProfileForAuthService.proto">
         <GrpcServices>Both</GrpcServices>
         <Access>Public</Access>
         <ProtoCompile>True</ProtoCompile>

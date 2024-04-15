@@ -9,6 +9,6 @@ message CreateProfileGrpcResponse{
   int32 httpStatusCode = 1;
 }
 
-service ProfileMicroservice{
+service ProfileForAuthMicroservice{
   rpc CreateProfile (CreateProfileGrpcRequest) returns (CreateProfileGrpcResponse);
 }

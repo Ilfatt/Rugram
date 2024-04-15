@@ -1,10 +1,12 @@
 using Auth.Data;
 using Auth.Data.Models;
+using Contracts.RabbitMq;
 using Infrastructure.MediatR.Contracts;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using static Auth.Features.UserAuthHelper;
-using static ProfileMicroservice;
+using static ProfileForAuthMicroservice;
 
 
 namespace Auth.Features.RegisterUser;
@@ -13,7 +15,8 @@ public class RegisterUserRequestHandler(
 		AppDbContext dbContext,
 		IConfiguration configuration,
 		IDistributedCache cache,
-		ProfileMicroserviceClient profileClient)
+		ProfileForAuthMicroserviceClient profileClient,
+		IBus bus)
 	: IGrpcRequestHandler<RegisterUserRequest, RegisterUserResponse>
 {
 	public async Task<GrpcResult<RegisterUserResponse>> Handle(
@@ -31,9 +34,9 @@ public class RegisterUserRequestHandler(
 			                              token.Value == hashedToken, cancellationToken);
 
 		if (mailConfirmationToken == null) return StatusCodes.Status404NotFound;
-		
+
 		if (mailConfirmationToken.ValidTo < DateTime.UtcNow) return StatusCodes.Status403Forbidden;
-		
+
 		var user = new User
 		{
 			Email = request.Email,
@@ -44,12 +47,14 @@ public class RegisterUserRequestHandler(
 
 		var result = CreateRefreshToken(configuration, user.Id);
 		var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
-		
+
 		user.RefreshTokens.Add(result.RefreshToken);
 
 		dbContext.Users.Add(user);
 		dbContext.RefreshTokens.Add(result.RefreshToken);
 		await dbContext.SaveChangesAsync(cancellationToken);
+
+		await bus.Publish(new CreateBucketMessage(user.Id), cancellationToken);
 
 		try
 		{
@@ -70,9 +75,10 @@ public class RegisterUserRequestHandler(
 
 			var createProfileResponse = await createProfileTask;
 
-			if (createProfileResponse.HttpStatusCode != 200)
+			if (createProfileResponse.HttpStatusCode != StatusCodes.Status204NoContent)
 			{
 				await transaction.RollbackAsync(cancellationToken);
+				await bus.Publish(new DeleteBucketMessage(user.Id), cancellationToken);
 				return createProfileResponse.HttpStatusCode;
 			}
 
@@ -80,11 +86,12 @@ public class RegisterUserRequestHandler(
 		}
 		catch (Exception)
 		{
+			//TODO: implement outbox
 			await transaction.RollbackAsync(cancellationToken);
+			await bus.Publish(new DeleteBucketMessage(user.Id), cancellationToken);
 			throw;
 		}
-		
-		
+
 		var jwtToken = GenerateJwtToken(configuration, user.Id, user.Role);
 
 		return new RegisterUserResponse(

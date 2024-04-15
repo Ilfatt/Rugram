@@ -16,8 +16,7 @@ public class LoginEndpoint : IEndpoint
 				CancellationToken cancellationToken) =>
 			{
 				var response = await authClient.LoginAsync(
-					mapper.Map<LoginGrpcRequest>(request),
-					cancellationToken: cancellationToken);
+					mapper.Map<LoginGrpcRequest>(request), cancellationToken: cancellationToken);
 
 				return response.HttpStatusCode switch
 				{

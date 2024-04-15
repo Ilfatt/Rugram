@@ -2,7 +2,6 @@ using Auth.Data;
 using Infrastructure.MediatR.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using static Auth.Features.UserAuthHelper;
 
 namespace Auth.Features.Login;
 
@@ -21,10 +20,10 @@ public class LoginRequestHandler(
 		if (user == null) return StatusCodes.Status404NotFound;
 		if (user.Password != request.Password.HashSha256()) return StatusCodes.Status403Forbidden;
 
-		var jwtToken = GenerateJwtToken(configuration, user.Id, user.Role);
-		var result = CreateRefreshToken(configuration, user.Id);
+		var jwtToken = UserAuthHelper.GenerateJwtToken(configuration, user.Id, user.Role);
+		var result = UserAuthHelper.CreateRefreshToken(configuration, user.Id);
 
-		await PutInCacheRefreshTokenAsync(
+		await UserAuthHelper.PutInCacheRefreshTokenAsync(
 			configuration,
 			cache,
 			result.RefreshToken.Value,

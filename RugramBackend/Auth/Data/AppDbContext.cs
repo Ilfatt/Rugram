@@ -9,9 +9,9 @@ public class AppDbContext : DbContext
 	{
 	}
 
-	public DbSet<User> Users { get; set; } = null!;
-	public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
-	public DbSet<MailConfirmationToken> MailConfirmationTokens { get; set; } = null!;
+	public DbSet<User> Users { get; init; } = null!;
+	public DbSet<RefreshToken> RefreshTokens { get; init; } = null!;
+	public DbSet<MailConfirmationToken> MailConfirmationTokens { get; init; } = null!;
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{

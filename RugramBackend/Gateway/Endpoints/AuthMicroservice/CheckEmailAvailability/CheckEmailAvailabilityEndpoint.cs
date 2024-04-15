@@ -14,7 +14,7 @@ public class CheckEmailAvailabilityEndpoint : IEndpoint
 		app.MapGet("auth/checkEmailAvailability/{email}", (string email,
 				AuthMicroserviceClient authClient,
 				IMapper mapper,
-				CancellationToken cancellationToken) => Results.Ok())
+				CancellationToken cancellationToken) => Results.NoContent())
 			.AllowAnonymous()
 			.WithOpenApi(generatedOperation =>
 			{
@@ -34,7 +34,7 @@ public class CheckEmailAvailabilityEndpoint : IEndpoint
 					StatusCodes.Status409Conflict,
 					"Почта занята"),
 				new SwaggerResponseAttribute(
-					StatusCodes.Status200OK,
+					StatusCodes.Status204NoContent,
 					"Почта свободна")
 			);
 	}

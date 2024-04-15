@@ -9,17 +9,16 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 	serverOptions.ConfigureEndpointDefaults(options => options.Protocols = HttpProtocols.Http2);
 });
 
-builder.Services.AddCors();
-
+builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Configuration.AddEnvironmentVariables();
+builder.Services.AddCors();
+builder.Services.AddGrpc();
+builder.Services.AddHttpContextAccessor();
 
 builder.AddSwagger();
 builder.AddAuthorization();
-
-builder.Services.AddGrpc();
+builder.AddMasstransitRabbitMq();
 builder.AddGrpcClients();
-
-builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 var app = builder.Build();
 
@@ -33,7 +32,6 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
-app.RouteEndpoints();
 
 app.UseCors(option =>
 {
@@ -41,5 +39,9 @@ app.UseCors(option =>
 	option.AllowAnyMethod();
 	option.AllowAnyOrigin();
 });
+
+app.RouteEndpoints();
+
+await Task.Delay(1000 * 10);
 
 app.Run();

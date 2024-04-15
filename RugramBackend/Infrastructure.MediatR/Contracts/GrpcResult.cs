@@ -1,19 +1,30 @@
 namespace Infrastructure.MediatR.Contracts;
 
-public class GrpcResult<TBody>
+public class GrpcResult
 {
-	private GrpcResult(int httpStatusCode)
+	protected GrpcResult(int httpStatusCode)
 	{
 		HttpStatusCode = httpStatusCode;
 	}
 
-	private GrpcResult(TBody body)
+	public int HttpStatusCode { get; private init; }
+
+	public static implicit operator GrpcResult(int httpStatusCode)
 	{
-		Body = body;
-		HttpStatusCode = 200;
+		return new GrpcResult(httpStatusCode);
+	}
+}
+
+public class GrpcResult<TBody> : GrpcResult
+{
+	private GrpcResult(int httpStatusCode) : base(httpStatusCode)
+	{
 	}
 
-	public int HttpStatusCode { get; private init; }
+	private GrpcResult(TBody body) : base(200)
+	{
+		Body = body;
+	}
 
 	public TBody? Body { get; private init; }
 
