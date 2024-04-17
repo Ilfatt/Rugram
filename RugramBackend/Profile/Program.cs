@@ -6,6 +6,7 @@ using Minio;
 using Profile.AutoMapper;
 using Profile.Extensions;
 using Profile.Grpc.ProfileForAuthService;
+using Profile.Grpc.ProfileService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,7 @@ var app = builder.Build();
 await app.MigrateDbAsync();
 
 app.MapGrpcService<ProfileForAuthGrpcService>();
+app.MapGrpcService<ProfileGrpcService>();
 
 await Task.Delay(1000 * 15);
 
