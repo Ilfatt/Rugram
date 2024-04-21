@@ -1,5 +1,4 @@
 using Gateway.Contracts;
-using Gateway.Endpoints.ProfileMicroservice.GetProfileName;
 using Swashbuckle.AspNetCore.Annotations;
 using static ProfileMicroservice;
 
@@ -34,7 +33,7 @@ public class GetProfileIndicatorsEndpoint : IEndpoint
 			.WithOpenApi(generatedOperation =>
 			{
 				var parameter = generatedOperation.Parameters[0];
-				parameter.Description = 
+				parameter.Description =
 					"Id профиля(или пользователя) количество подписчиков и подписок которого надо получить";
 				return generatedOperation;
 			})

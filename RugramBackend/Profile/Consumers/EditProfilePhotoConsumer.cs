@@ -1,7 +1,6 @@
 using Contracts.RabbitMq;
 using Infrastructure.S3;
 using MassTransit;
-using Minio.Exceptions;
 
 namespace Profile.Consumers;
 

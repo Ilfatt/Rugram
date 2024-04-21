@@ -8,7 +8,7 @@ using static ProfileMicroservice;
 namespace Gateway.Endpoints.ProfileMicroservice.GetFeed;
 
 public class GetFeedEndpoint : IEndpoint
-{	
+{
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
 		app.MapGet("profile/feed/{pageSize}&{pageNumber}", async (

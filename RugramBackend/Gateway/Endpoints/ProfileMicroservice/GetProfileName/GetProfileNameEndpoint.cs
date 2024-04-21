@@ -18,7 +18,7 @@ public class GetProfileNameEndpoint : IEndpoint
 						ProfileId = profileId.ToString()
 					},
 					cancellationToken: cancellationToken);
-				
+
 				return response.HttpStatusCode switch
 				{
 					200 => Results.Ok(new GetProfileNameResponse(response.ProfileName)),

@@ -3,11 +3,11 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace Gateway.Endpoints.ProfileMicroservice.GetProfileRecommendations;
 
 public record GetProfileRecommendationsResponse(
-	[SwaggerSchema("Профили")]
+	[property: SwaggerSchema("Профили")]
 	ProfileDto[] Profiles);
 
 public record ProfileDto(
-	[SwaggerSchema("Id профиля")]
+	[property: SwaggerSchema("Id профиля")]
 	Guid Id,
-	[SwaggerSchema("Ник профиля")]
+	[property: SwaggerSchema("Ник профиля")]
 	string ProfileName);

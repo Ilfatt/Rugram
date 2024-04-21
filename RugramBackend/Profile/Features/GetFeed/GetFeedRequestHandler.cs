@@ -40,7 +40,7 @@ public class GetFeedRequestHandler(
 				.Select(postGrpcDto => new Guid(postGrpcDto.ProfileId))
 				.Contains(x.Id))
 			.ToDictionaryAsync(x => x.Id, x => x.ProfileName, cancellationToken);
-		
+
 		return new GetFeedResponse(response.FeedPostDto
 			.Select(x => new FeedPostDto(
 				new Guid(x.ProfileId),
