@@ -1,11 +1,27 @@
-import { FC } from 'react';
+import { FC } from "react";
+import styled from "styled-components";
+import { GlassDiv } from "../styles";
 
-const PhotoCard : FC = () => {
-  const a = 0;
+const PostContainer = styled(GlassDiv)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  padding: 8px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+  }
+`
+
+const PhotoCard: FC<{src: string}> = ({src}) => {
   return (
-    <div>
-      {a}
-    </div>
+    <PostContainer>
+      <img src={src}/>
+    </PostContainer>
   );
 };
 

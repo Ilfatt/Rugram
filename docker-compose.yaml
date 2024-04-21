@@ -55,7 +55,7 @@ services:
       - EmailConfig__SenderPassword=${EmailSenderPassword}
       - SmtpSettings__Port=587
       - SmtpSettings__SmtpAddress=smtp.mail.ru
-      - Domain__AppUrl=https://localhost:3010
+      - Domain__AppUrl=http://localhost:3010
       - ConnectionStrings__PostreSQL=${AuthConnectionStringPostreSQL}
       - ConnectionStrings__Redis=redisAuth:6379,password=${AuthRedisPassword}
       - Microservices__ProfileAddress=http://profile:80
@@ -218,7 +218,11 @@ services:
   #   image: rugramfrontend
   #   container_name: rugramfrontend
   #   ports:
-  #     - "3000:5173"
+  #     - "3010:5173"
   #   build:
   #     context: ./RugramFrontend
   #     dockerfile: Dockerfile
+  #   networks:
+  #     rugram:
+  #       aliases:
+  #         - rugramrontend
