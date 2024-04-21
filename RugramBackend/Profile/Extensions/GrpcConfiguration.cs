@@ -1,5 +1,4 @@
 namespace Profile.Extensions;
-
 using static PostForProfileMicroservice.PostForProfileMicroservice;
 
 public static class GrpcConfiguration
