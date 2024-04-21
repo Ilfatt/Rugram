@@ -1,13 +1,11 @@
 using FluentValidation;
 
-namespace Posts.Features.GetPosts;
+namespace Profile.Features.GetFeed;
 
-public class GetPostsRequestValidator : AbstractValidator<GetPostsRequest>
+public class GetFeedRequestValidator : AbstractValidator<GetFeedRequest>
 {
-	public GetPostsRequestValidator()
+	public GetFeedRequestValidator()
 	{
-		RuleFor(x => x.ProfileId)
-			.NotEqual(Guid.Empty);
 		RuleFor(x => x.PageSize)
 			.Must(x => x is > -1 and <= 1000);
 		RuleFor(x => x.PageNumber)

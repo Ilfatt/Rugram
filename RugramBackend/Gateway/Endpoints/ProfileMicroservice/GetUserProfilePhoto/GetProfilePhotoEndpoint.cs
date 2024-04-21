@@ -51,7 +51,7 @@ public class GetProfilePhotoEndpoint : IEndpoint
 				new SwaggerResponseAttribute(
 					StatusCodes.Status200OK,
 					"",
-					typeof(GetProfileNameResponse))
+					typeof(GetProfilePhotoResponse))
 			);
 	}
 }

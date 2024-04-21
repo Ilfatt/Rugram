@@ -24,7 +24,7 @@ public class GetPhotoRequestHandler(IS3StorageService s3StorageService)
 		{
 			return StatusCodes.Status404NotFound;
 		}
-		catch (FileNotFoundException)
+		catch (ObjectNotFoundException)
 		{
 			return StatusCodes.Status404NotFound;
 		}

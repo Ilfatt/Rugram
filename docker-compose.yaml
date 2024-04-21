@@ -115,6 +115,7 @@ services:
       - MinioS3__SecretKey=${MinioS3SecretKey}
       - MinioS3__Timeout=5000
       - MinioS3__Endpoint=profileMinioS3:9000
+      - Microservices__PostAddress=http://post:80
     depends_on:
       - DbProfile
       - ProfileMinioS3

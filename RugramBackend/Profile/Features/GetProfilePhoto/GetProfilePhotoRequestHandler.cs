@@ -30,7 +30,7 @@ public class GetProfilePhotoRequestHandler(IS3StorageService s3StorageService, A
 			if (await userExist)
 				throw new ApplicationException("У пользователя нет бакета в хранилище аваторок");
 		}
-		catch (FileNotFoundException)
+		catch (ObjectNotFoundException)
 		{
 			if (await userExist)
 				return StatusCodes.Status204NoContent;

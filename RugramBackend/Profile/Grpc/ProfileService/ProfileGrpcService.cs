@@ -1,6 +1,7 @@
 using AutoMapper;
 using Grpc.Core;
 using MediatR;
+using Profile.Features.GetFeed;
 using Profile.Features.GetProfileIndicators;
 using Profile.Features.GetProfileName;
 using Profile.Features.GetProfilePhoto;
@@ -50,5 +51,13 @@ public class ProfileGrpcService(IMapper mapper, IMediator mediator)
 	{
 		return mapper.Map<GetProfileIndicatorsGrpcResponse>(
 			await mediator.Send(mapper.Map<GetProfileIndicatorsRequest>(request), context.CancellationToken));
+	}
+
+	public override async Task<GetFeedGrpcResponse> GetFeed(
+		GetFeedGrpcRequest request,
+		ServerCallContext context)
+	{
+		return mapper.Map<GetFeedGrpcResponse>(
+			await mediator.Send(mapper.Map<GetFeedRequest>(request), context.CancellationToken));
 	}
 }
