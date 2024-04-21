@@ -8,7 +8,7 @@ public class GetProfileNameEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapGet("profile/getProfileName/{profileId}", async (
+		app.MapGet("profile/profileName/{profileId}", async (
 				Guid profileId,
 				ProfileMicroserviceClient profileClient,
 				CancellationToken cancellationToken) =>

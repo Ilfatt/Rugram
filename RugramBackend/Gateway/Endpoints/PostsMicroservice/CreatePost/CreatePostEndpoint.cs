@@ -11,7 +11,7 @@ public class CreatePostEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapPost("post/create", async (
+		app.MapPost("post", async (
 				[FromForm] CreatePostRequest request,
 				IBus bus,
 				[FromServices] IHttpContextAccessor httpContextAccessor,

@@ -11,7 +11,7 @@ public class GetFeedEndpoint : IEndpoint
 {	
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapGet("profile/getFeed/{pageSize}&{pageNumber}", async (
+		app.MapGet("profile/feed/{pageSize}&{pageNumber}", async (
 				int pageSize,
 				int pageNumber,
 				ProfileMicroserviceClient profileClient,

@@ -10,7 +10,7 @@ public class GetPhotoEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapGet("post/get/{photoId}&{profileId}", async (
+		app.MapGet("post/photo/{photoId}&{profileId}", async (
 				Guid photoId,
 				Guid profileId,
 				PostMicroserviceClient postClient,

@@ -9,7 +9,7 @@ public class GetProfileIndicatorsEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapGet("profile/getProfileIndicators/{profileId}", async (
+		app.MapGet("profile/profileIndicators/{profileId}", async (
 				Guid profileId,
 				ProfileMicroserviceClient profileClient,
 				CancellationToken cancellationToken) =>
