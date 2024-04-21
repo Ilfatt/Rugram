@@ -1,4 +1,3 @@
-using System.Reactive.Linq;
 using Minio;
 using Minio.DataModel.Args;
 
@@ -24,23 +23,6 @@ public class MinioS3StorageService(IMinioClient minioClient) : IS3StorageService
 
 	public async Task RemoveBucketAsync(Guid bucketIdentifier, CancellationToken cancellationToken)
 	{
-		var listObjectsArgs = new ListObjectsArgs()
-			.WithBucket(bucketIdentifier.ToString());
-
-		var objectNames = await minioClient
-			.ListObjectsAsync(listObjectsArgs, cancellationToken)
-			.Select(x => x.Key)
-			.ToList();
-
-		if (objectNames.Any())
-		{
-			var removeObjectsArgs = new RemoveObjectsArgs()
-				.WithBucket(bucketIdentifier.ToString())
-				.WithObjects(objectNames);
-
-			await minioClient.RemoveObjectsAsync(removeObjectsArgs, cancellationToken);
-		}
-
 		var removeBucketArgs = new RemoveBucketArgs()
 			.WithBucket(bucketIdentifier.ToString());
 

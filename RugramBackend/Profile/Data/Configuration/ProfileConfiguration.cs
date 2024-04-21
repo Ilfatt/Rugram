@@ -11,11 +11,9 @@ public class ProfileConfiguration : IEntityTypeConfiguration<UserProfile>
 		builder
 			.HasMany(x => x.Subscribers)
 			.WithMany(x => x.SubscribedTo);
-
 		builder
 			.Property(x => x.ProfileName)
 			.HasMaxLength(25);
-
 		builder
 			.HasIndex(x => x.ProfileName)
 			.IsUnique();

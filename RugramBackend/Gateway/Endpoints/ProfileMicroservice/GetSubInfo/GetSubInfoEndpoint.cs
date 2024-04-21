@@ -1,60 +1,61 @@
 using AutoMapper;
 using Gateway.Contracts;
+using Gateway.Endpoints.ProfileMicroservice.GetFeed;
 using Gateway.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using static ProfileMicroservice;
 
-namespace Gateway.Endpoints.ProfileMicroservice.GetFeed;
 
-public class GetFeedEndpoint : IEndpoint
-{	
+namespace Gateway.Endpoints.ProfileMicroservice.GetSubInfo;
+
+public class GetSubInfoEndpoint : IEndpoint
+{
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapGet("profile/feed/{pageSize}&{pageNumber}", async (
-				int pageSize,
-				int pageNumber,
+		app.MapGet("profile/subInfo/{profileId}", async (
+				Guid profileId,
 				ProfileMicroserviceClient profileClient,
 				[FromServices] IHttpContextAccessor httpContextAccessor,
 				IMapper mapper,
 				CancellationToken cancellationToken) =>
 			{
-				var response = await profileClient.GetFeedAsync(new GetFeedGrpcRequest()
+				var response = await profileClient.GetSubInfoAsync(new GetSubInfoGrpcRequest()
 					{
-						ProfileId = httpContextAccessor.HttpContext!.GetUserId().ToString(),
-						PageSize = pageSize,
-						PageNumber = pageNumber
+						ThisProfileId = httpContextAccessor.HttpContext!.GetUserId().ToString(), 
+						OtherProfileId = profileId.ToString(), 
 					},
 					cancellationToken: cancellationToken);
 
 				return response.HttpStatusCode switch
 				{
-					200 => Results.Ok(mapper.Map<GetFeedResponse>(response)),
+					200 => Results.Ok(mapper.Map<GetSubInfoResponse>(response)),
 					400 => Results.BadRequest(),
+					404 => Results.NotFound(),
 					_ => Results.Problem(statusCode: 500)
 				};
 			})
 			.RequireAuthorization()
 			.WithOpenApi(generatedOperation =>
 			{
-				generatedOperation.Parameters[0].Description = "Размер страницы";
-				generatedOperation.Parameters[1].Description = "Номер страницы";
+				generatedOperation.Parameters[0].Description = "Id профиля относительо которого нужно получить информацию";
 
 				return generatedOperation;
 			})
 			.WithTags("Profile")
-			.WithSummary("Получить ленту")
+			.WithSummary("Получить информацию о том кто на кого подписан")
 			.WithDescription("Доступ: авторизованные пользователи")
 			.WithMetadata(
 				new SwaggerResponseAttribute(StatusCodes.Status500InternalServerError),
 				new SwaggerResponseAttribute(StatusCodes.Status401Unauthorized),
 				new SwaggerResponseAttribute(StatusCodes.Status400BadRequest,
-					"Не пройдена валидация. pageSize is > -1 and <= 1000," +
-					$" pageNumber is > -1 and < 100000, {int.MaxValue} / pageNumber >= pageSize"),
+					"В запросе отправлен свой же id"),
+				new SwaggerResponseAttribute(StatusCodes.Status404NotFound,
+					"Профиль не найден"),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status200OK,
 					"",
-					typeof(GetFeedResponse))
+					typeof(GetSubInfoResponse))
 			);
 	}
 }
