@@ -1,6 +1,6 @@
-import { FC } from 'react';
-import { icons } from '../enums';
-import styled from 'styled-components';
+import { FC } from "react";
+import { icons } from "../enums";
+import styled from "styled-components";
 
 const Logo = styled.div`
   position: absolute;
@@ -9,9 +9,9 @@ const Logo = styled.div`
   img {
     height: 48px;
   }
-`
+`;
 
-const LogoComponent : FC = () => {
+const LogoComponent: FC = () => {
   return (
     <Logo>
       <img src={icons.logo} />

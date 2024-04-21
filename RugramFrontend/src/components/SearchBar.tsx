@@ -1,15 +1,14 @@
-import { FC, useState } from 'react';
-import styled from 'styled-components';
-import { icons } from '../enums';
-import LogoComponent from './LogoComponent';
-import { GlassDiv } from '../styles';
+import { FC, useState } from "react";
+import styled from "styled-components";
+import { icons } from "../enums";
+import { GlassDiv } from "../styles";
 
 const SearchContainer = styled.div`
   min-width: 88vw;
   display: flex;
   justify-content: center;
   position: sticky;
-`
+`;
 
 const BarContainer = styled(GlassDiv)`
   display: flex;
@@ -22,7 +21,7 @@ const BarContainer = styled(GlassDiv)`
     width: 24px;
     height: 24px;
   }
-`
+`;
 
 const StyledInput = styled.input`
   background-color: inherit;
@@ -30,23 +29,22 @@ const StyledInput = styled.input`
   width: 90%;
   padding: 8px;
   font-size: 16px;
-  &:focus
-  {
+  &:focus {
     outline: none;
   }
-`
+`;
 
-const SearchBar : FC = () => {
-  const [search, setSearch] = useState('');
+const SearchBar: FC = () => {
+  const [search, setSearch] = useState("");
   return (
     <SearchContainer>
       <BarContainer>
         <img src={icons.search} />
         <StyledInput
-          type="text"
-          placeholder='Начните вводить логин'
-          value={search}
           onChange={(value) => setSearch(value.target.value)}
+          placeholder="Начните вводить логин"
+          type="text"
+          value={search}
         />
       </BarContainer>
     </SearchContainer>

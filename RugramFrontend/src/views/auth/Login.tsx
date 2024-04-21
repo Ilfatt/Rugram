@@ -1,85 +1,107 @@
-import { createRef, FC, useState } from 'react';
-import Title from '../../components/ui/Title';
-import { WithValidation } from '../../types';
-import Input from '../../components/ui/Input';
-import Button from '../../components/ui/Button';
-import { FooterContainer, LoginContainer, Separator, StyledLink, TextForm } from './AuthStyledComponents';
+/* eslint-disable prettier/prettier */
+import { createRef, FC, useState } from "react";
+import Title from "../../components/ui/Title";
+import Input from "../../components/ui/Input";
+import Button from "../../components/ui/Button";
+import {
+  FooterContainer,
+  LoginContainer,
+  Separator,
+  StyledLink,
+  TextForm,
+} from "./AuthStyledComponents";
+import { WithValidation } from "../../types/commonTypes";
+import UseStores from "../../hooks/useStores";
+import { useNavigate } from "react-router-dom";
 
-const Login : FC = () => {
-
+const Login: FC = () => {
   const refs = [
     {
       ref: createRef<WithValidation>(),
-      id: 'EmailRef',
+      id: "EmailRef",
     },
     {
       ref: createRef<WithValidation>(),
-      id: 'PasswordlRef',
+      id: "PasswordlRef",
     },
-  ]
+  ];
 
-  const [ EmailRef, PasswordRef ] = refs;
+  const [EmailRef, PasswordRef] = refs;
 
-  const [email, setEmail] = useState<string>('');
-  const [emailError, setEmailError] = useState<string | undefined>('');
-  const [password, setPassword] = useState<string>('');
-  const [passwordError, setPasswordError] = useState<string | undefined>('');
+  const { userStore } = UseStores();
+  const navigate = useNavigate();
 
-  const registrationHandler = () => {
+  const [email, setEmail] = useState<string>("");
+  const [emailError, setEmailError] = useState<string | undefined>("");
+  const [password, setPassword] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string | undefined>("");
+
+  const checkErrors = () => {
+    const errors: (string | undefined)[] = [];
     refs.map((ref) => {
-      if (ref.id === 'EmailRef') {
-        setEmailError(ref.ref.current?.validate())
+      const error = ref.ref.current?.validate();
+      if (error) {
+        if (ref.id === "EmailRef") {
+          setEmailError(error);
+        } else {
+          setPasswordError(error);
+        }
+        errors.push(error);
       }
-      else {
-        setPasswordError(ref.ref.current?.validate())
+    });
+    return !!errors.length;
+  };
 
+  const registrationHandler = async () => {
+    if (!checkErrors()) {
+      await userStore.Login(email, password);
+      if (userStore.token) {
+        navigate('/recommendation');
+      } else {
+        setEmailError('Неверная почта или пароль');
+        setPasswordError('Неверная почта или пароль');
       }
-    })
-    if (!emailError && !passwordError) {
-      console.log('Норм')
+
     }
-  }
+  };
 
   return (
     <LoginContainer>
-      <Title
-        text='Вход'
-      />
+      <Title text="Вход" />
       <Separator>
         <TextForm>
           <Input
-            type='email'
-            value={email}
-            onChange={(value) => {
-              setEmailError('')
-              setEmail(value)
-            }}
-            title={'Email'}
-            errorMessage={emailError}
             ref={EmailRef.ref}
+            errorMessage={emailError}
+            onChange={(value) => {
+              setEmailError("");
+              setEmail(value);
+            }}
+            title={"Email"}
+            type="email"
+            value={email}
           />
           <Input
-            type='password'
-            value={password}
-            onChange={(value) => {
-              setPasswordError('')
-              setPassword(value)
-            }}
-            title={'Пароль'}
-            errorMessage={passwordError}
             ref={PasswordRef.ref}
+            errorMessage={passwordError}
+            onChange={(value) => {
+              setPasswordError("");
+              setPassword(value);
+            }}
+            title={"Пароль"}
+            type="password"
+            value={password}
           />
           <Button
             onClick={registrationHandler}
-            text='Войти'
+            text="Войти"
           />
         </TextForm>
         <FooterContainer>
           <span>Ещё нет аккаунта?</span>
-          <StyledLink to='/registration'>Регистрация</StyledLink>
+          <StyledLink to="/auth/registration">Регистрация</StyledLink>
         </FooterContainer>
       </Separator>
-
     </LoginContainer>
   );
 };
