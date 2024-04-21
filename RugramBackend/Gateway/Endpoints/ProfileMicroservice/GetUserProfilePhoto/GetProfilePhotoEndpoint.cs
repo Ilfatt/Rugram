@@ -10,7 +10,7 @@ public class GetProfilePhotoEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapGet("profile/getProfilePhoto/{profileId}", async (
+		app.MapGet("profile/profilePhoto/{profileId}", async (
 				Guid profileId,
 				ProfileMicroserviceClient profileClient,
 				CancellationToken cancellationToken) =>
