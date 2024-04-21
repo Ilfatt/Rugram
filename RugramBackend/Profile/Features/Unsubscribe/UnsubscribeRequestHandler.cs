@@ -22,7 +22,7 @@ public class UnsubscribeRequestHandler(AppDbContext appDbContext)
 
 		if (subscriber.SubscribedTo.All(x => x.Id != request.IdOfProfileUnsubscribedTo))
 			return StatusCodes.Status204NoContent;
-		
+
 		subscriber.SubscribedTo.Remove(unsubscribedTo);
 		await appDbContext.SaveChangesAsync(cancellationToken);
 

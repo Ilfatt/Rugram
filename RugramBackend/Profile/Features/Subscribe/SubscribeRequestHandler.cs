@@ -22,7 +22,7 @@ public class SubscribeRequestHandler(AppDbContext appDbContext)
 
 		if (subscriber.SubscribedTo.Any(x => x.Id == request.IdOfProfileSubscribedTo))
 			return StatusCodes.Status204NoContent;
-		
+
 		subscriber.SubscribedTo.Add(subscribedTo);
 		await appDbContext.SaveChangesAsync(cancellationToken);
 

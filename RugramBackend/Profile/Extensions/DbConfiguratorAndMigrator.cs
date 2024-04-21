@@ -17,10 +17,7 @@ public static class DbConfiguratorAndMigrator
 			{
 				options.UseNpgsql(
 					builder.Configuration.GetConnectionString("PostreSQL"),
-					opt =>
-					{
-						opt.MigrationsAssembly(typeof(AppDbContext).GetTypeInfo().Assembly.GetName().Name);
-					});
+					opt => { opt.MigrationsAssembly(typeof(AppDbContext).GetTypeInfo().Assembly.GetName().Name); });
 			});
 	}
 

@@ -4,7 +4,7 @@ using Posts.Data;
 
 namespace Posts.Features.GetFeed;
 
-public class GetFeedRequestHandler(AppDbContext appDbContext) 
+public class GetFeedRequestHandler(AppDbContext appDbContext)
 	: IGrpcRequestHandler<GetFeedRequest, GetFeedResponse>
 {
 	public async Task<GrpcResult<GetFeedResponse>> Handle(

@@ -1,6 +1,5 @@
 using AutoMapper;
 using Gateway.Contracts;
-using Gateway.Endpoints.ProfileMicroservice.GetFeed;
 using Gateway.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -22,8 +21,8 @@ public class GetSubInfoEndpoint : IEndpoint
 			{
 				var response = await profileClient.GetSubInfoAsync(new GetSubInfoGrpcRequest()
 					{
-						ThisProfileId = httpContextAccessor.HttpContext!.GetUserId().ToString(), 
-						OtherProfileId = profileId.ToString(), 
+						ThisProfileId = httpContextAccessor.HttpContext!.GetUserId().ToString(),
+						OtherProfileId = profileId.ToString(),
 					},
 					cancellationToken: cancellationToken);
 
@@ -38,7 +37,8 @@ public class GetSubInfoEndpoint : IEndpoint
 			.RequireAuthorization()
 			.WithOpenApi(generatedOperation =>
 			{
-				generatedOperation.Parameters[0].Description = "Id профиля относительо которого нужно получить информацию";
+				generatedOperation.Parameters[0].Description =
+					"Id профиля относительо которого нужно получить информацию";
 
 				return generatedOperation;
 			})

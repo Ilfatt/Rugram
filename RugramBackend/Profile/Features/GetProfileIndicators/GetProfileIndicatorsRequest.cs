@@ -1,5 +1,4 @@
 using Infrastructure.MediatR.Contracts;
-using Profile.Features.GetProfileName;
 
 namespace Profile.Features.GetProfileIndicators;
 

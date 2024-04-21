@@ -1,6 +1,5 @@
 using Gateway.Contracts;
 using Gateway.Endpoints.PostsMicroservice.GetPhoto;
-using Gateway.Endpoints.ProfileMicroservice.GetProfileName;
 using Swashbuckle.AspNetCore.Annotations;
 using static ProfileMicroservice;
 
@@ -23,7 +22,7 @@ public class GetProfilePhotoEndpoint : IEndpoint
 
 				return response.HttpStatusCode switch
 				{
-					200 => Results.Ok(new GetPhotoResponse(response.ProfilePhoto.ToByteArray())),
+					200 => Results.Ok(new GetProfilePhotoResponse(response.ProfilePhoto.ToByteArray())),
 					204 => Results.NoContent(),
 					400 => Results.BadRequest(),
 					404 => Results.NotFound(),

@@ -55,7 +55,7 @@ public class GetProfileRecommendationsEndpoint : IEndpoint
 				new SwaggerResponseAttribute(
 					StatusCodes.Status400BadRequest,
 					$"Не пройдена валидация. searchString меньше 25 символов,  pageSize is > -1 and <= 1000," +
-					$" pageNumber is > -1 and < 100000, {int.MaxValue} / pageNumber >= pageSize"),
+					$" pageNumber is > -1 and < 100000, {int.MaxValue} / pageNumber = pageSize"),
 				new SwaggerResponseAttribute(StatusCodes.Status401Unauthorized),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status200OK,

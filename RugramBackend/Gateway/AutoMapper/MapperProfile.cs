@@ -2,7 +2,6 @@ using Gateway.Endpoints.AuthMicroservice.Login;
 using Gateway.Endpoints.AuthMicroservice.RegisterUser;
 using Gateway.Endpoints.AuthMicroservice.SendEmailConfirmation;
 using Gateway.Endpoints.AuthMicroservice.UpdateJwtToken;
-using Gateway.Endpoints.PostsMicroservice.GetPhoto;
 using Gateway.Endpoints.PostsMicroservice.GetPosts;
 using Gateway.Endpoints.ProfileMicroservice.GetFeed;
 using Gateway.Endpoints.ProfileMicroservice.GetProfileRecommendations;
