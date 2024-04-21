@@ -5,6 +5,8 @@ using Gateway.Endpoints.AuthMicroservice.UpdateJwtToken;
 using Gateway.Endpoints.PostsMicroservice.GetPhoto;
 using Gateway.Endpoints.PostsMicroservice.GetPosts;
 using Gateway.Endpoints.ProfileMicroservice.GetFeed;
+using Gateway.Endpoints.ProfileMicroservice.GetProfileRecommendations;
+using Gateway.Endpoints.ProfileMicroservice.GetSubInfo;
 using Infrastructure.AutoMapper;
 
 namespace Gateway.AutoMapper;
@@ -26,8 +28,12 @@ public class MapperProfile : BaseMappingProfile
 
 		CreateMap<ProfilePostGrpc, ProfilePostDto>();
 		CreateMap<GetPostsGrpcResponse, GetPostsResponse>();
-		
+
 		CreateMap<FeedPostGrpcDto, FeedPostDto>();
 		CreateMap<GetFeedGrpcResponse, GetFeedResponse>();
+
+		CreateMap<GetSubInfoGrpcResponse, GetSubInfoResponse>();
+
+		CreateMap<GetProfileRecommendationsGrpcResponse, GetProfileRecommendationsResponse>();
 	}
 }

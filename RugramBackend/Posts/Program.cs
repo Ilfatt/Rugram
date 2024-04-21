@@ -1,3 +1,5 @@
+using FluentValidation;
+using Infrastructure.MediatR.Extensions;
 using Infrastructure.S3;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Minio;
@@ -19,6 +21,8 @@ builder.AddMasstransitRabbitMq();
 builder.Services.AddGrpc();
 builder.Services.AddSingleton<IS3StorageService, MinioS3StorageService>();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
+builder.Services.AddValidationBehaviorsFromAssembly(typeof(Program).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddMinio(configuration =>
 {

@@ -1,13 +1,15 @@
 using FluentValidation;
 
-namespace Posts.Features.GetPosts;
+namespace Profile.Features.GetProfileRecommendations;
 
-public class GetPostsRequestValidator : AbstractValidator<GetPostsRequest>
+public class GetProfileRecommendationsRequestValidator : AbstractValidator<GetProfileRecommendationsRequest>
 {
-	public GetPostsRequestValidator()
+	public GetProfileRecommendationsRequestValidator()
 	{
 		RuleFor(x => x.ProfileId)
 			.NotEqual(Guid.Empty);
+		RuleFor(x => x.SearchString)
+			.Must(x => x.Length < 25);
 		RuleFor(x => x.PageSize)
 			.Must(x => x is > -1 and <= 1000);
 		RuleFor(x => x.PageNumber)

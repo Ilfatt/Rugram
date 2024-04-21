@@ -5,6 +5,8 @@ using Profile.Features.GetFeed;
 using Profile.Features.GetProfileIndicators;
 using Profile.Features.GetProfileName;
 using Profile.Features.GetProfilePhoto;
+using Profile.Features.GetProfileRecommendations;
+using Profile.Features.GetSubInfo;
 using Profile.Features.Subscribe;
 using Profile.Features.Unsubscribe;
 
@@ -59,5 +61,21 @@ public class ProfileGrpcService(IMapper mapper, IMediator mediator)
 	{
 		return mapper.Map<GetFeedGrpcResponse>(
 			await mediator.Send(mapper.Map<GetFeedRequest>(request), context.CancellationToken));
+	}
+
+	public override async Task<GetSubInfoGrpcResponse> GetSubInfo(
+		GetSubInfoGrpcRequest request,
+		ServerCallContext context)
+	{
+		return mapper.Map<GetSubInfoGrpcResponse>(
+			await mediator.Send(mapper.Map<GetSubInfoRequest>(request), context.CancellationToken));
+	}
+
+	public override async Task<GetProfileRecommendationsGrpcResponse> GetProfileRecommendations(
+		GetProfileRecommendationsGrpcRequest request,
+		ServerCallContext context)
+	{
+		return mapper.Map<GetProfileRecommendationsGrpcResponse>(
+			await mediator.Send(mapper.Map<GetProfileRecommendationsRequest>(request), context.CancellationToken));
 	}
 }

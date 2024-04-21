@@ -23,7 +23,7 @@ public class GetFeedRequestHandler(
 			})
 			.FirstOrDefaultAsync(cancellationToken);
 
-		if (profileData == null) return 404;
+		if (profileData == null) return StatusCodes.Status404NotFound;
 
 		var response = await postMicroserviceClient.GetFeedAsync(
 			new PostForProfileMicroservice.GetFeedGrpcRequest()
@@ -33,7 +33,7 @@ public class GetFeedRequestHandler(
 				SubscriptionIds = { profileData.SubscriptionIds }
 			}, cancellationToken: cancellationToken);
 
-		if (response.HttpStatusCode != 200) return response.HttpStatusCode;
+		if (response.HttpStatusCode != StatusCodes.Status200OK) return response.HttpStatusCode;
 
 		var profileIdToName = await appDbContext.UserProfiles
 			.Where(x => response.FeedPostDto

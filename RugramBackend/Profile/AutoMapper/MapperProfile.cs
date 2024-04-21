@@ -4,6 +4,7 @@ using Profile.Features.GetFeed;
 using Profile.Features.GetProfileIndicators;
 using Profile.Features.GetProfileName;
 using Profile.Features.GetProfilePhoto;
+using Profile.Features.GetProfileRecommendations;
 using Profile.Features.Subscribe;
 using Profile.Features.Unsubscribe;
 
@@ -33,5 +34,9 @@ public class MapperProfile : BaseMappingProfile
 
 		CreateMap<GetFeedGrpcRequest, GetFeedRequest>();
 		CreateMapFromResult<GetFeedResponse, GetFeedGrpcResponse>();
+
+		CreateMap<ProfileDto, ProfileGrpcDto>();
+		CreateMap<GetProfileRecommendationsGrpcRequest, GetProfileRecommendationsRequest>();
+		CreateMapFromResult<GetProfileRecommendationsResponse, GetProfileRecommendationsGrpcResponse>();
 	}
 }
