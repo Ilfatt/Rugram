@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Minio;
 using Posts.AutoMapper;
 using Posts.Extensions;
-using Posts.Grpc.ProfileService;
+using Posts.Grpc.PostForProfileService;
+using Posts.Grpc.PostService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,7 @@ var app = builder.Build();
 await app.MigrateDbAsync();
 
 app.MapGrpcService<PostGrpcService>();
+app.MapGrpcService<PostForProfileService>();
 
 await Task.Delay(1000 * 15);
 

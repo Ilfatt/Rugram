@@ -1,5 +1,6 @@
 using Infrastructure.AutoMapper;
 using Profile.Features.CreateProfile;
+using Profile.Features.GetFeed;
 using Profile.Features.GetProfileIndicators;
 using Profile.Features.GetProfileName;
 using Profile.Features.GetProfilePhoto;
@@ -23,11 +24,14 @@ public class MapperProfile : BaseMappingProfile
 
 		CreateMap<GetProfileNameGrpcRequest, GetProfileNameRequest>();
 		CreateMapFromResult<GetProfileNameResponse, GetProfileNameGrpcResponse>();
-		
+
 		CreateMap<GetProfilePhotoGrpcRequest, GetProfilePhotoRequest>();
 		CreateMapFromResult<GetProfilePhotoResponse, GetProfilePhotoGrpcResponse>();
-		
+
 		CreateMap<GetProfileIndicatorsGrpcRequest, GetProfileIndicatorsRequest>();
 		CreateMapFromResult<GetProfileIndicatorsResponse, GetProfileIndicatorsGrpcResponse>();
+
+		CreateMap<GetFeedGrpcRequest, GetFeedRequest>();
+		CreateMapFromResult<GetFeedResponse, GetFeedGrpcResponse>();
 	}
 }

@@ -1,4 +1,6 @@
 using Infrastructure.AutoMapper;
+using PostForProfileMicroservice;
+using Posts.Features.GetFeed;
 using Posts.Features.GetPhoto;
 using Posts.Features.GetPosts;
 
@@ -13,7 +15,8 @@ public class MapperProfile : BaseMappingProfile
 
 		CreateMap<GetPostsGrpcRequest, GetPostsRequest>();
 
-		CreateMap<PostDto, PostGrpc>();
-		CreateMapFromResult<GetPostsResponse, GetPostsGrpcResponse>();
+		CreateMap<GetFeedGrpcRequest, GetFeedRequest>();
+		CreateMap<ProfilePostDto, ProfilePostGrpc>();
+		CreateMapFromResult<GetFeedResponse, GetFeedGrpcResponse>();
 	}
 }

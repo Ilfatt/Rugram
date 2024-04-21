@@ -4,11 +4,11 @@ namespace Gateway.Endpoints.PostsMicroservice.GetPosts;
 
 public record GetPostsResponse(
 	[SwaggerSchema("Посты")]
-	PostDto[] Posts,
+	ProfilePostDto[] Posts,
 	[SwaggerSchema("Общее колличество постов")]
 	int TotalPostsCount);
 
-public record PostDto(
+public record ProfilePostDto(
 	[SwaggerSchema("Id поста")]
 	Guid PostId,
 	[SwaggerSchema("Описание фотки")]
@@ -17,3 +17,4 @@ public record PostDto(
 	DateTime DateOfCreation,
 	[SwaggerSchema("Ids фоток данного поста")]
 	Guid[] PhotoIds);
+	

@@ -16,12 +16,12 @@ public class GetPostsRequestHandler(AppDbContext appDbContext)
 			.CountAsync(cancellationToken);
 
 		if (totalPostsCount <= request.PageSize * request.PageNumber)
-			return new GetPostsResponse(new List<PostDto>(), totalPostsCount);
+			return new GetPostsResponse(new List<ProfilePostDto>(), totalPostsCount);
 
 		var posts = await appDbContext.Posts
 			.Where(x => x.ProfileId == request.ProfileId)
 			.OrderBy(x => x.DateOfCreation)
-			.Select(x => new PostDto(
+			.Select(x => new ProfilePostDto(
 				x.Id,
 				x.Description,
 				x.DateOfCreation,

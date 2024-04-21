@@ -4,7 +4,7 @@ using MediatR;
 using Posts.Features.GetPhoto;
 using Posts.Features.GetPosts;
 
-namespace Posts.Grpc.ProfileService;
+namespace Posts.Grpc.PostService;
 
 public class PostGrpcService(IMediator mediator, IMapper mapper) : PostMicroservice.PostMicroserviceBase
 {

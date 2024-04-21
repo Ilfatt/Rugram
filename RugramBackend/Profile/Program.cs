@@ -33,6 +33,7 @@ builder.Services.AddMinio(configuration =>
 		builder.Configuration["MinioS3:SecretKey"]!);
 });
 
+builder.AddGrpcClients();
 builder.AddMasstransitRabbitMq();
 builder.ConfigurePostgresqlConnection();
 

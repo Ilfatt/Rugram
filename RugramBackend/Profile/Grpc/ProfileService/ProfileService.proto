@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 message GetProfileIndicatorsGrpcRequest{
   string profileId = 1;
 }
@@ -47,10 +49,30 @@ message UnsubscribeGrpcResponse{
   int32 httpStatusCode = 1;
 }
 
+message GetFeedGrpcRequest{
+  string profileId = 1;
+  int32 pageSize = 2;
+  int32 pageNumber = 3;
+}
+
+message GetFeedGrpcResponse{
+  int32 httpStatusCode = 1;
+  repeated FeedPostGrpcDto FeedPostDto  = 2;
+}
+
+message FeedPostGrpcDto{
+  string profileId = 1;
+  string profileName = 2;
+  string Description = 3;
+  google.protobuf.Timestamp dateOfCreation = 4;
+  repeated string photoIds = 5;
+}
+
 service ProfileMicroservice{
   rpc Subscribe (SubscribeGrpcRequest) returns (SubscribeGrpcResponse);
   rpc Unsubscribe (UnsubscribeGrpcRequest) returns (UnsubscribeGrpcResponse);
   rpc GetProfileName (GetProfileNameGrpcRequest) returns (GetProfileNameGrpcResponse);
   rpc GetProfilePhoto (GetProfilePhotoGrpcRequest) returns (GetProfilePhotoGrpcResponse);
   rpc GetProfileIndicators (GetProfileIndicatorsGrpcRequest) returns (GetProfileIndicatorsGrpcResponse);
+  rpc GetFeed (GetFeedGrpcRequest) returns (GetFeedGrpcResponse);
 }

@@ -1,5 +1,5 @@
 namespace Posts.Features.GetPosts;
 
-public record GetPostsResponse(IReadOnlyList<PostDto> Posts, int TotalPostsCount);
+public record GetPostsResponse(IReadOnlyList<ProfilePostDto> Posts, int TotalPostsCount);
 
-public record PostDto(Guid PostId, string Description, DateTime DateOfCreation, Guid[] PhotoIds);
+public record ProfilePostDto(Guid PostId, string Description, DateTime DateOfCreation, Guid[] PhotoIds);

@@ -19,12 +19,12 @@ message GetPostsGrpcRequest{
 }
 
 message GetPostsGrpcResponse{
-  repeated PostGrpc Posts = 1;
+  repeated ProfilePostGrpc Posts = 1;
   int32 totalPostsCount = 2;
   int32 httpStatusCode = 3;
 }
 
-message PostGrpc{
+message ProfilePostGrpc{
   string postId = 1;
   string Description = 2;
   google.protobuf.Timestamp dateOfCreation = 3;
