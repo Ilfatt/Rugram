@@ -43,16 +43,51 @@ public class GetProfileRecommendationsRequestHandler(AppDbContext appDbContext)
 			.Select(x => new ProfileDto(x.Id, x.ProfileName))
 			.ToListAsync(cancellationToken);
 
+		var count = await profilesQuery.CountAsync(cancellationToken);
+
 		if (profiles.Count < request.PageSize)
 		{
-			var count = await profilesQuery.CountAsync(cancellationToken);
-
 			profilesQuery = appDbContext.UserProfiles
 				.Where(x =>
 					!x.SubscribedTo
 						.Select(profile => profile.Id)
 						.Contains(request.ProfileId)
 					&& !x.Subscribers
+						.Select(profile => profile.Id)
+						.Contains(request.ProfileId))
+				.Where(x =>
+					request.SearchString == string.Empty
+					|| x.ProfileName
+						.ToLower()
+						.Contains(request.SearchString
+							.ToLower()));
+
+			if (request.SearchString != string.Empty)
+				profilesQuery = profilesQuery
+					.OrderByDescending(x => x.ProfileName
+						.ToLower()
+						.StartsWith(request.SearchString
+							.ToLower()))
+					.ThenBy(x => x.Id);
+			else
+				profilesQuery = profilesQuery
+					.OrderBy(x => x.Id);
+
+			profiles.AddRange(
+				await profilesQuery
+					.Skip(request.PageNumber * request.PageSize - count)
+					.Take(request.PageSize - profiles.Count)
+					.Select(x => new ProfileDto(x.Id, x.ProfileName))
+					.ToListAsync(cancellationToken));
+		}
+
+		if (profiles.Count < request.PageSize)
+		{
+			count += await profilesQuery.CountAsync(cancellationToken);
+
+			profilesQuery = appDbContext.UserProfiles
+				.Where(x =>
+					x.Subscribers
 						.Select(profile => profile.Id)
 						.Contains(request.ProfileId))
 				.Where(x =>
