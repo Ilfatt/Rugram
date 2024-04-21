@@ -8,7 +8,7 @@ public class GetPostsEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapGet("post/getAll{profileId}&{pageNumber}&{pageSize}", async (
+		app.MapGet("post/{profileId}&{pageNumber}&{pageSize}", async (
 				Guid profileId,
 				int pageNumber,
 				int pageSize,
