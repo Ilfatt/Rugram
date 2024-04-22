@@ -214,15 +214,15 @@ services:
       rugram:
         aliases:
           - rabbitMq
-  # RugramFrontend:
-  #   image: rugramfrontend
-  #   container_name: rugramfrontend
-  #   ports:
-  #     - "3010:5173"
-  #   build:
-  #     context: ./RugramFrontend
-  #     dockerfile: Dockerfile
-  #   networks:
-  #     rugram:
-  #       aliases:
-  #         - rugramrontend
+  RugramFrontend:
+    image: rugramfrontend
+    container_name: rugramfrontend
+    ports:
+      - "3010:5173"
+    build:
+      context: ./RugramFrontend
+      dockerfile: Dockerfile
+    networks:
+      rugram:
+        aliases:
+          - rugramrontend

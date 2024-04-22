@@ -75,7 +75,7 @@ public class GetProfileRecommendationsRequestHandler(AppDbContext appDbContext)
 
 			profiles.AddRange(
 				await profilesQuery
-					.Skip(request.PageNumber * request.PageSize - count)
+					.Skip(Math.Max(request.PageNumber * request.PageSize - count, 0))
 					.Take(request.PageSize - profiles.Count)
 					.Select(x => new ProfileDto(x.Id, x.ProfileName))
 					.ToListAsync(cancellationToken));
@@ -110,7 +110,7 @@ public class GetProfileRecommendationsRequestHandler(AppDbContext appDbContext)
 
 			profiles.AddRange(
 				await profilesQuery
-					.Skip(request.PageNumber * request.PageSize - count)
+					.Skip(Math.Max(request.PageNumber * request.PageSize - count, 0))
 					.Take(request.PageSize - profiles.Count)
 					.Select(x => new ProfileDto(x.Id, x.ProfileName))
 					.ToListAsync(cancellationToken));
