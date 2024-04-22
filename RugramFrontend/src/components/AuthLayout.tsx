@@ -3,9 +3,9 @@ import BackgroundVideo from "./BackgroundVideo";
 import { Outlet, useNavigate } from "react-router-dom";
 import LogoComponent from "./LogoComponent";
 import styled from "styled-components";
+import { observer } from "mobx-react";
 import UseStores from "../hooks/useStores";
 import ModalWindow from "./ModalWindow";
-import { observer } from "mobx-react";
 
 const Container = styled.div`
   padding: 36px 48px;

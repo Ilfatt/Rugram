@@ -9,7 +9,7 @@ import { icons } from '../enums';
 import { observer } from 'mobx-react';
 
 const ProfileCardContainer = styled(GlassDiv)`
-  width: 40vw;
+  width: 25vw;
   height: 80vh;
   border-radius: 16px;
   display: flex;
@@ -32,8 +32,8 @@ const Icon = styled.img`
   padding: 4px;
   width: -webkit-fill-available;
   height: -webkit-fill-available;
-  max-width: 150px;
-  max-height: 150px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   border: 3px solid black;
 
@@ -49,8 +49,13 @@ const UpperBlock = styled.div`
   align-items: center;
   width: -webkit-fill-available;
   height: -webkit-fill-available;
-  gap: 16px;
+  gap: 12px;
 `;
+
+const Title = styled.div`
+  font-size: 24px;
+  font-weight: bold;
+`
 
 const ProfileCard : FC<{isSameUser: boolean}> = ({isSameUser}) => {
   const { userStore, uploadStore } = UseStores();
@@ -105,13 +110,9 @@ const ProfileCard : FC<{isSameUser: boolean}> = ({isSameUser}) => {
             type="file"
           />
 
-          <h2>{userStore.user.username}</h2>
+          <Title>{userStore.user.username}</Title>
           <div>
             {`Folovers: ${userStore.user.followersCount}`}
-          </div>
-          <div>
-            <h2>About</h2>
-            <div>{userStore.user.description}</div>
           </div>
         </UpperBlock>
 

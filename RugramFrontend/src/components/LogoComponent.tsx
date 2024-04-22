@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 const Logo = styled.div`
   position: absolute;
-  top: 30px;
   right: 30px;
   img {
     height: 48px;

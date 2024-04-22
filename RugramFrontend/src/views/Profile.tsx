@@ -9,6 +9,13 @@ import { CropperContainer } from "./Add";
 import Cropper from "react-easy-crop";
 import Button from "../components/ui/Button";
 import getCroppedImg from "../tools/cropImage";
+import CardGrid from "../components/CardGrid";
+import styled from "styled-components";
+
+const ProfilePage = styled.div`
+  display: flex;
+  gap: 24px;
+`
 
 const cropperStyle = {
   containerStyle: { position: 'relative', height: '30vw', width: '30vw', borderRadius: '16px', marginBottom: '24px' } as React.CSSProperties,
@@ -38,6 +45,7 @@ const Profile: FC = () => {
   useEffect(() => {
     if (id) {
       userStore.getProfile(id)
+      userStore.getPosts(0)
     }
   }, [id])
 
@@ -100,10 +108,11 @@ const Profile: FC = () => {
   }, [uploadStore.currentImage, crop, rotation, zoom, setCrop, onCropComplete, setRotation, setZoom, croppedImage])
 
   return (
-    <div>
+    <ProfilePage>
       <ProfileCard
         isSameUser={userStore.user.id === id}
       />
+      <CardGrid />
       {
         uploadStore.currentImage && (
           <ModalSearchWindow
@@ -114,7 +123,7 @@ const Profile: FC = () => {
           </ModalSearchWindow>
         )
       }
-    </div>
+    </ProfilePage>
   );
 };
 

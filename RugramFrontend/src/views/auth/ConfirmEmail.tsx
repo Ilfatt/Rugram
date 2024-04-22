@@ -71,7 +71,7 @@ const ConfirmEmail: FC = () => {
           navigate("/recommendation", { replace: true });
         }
       } else {
-        setLoginError("Пользователь с таким логином уже существует");
+        setLoginError("Пользователь с таким именем уже существует");
       }
 
     }
@@ -89,7 +89,7 @@ const ConfirmEmail: FC = () => {
               setLoginError("");
               setLogin(value);
             }}
-            title={"Логин"}
+            title={"Имя пользователя"}
             type="login"
             value={login}
           />

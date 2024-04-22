@@ -7,10 +7,14 @@ import Icon from "./ui/Icon";
 import UseStores from "../hooks/useStores";
 import { observer } from "mobx-react";
 
+const NavBar = styled.div`
+  height: 100%;
+`
+
 const BarContainer = styled(GlassDiv)`
   display: flex;
   flex-direction: column;
-  position: sticky;
+  position: fixed;
   padding: 16px 8px;
   justify-content: space-between;
   min-height: 88vh;
@@ -36,23 +40,26 @@ const Navbar: FC = () => {
   const {userStore} = UseStores();
 
   return (
-    <BarContainer>
-      <MainButtons>
-        <LinkElem to={"/recommendation"}>
-          <Icon icon={icons.browse} />
-        </LinkElem>
-        <LinkElem to={`/profile/${userStore.user.id}`}>
-          <Icon icon={icons.profile} />
-        </LinkElem>
-        <LinkElem to={"/add"}>
-          <Icon icon={icons.plus} />
-        </LinkElem>
-      </MainButtons>
-      <Icon
-        icon={icons.exit}
-        onClick={() => userStore.LogOut()}
-      />
-    </BarContainer>
+    <NavBar>
+      <BarContainer>
+        <MainButtons>
+          <LinkElem to={"/recommendation"}>
+            <Icon icon={icons.browse} />
+          </LinkElem>
+          <LinkElem to={`/profile/${userStore.user.id}`}>
+            <Icon icon={icons.profile} />
+          </LinkElem>
+          <LinkElem to={"/add"}>
+            <Icon icon={icons.plus} />
+          </LinkElem>
+        </MainButtons>
+        <Icon
+          icon={icons.exit}
+          onClick={() => userStore.LogOut()}
+        />
+      </BarContainer>
+
+    </NavBar>
   );
 };
 

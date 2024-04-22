@@ -8,22 +8,28 @@ import LogoComponent from "./LogoComponent";
 import UseStores from "../hooks/useStores";
 import ModalWindow from "./ModalWindow";
 import { observer } from "mobx-react";
+import { decodeToken } from "../tools/decodeToken";
 
 const PageContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 48px;
+  gap: 24px;
   margin: 24px 12px;
 `;
 
 const PageBody = styled.div`
   display: flex;
   flex-direction: column;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
   gap: 24px;
+  margin-left: 76px;
+  margin-top: 64px;
+  /* width: -webkit-fill-available; */
+  /* padding: 0 12px; */
+  /* margin-left: 1px; */
 `;
-
-
-
 
 const PageLayout: FC = () => {
 
@@ -47,6 +53,7 @@ const PageLayout: FC = () => {
 
   useEffect(() => {
     if (userStore.token) {
+      userStore.user.id = decodeToken(userStore.token);
       userStore.updateJwt();
       startJwtUpdateInterval();
     }
