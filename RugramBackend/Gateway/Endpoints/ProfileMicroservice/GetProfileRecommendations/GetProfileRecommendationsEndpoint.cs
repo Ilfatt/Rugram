@@ -11,7 +11,7 @@ public class GetProfileRecommendationsEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapGet("profile/recommendations/{searchString}&{pageSize}&{pageNumber}", async (
+		app.MapGet("profile/recommendations/{pageSize}&{pageNumber}/{searchString?}", async (
 				string? searchString,
 				int pageSize,
 				int pageNumber,
