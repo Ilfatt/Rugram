@@ -6,7 +6,7 @@ import ErrorStateStore from "./StateStores/ErrorStateStore";
 import SuccessStateStore from "./StateStores/SuccessStateStore";
 import { decodeToken } from "../tools/decodeToken";
 import ProfileServices from "../services/ProfileServices";
-import { User } from "../types/commonTypes";
+import { SearchProfile, User } from "../types/commonTypes";
 
 class UserStore {
   user: User;
@@ -16,6 +16,8 @@ class UserStore {
   token?: string;
 
   refreshToken?: string;
+
+  searchProfiles?: SearchProfile;
 
   constructor() {
     makeAutoObservable(this);
@@ -168,16 +170,49 @@ class UserStore {
     try {
       const response = await ProfileServices.GetProfile(id);
       this.user.username = response.profileName
-      this.user.img = response.icon;
+      this.user.img = response.icon.status === 200
+        ? `data:image/png;base64, ${response.icon.data.photo}`
+        : undefined;
       this.user.followersCount = response.subscribersCount;
       this.user.followingCount = response.subscriptionsCount;
-      // this.profileDescription = response.profileDescription;
+
       this.state = new SuccessStateStore();
     } catch (error) {
       runInAction(() => {
         this.state = new ErrorStateStore(error);
       });
     }
+  }
+
+  public async getPosts(pageNumber: number) {
+    this.state = new FetchingStateStore();
+    try {
+      if (this.user.id) {
+        const response = await ProfileServices.GetPosts(this.user.id, pageNumber, 20);
+        // response.posts.map(async (post) => {
+        //   post.photoUrls = await Promise.all(post.photoIds.map(async (photo) => {
+        //     return await ProfileServices.GetPostImage(this.user.id!, photo)
+        //   }));
+        // })
+
+        this.user.posts = response.posts;
+        this.state = new SuccessStateStore();
+      }
+    } catch (error) {
+      this.state = new ErrorStateStore(error);
+    }
+  }
+
+  public async search(search: string) {
+    this.state = new FetchingStateStore();
+    try {
+      const response = await ProfileServices.Search(search);
+      this.state = new SuccessStateStore();
+      this.searchProfiles = response;
+    } catch (error) {
+      this.state = new ErrorStateStore(error);
+    }
+
   }
 
   public async clearUser() {

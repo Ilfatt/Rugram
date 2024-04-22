@@ -1,4 +1,4 @@
-import { ProfileRequest } from "../types/commonTypes";
+import { Posts, ProfileRequest, SearchProfile } from "../types/commonTypes";
 import { ApiConnection } from "./ApiConnection";
 
 class ProfileServices {
@@ -14,13 +14,29 @@ class ProfileServices {
 
   static async GetProfile(id: string) {
     const name = await ApiConnection.get<{profileName: string}>(`profile/profileName/${id}`);
-    const icon = `data:image/png;base64, ${(await ApiConnection.get<{photo: string}>(`profile/profilePhoto/${id}`)).data.photo}`;
+    const icon = (await ApiConnection.get<{photo: string}>(`profile/profilePhoto/${id}`))
     const followers = await ApiConnection.get<{
       subscribersCount: number,
       subscriptionsCount: number
     }>(`profile/profileIndicators/${id}`);
 
     return { ...name.data, icon , ...followers.data } as unknown as ProfileRequest;
+  }
+
+  static async GetPosts(id: string, pageNumber: number, pageSize: number) {
+    const response = await ApiConnection.get<Posts>(`post/${id}&${pageNumber}&${pageSize}`);
+    return response.data;
+  }
+
+  static async GetPostImage(id: string, photoId: string) {
+    const response = await ApiConnection.get<{photo: string}>(`post/photo/${photoId}&${id}`);
+    return response.data.photo;
+  }
+
+  static async Search(search: string) {
+    const response = await ApiConnection.get<SearchProfile>(`profile/recommendations/${search}&8&1`);
+    return response.data;
+
   }
 }
 

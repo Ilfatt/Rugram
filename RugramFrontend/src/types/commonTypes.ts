@@ -1,3 +1,5 @@
+import { AxiosResponse } from "axios";
+
 export interface JwtResponseType {
   jwtToken: "string";
   refreshToken: "string";
@@ -9,7 +11,9 @@ export type WithValidation = {
 
 export type ProfileRequest = {
   profileName: string,
-  icon: string,
+  icon: AxiosResponse<{
+    photo: string;
+  }>,
   subscribersCount: number,
   subscriptionsCount: number
 }
@@ -21,9 +25,25 @@ export type User = {
   description?: string,
   followersCount?: number,
   followingCount?: number,
-  posts?: {
+  posts?: Post[]
+}
+
+export type Posts = {
+  posts: Post[],
+  totalCount: number,
+}
+
+export type Post = {
+  postId: string,
+  description: string,
+  dateOfCreation: string,
+  photoIds: string[],
+  photoUrls?: string[],
+}
+
+export type SearchProfile = {
+  profiles: Array<{
     id: string,
-    img: string,
-    postDescription: string,
-  }
+    profileName: string,
+  }>
 }

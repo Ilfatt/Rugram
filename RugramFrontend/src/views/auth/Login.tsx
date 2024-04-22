@@ -11,8 +11,8 @@ import {
   TextForm,
 } from "./AuthStyledComponents";
 import { WithValidation } from "../../types/commonTypes";
-import UseStores from "../../hooks/useStores";
 import { useNavigate } from "react-router-dom";
+import UseStores from "../../hooks/useStores";
 
 const Login: FC = () => {
   const refs = [

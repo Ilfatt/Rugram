@@ -9,7 +9,7 @@ class UploadService {
       formData.append("photos", dataURLtoFile(photo), `photo${index}.jpeg`);
     })
     formData.append("description", description);
-    const response = await fetch("https://localhost:3001/post/create",
+    const response = await fetch("https://localhost:3001/post",
       {
         method: "POST",
         headers: {
