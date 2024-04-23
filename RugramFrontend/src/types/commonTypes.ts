@@ -12,10 +12,11 @@ export type WithValidation = {
 export type ProfileRequest = {
   profileName: string,
   icon: AxiosResponse<{
-    photo: string;
+    profilePhoto: string;
   }>,
   subscribersCount: number,
   subscriptionsCount: number
+  subInfo: SubInfoType
 }
 
 export type User = {
@@ -25,7 +26,7 @@ export type User = {
   description?: string,
   followersCount?: number,
   followingCount?: number,
-  posts?: Post[]
+  posts?: Post[],
 }
 
 export type Posts = {
@@ -41,9 +42,23 @@ export type Post = {
   photoUrls?: string[],
 }
 
+export type ProfilePost = {
+  profileId: string,
+  description: string,
+  dateOfCreation: string,
+  photoIds: string[],
+  photoUrls?: string[],
+}
+
 export type SearchProfile = {
   profiles: Array<{
     id: string,
     profileName: string,
+    profileImg?: string,
   }>
+}
+
+export type SubInfoType = {
+  otherProfileSubscribedToThisProfile: boolean,
+  thisProfileSubscribedToOtherProfile: boolean
 }

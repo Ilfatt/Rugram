@@ -45,7 +45,7 @@ const Profile: FC = () => {
   useEffect(() => {
     if (id) {
       userStore.getProfile(id)
-      userStore.getPosts(0)
+      userStore.getPosts(id, 0)
     }
   }, [id])
 
@@ -107,12 +107,18 @@ const Profile: FC = () => {
     )
   }, [uploadStore.currentImage, crop, rotation, zoom, setCrop, onCropComplete, setRotation, setZoom, croppedImage])
 
+  const MemoCardGrid = useMemo(() => {
+    return (
+      <CardGrid />
+    )
+  }, [userStore.user.posts, window.location])
+
   return (
     <ProfilePage>
       <ProfileCard
         isSameUser={userStore.user.id === id}
       />
-      <CardGrid />
+      {MemoCardGrid}
       {
         uploadStore.currentImage && (
           <ModalSearchWindow

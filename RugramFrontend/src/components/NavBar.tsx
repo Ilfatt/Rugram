@@ -43,7 +43,7 @@ const Navbar: FC = () => {
     <NavBar>
       <BarContainer>
         <MainButtons>
-          <LinkElem to={"/recommendation"}>
+          <LinkElem to={"/feed"}>
             <Icon icon={icons.browse} />
           </LinkElem>
           <LinkElem to={`/profile/${userStore.user.id}`}>

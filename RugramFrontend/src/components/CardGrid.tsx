@@ -12,24 +12,39 @@ const Grid = styled.div`
   flex-wrap: wrap;
 `;
 
+const NoPosts = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36px;
+  width: 100%;
+  min-width: 60vw;
+`
+
 const CardGrid : FC = () => {
   const { userStore } = useStores();
-  return (
-    <Grid>
-      {
-        userStore.user.posts?.length
-          ? userStore.user.posts.map((post) => (
-            <PhotoCard
-              key={post.postId}
-              description={post.description}
-              src={post.photoIds}
-            />
-          )) : (
-            <div> Постов пока нет</div>
-          )
-      }
-    </Grid>
-  );
+
+  return userStore.user.posts?.length
+    ? (
+      <Grid>
+        {
+          userStore.user.posts.map((post) => {
+            if (post.photoUrls) {
+              return (
+                <PhotoCard
+                  key={post.postId}
+                  description={post.description}
+                  link={post.postId}
+                  src={post.photoUrls}
+                />
+              )
+            }
+          })}
+      </Grid>
+    ) : (
+      <NoPosts> Постов пока нет</NoPosts>
+    )
+
 };
 
 export default observer(CardGrid);

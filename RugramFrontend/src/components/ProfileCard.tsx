@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeEvent, FC, useRef, useState} from 'react';
+import { ChangeEvent, FC, useCallback, useMemo, useRef} from 'react';
 import styled from 'styled-components';
 import { GlassDiv } from '../styles';
 import UseStores from '../hooks/useStores';
@@ -27,7 +27,7 @@ const ChieldContainer = styled.div`
   padding: 36px;
 `
 
-const Icon = styled.img`
+const Icon = styled.img<{isSameUser: boolean}>`
   /* background-color: red; */
   padding: 4px;
   width: -webkit-fill-available;
@@ -38,9 +38,15 @@ const Icon = styled.img`
   border: 3px solid black;
 
   &:hover {
-    cursor: pointer;
-    background-color: rgba(45, 47, 53, 0.1);
+    ${(props) => {
+    if (props.isSameUser) {
+      return `
+          cursor: pointer;
+          background-color: rgba(45, 47, 53, 0.1);
+        `
+    }
   }
+}}
 `
 
 const UpperBlock = styled.div`
@@ -49,7 +55,7 @@ const UpperBlock = styled.div`
   align-items: center;
   width: -webkit-fill-available;
   height: -webkit-fill-available;
-  gap: 12px;
+  gap: 24px;
 `;
 
 const Title = styled.div`
@@ -57,11 +63,33 @@ const Title = styled.div`
   font-weight: bold;
 `
 
+const Subscribtions = styled.div`
+  display: flex;
+  gap: 12px;
+`
+
+const SubscribersBlock = styled.div`
+  padding: 8px 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: -webkit-fill-available;
+  /* width: 80px; */
+
+  border-radius: 8px;
+
+  div {
+    font-weight: 300;
+  }
+`
+
+
 const ProfileCard : FC<{isSameUser: boolean}> = ({isSameUser}) => {
   const { userStore, uploadStore } = UseStores();
   const { id } = useParams();
 
-  const [uploadError, setUploadError] = useState('')
+  // const [uploadError, setUploadError] = useState('')
   const uploadRef = useRef<HTMLInputElement>(null)
 
   const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -72,7 +100,7 @@ const ProfileCard : FC<{isSameUser: boolean}> = ({isSameUser}) => {
 
     if (file) {
       if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
-        setUploadError('Для загрузки доступны только файлы формата .png/.jpeg/.jpg')
+        // setUploadError('Для загрузки доступны только файлы формата .png/.jpeg/.jpg')
         return;
       }
 
@@ -85,22 +113,74 @@ const ProfileCard : FC<{isSameUser: boolean}> = ({isSameUser}) => {
       e.target.value = ''
       fileReader.readAsDataURL(file)
     } else {
-      setUploadError('Ошибка загрузки файла. Попробуйте ещё раз.')
+      // setUploadError('Ошибка загрузки файла. Попробуйте ещё раз.')
     }
   }
+
+  const MemoIcon = useMemo(() => {
+    return (
+      <Icon
+        isSameUser={isSameUser}
+        onClick={() => {
+          if (isSameUser) {
+            // setUploadError('');
+            uploadRef.current?.click();
+          }
+        }}
+        src={userStore.user.img ? userStore.user.img : icons.profile}
+      />
+    )
+  }, [userStore.user.img])
+
+  const MemoButton = useCallback(() => {
+    console.warn(userStore.subInfo)
+    if (!isSameUser && id) {
+      if (userStore.subInfo?.otherProfileSubscribedToThisProfile
+        && !userStore.subInfo.thisProfileSubscribedToOtherProfile) {
+        return (
+          <Button
+            onClick={() => {
+              userStore.follow(id)
+              userStore.getProfile(id);
+            }}
+            text='Подписаться в ответ'
+          />
+        )
+      } else if (userStore.subInfo?.thisProfileSubscribedToOtherProfile) {
+        return (
+          <Button
+            onClick={() => {
+              userStore.unFollow(id)
+              userStore.getProfile(id);
+            }}
+            text='Отписаться'
+          />
+        )
+      } else {
+        return (
+          <Button
+            onClick={() => {
+              userStore.follow(id)
+              userStore.getProfile(id);
+            }}
+            text='Подписаться'
+          />
+        )
+      }
+    }
+  }, [
+    userStore.subInfo,
+    userStore.subInfo?.otherProfileSubscribedToThisProfile,
+    userStore.subInfo?.thisProfileSubscribedToOtherProfile,
+    id,
+    isSameUser
+  ])
 
   return (
     <ProfileCardContainer>
       <ChieldContainer>
         <UpperBlock>
-          <Icon
-            onClick={() => {
-              setUploadError('');
-              uploadRef.current?.click();
-            }}
-            src={userStore.user.img ? userStore.user.img : icons.profile}
-          />
-          {uploadError}
+          {MemoIcon}
           <input
             ref={uploadRef}
             accept='image/*'
@@ -110,20 +190,25 @@ const ProfileCard : FC<{isSameUser: boolean}> = ({isSameUser}) => {
             type="file"
           />
 
+          {/* <Separator /> */}
+
           <Title>{userStore.user.username}</Title>
-          <div>
-            {`Folovers: ${userStore.user.followersCount}`}
-          </div>
+
+          {/* <Separator /> */}
+
+          <Subscribtions>
+            <SubscribersBlock>
+              <b>{userStore.user.followingCount}</b>
+              <div>Подписки</div>
+            </SubscribersBlock>
+            <SubscribersBlock>
+              <b>{userStore.user.followersCount}</b>
+              <div>Подписчики</div>
+            </SubscribersBlock>
+          </Subscribtions>
         </UpperBlock>
 
-        {!isSameUser && id && (
-          <Button
-            onClick={() => {
-              userStore.follow(id!)
-            }}
-            text='Подписаться'
-          />
-        )}
+        {MemoButton()}
       </ChieldContainer>
     </ProfileCardContainer>
   );

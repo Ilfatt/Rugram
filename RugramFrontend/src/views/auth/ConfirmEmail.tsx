@@ -68,7 +68,7 @@ const ConfirmEmail: FC = () => {
       if (LoginError) {
         await userStore.Registration(token, email, password, login);
         if (userStore.token) {
-          navigate("/recommendation", { replace: true });
+          navigate("/feed", { replace: true });
         }
       } else {
         setLoginError("Пользователь с таким именем уже существует");

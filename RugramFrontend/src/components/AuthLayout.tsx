@@ -43,7 +43,7 @@ const AuthLayout: FC = () => {
       navigate("/auth/login");
     }
     if (userStore.token) {
-      navigate('/recommendation')
+      navigate('/feed')
     }
   }, [window.location]);
 
