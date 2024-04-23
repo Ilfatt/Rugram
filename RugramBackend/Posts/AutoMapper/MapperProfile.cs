@@ -19,6 +19,7 @@ public class MapperProfile : BaseMappingProfile
 		CreateMap<ProfilePostDto, ProfilePostGrpc>();
 		CreateMapFromResult<GetPostsResponse, GetPostsGrpcResponse>();
 
+		CreateMapFromResult<FeedPostDto, FeedPostGrpcDto>();
 		CreateMapFromResult<GetFeedResponse, GetFeedGrpcResponse>();
 	}
 }
