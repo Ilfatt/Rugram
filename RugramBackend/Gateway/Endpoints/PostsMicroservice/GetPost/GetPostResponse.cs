@@ -9,5 +9,5 @@ public record GetPostResponse(
 	DateTime DateOfCreation,
 	[property: SwaggerSchema("Описание фотки")]
 	string Description,
-	[property: SwaggerSchema("Ids фото")]
+	[property: SwaggerSchema("Фотки")]
 	byte[][] Photos);
