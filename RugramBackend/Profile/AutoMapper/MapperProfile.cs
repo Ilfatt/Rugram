@@ -5,6 +5,7 @@ using Profile.Features.GetProfileIndicators;
 using Profile.Features.GetProfileName;
 using Profile.Features.GetProfilePhoto;
 using Profile.Features.GetProfileRecommendations;
+using Profile.Features.GetSubInfo;
 using Profile.Features.Subscribe;
 using Profile.Features.Unsubscribe;
 
@@ -31,6 +32,9 @@ public class MapperProfile : BaseMappingProfile
 
 		CreateMap<GetProfileIndicatorsGrpcRequest, GetProfileIndicatorsRequest>();
 		CreateMapFromResult<GetProfileIndicatorsResponse, GetProfileIndicatorsGrpcResponse>();
+		
+		CreateMap<GetSubInfoGrpcRequest, GetSubInfoRequest>();
+		CreateMapFromResult<GetSubInfoResponse, GetSubInfoGrpcResponse>();
 
 		CreateMap<GetFeedGrpcRequest, GetFeedRequest>();
 		CreateMapFromResult<GetFeedResponse, GetFeedGrpcResponse>();
