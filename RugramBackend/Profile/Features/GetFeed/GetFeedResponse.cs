@@ -1,6 +1,6 @@
 namespace Profile.Features.GetFeed;
 
-public record GetFeedResponse(FeedPostDto[] NewsFeedPostDto);
+public record GetFeedResponse(FeedPostDto[] FeedPostDto);
 
 public record FeedPostDto(
 	Guid ProfileId,

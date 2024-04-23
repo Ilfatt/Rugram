@@ -4,7 +4,7 @@ namespace Gateway.Endpoints.ProfileMicroservice.GetFeed;
 
 public record GetFeedResponse(
 	[property: SwaggerSchema("Посты в новостной ленте. ")]
-	FeedPostDto[] NewsFeedPostDto = null!);
+	FeedPostDto[] FeedPostDto);
 
 public record FeedPostDto(
 	[property: SwaggerSchema("Id профиля сделавшего пост")]

@@ -37,6 +37,7 @@ public class MapperProfile : BaseMappingProfile
 		CreateMapFromResult<GetSubInfoResponse, GetSubInfoGrpcResponse>();
 
 		CreateMap<GetFeedGrpcRequest, GetFeedRequest>();
+		CreateMap<FeedPostDto, FeedPostGrpcDto>();
 		CreateMapFromResult<GetFeedResponse, GetFeedGrpcResponse>();
 
 		CreateMap<ProfileDto, ProfileGrpcDto>();
