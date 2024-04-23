@@ -3,7 +3,7 @@ import { icons } from "../enums";
 import styled from "styled-components";
 
 const Logo = styled.div`
-  position: absolute;
+  position: fixed;
   right: 30px;
   img {
     height: 48px;

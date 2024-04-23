@@ -67,7 +67,7 @@ const PageLayout: FC = () => {
     if (!userStore.token) {
       navigate("/auth/login");
     } else if (userStore.token && window.location.pathname === "/") {
-      navigate("/recommendation")
+      navigate("/feed")
     }
   }, [userStore.token]);
 
@@ -76,10 +76,12 @@ const PageLayout: FC = () => {
       <BackgroundVideo />
       <LogoComponent />
       <Navbar />
-      <PageBody>
+      <>
         <SearchBar />
-        <Outlet />
-      </PageBody>
+        <PageBody>
+          <Outlet />
+        </PageBody>
+      </>
       {modalStore.isOpen && (
         <ModalWindow
           onClose={() => {

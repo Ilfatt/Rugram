@@ -56,7 +56,7 @@ const Login: FC = () => {
     if (!checkErrors()) {
       await userStore.Login(email, password);
       if (userStore.token) {
-        navigate('/recommendation');
+        navigate('/feed');
       } else {
         setEmailError('Неверная почта или пароль');
         setPasswordError('Неверная почта или пароль');

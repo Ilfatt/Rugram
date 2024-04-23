@@ -3,12 +3,14 @@ import { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PageLayout from './components/PageLayout';
 import Profile from './views/Profile';
-import Recommendations from './views/Recommendations';
 import RegistrationPage from './views/auth/RegistrationPage';
 import AuthLayout from './components/AuthLayout';
 import Login from './views/auth/Login';
 import ConfirmEmail from './views/auth/ConfirmEmail';
 import Add from './views/Add';
+import Feed from './views/Feed';
+import { observer } from 'mobx-react';
+import PostPage from './views/PostPage';
 
 const App: FC = () => {
   return (
@@ -36,8 +38,8 @@ const App: FC = () => {
           path='/'
         >
           <Route
-            element={<Recommendations />}
-            path='recommendation'
+            element={<Feed />}
+            path='feed'
           />
           <Route
             element={<Profile />}
@@ -48,12 +50,12 @@ const App: FC = () => {
             path='profile/:id'
           />
           <Route
-            element={<h1>Search</h1>}
-            path='search'
-          />
-          <Route
             element={<Add />}
             path='/add'
+          />
+          <Route
+            element={<PostPage/>}
+            path='/profile/post/:id'
           />
         </Route>
 
@@ -66,4 +68,4 @@ const App: FC = () => {
   )
 };
 
-export default App;
+export default observer(App);

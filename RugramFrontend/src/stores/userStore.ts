@@ -9,6 +9,7 @@ import ProfileServices from "../services/ProfileServices";
 import { SearchProfile, User } from "../types/commonTypes";
 
 class UserStore {
+
   user: User;
 
   state?: StateStore;
@@ -18,6 +19,11 @@ class UserStore {
   refreshToken?: string;
 
   searchProfiles?: SearchProfile;
+
+  subInfo?: {
+    otherProfileSubscribedToThisProfile: boolean,
+    thisProfileSubscribedToOtherProfile: boolean
+  }
 
   constructor() {
     makeAutoObservable(this);
@@ -169,12 +175,15 @@ class UserStore {
     this.state = new FetchingStateStore();
     try {
       const response = await ProfileServices.GetProfile(id);
-      this.user.username = response.profileName
-      this.user.img = response.icon.status === 200
-        ? `data:image/png;base64, ${response.icon.data.photo}`
-        : undefined;
-      this.user.followersCount = response.subscribersCount;
-      this.user.followingCount = response.subscriptionsCount;
+      runInAction(() => {
+        this.user.username = response.profileName
+        this.user.img = response.icon.status === 200
+          ? `data:image/png;base64, ${response.icon.data.profilePhoto}`
+          : undefined;
+        this.user.followersCount = response.subscribersCount;
+        this.user.followingCount = response.subscriptionsCount;
+        this.subInfo = response.subInfo;
+      })
 
       this.state = new SuccessStateStore();
     } catch (error) {
@@ -184,20 +193,35 @@ class UserStore {
     }
   }
 
-  public async getPosts(pageNumber: number) {
+  public async getPostProfile(id:string) {
+    this.state = new FetchingStateStore();
+    try {
+      const response = await ProfileServices.GetProfile(id);
+      this.state = new SuccessStateStore();
+      return response;
+    } catch (error) {
+      runInAction(() => {
+        this.state = new ErrorStateStore(error);
+      });
+    }
+  }
+
+  public async getPosts(id:string, pageNumber: number) {
     this.state = new FetchingStateStore();
     try {
       if (this.user.id) {
-        const response = await ProfileServices.GetPosts(this.user.id, pageNumber, 20);
-        // response.posts.map(async (post) => {
-        //   post.photoUrls = await Promise.all(post.photoIds.map(async (photo) => {
-        //     return await ProfileServices.GetPostImage(this.user.id!, photo)
-        //   }));
-        // })
-
+        const response = await ProfileServices.GetPosts(id, pageNumber, 100);
         this.user.posts = response.posts;
-        this.state = new SuccessStateStore();
+        const photoPromises = this.user.posts.map(async (post) => {
+          post.photoUrls = await Promise.all(post.photoIds.map(async (photo) => {
+            return await ProfileServices.GetPostImage(id!, photo)
+          }));
+          return post;
+        });
+        await Promise.all(photoPromises);
       }
+
+      this.state = new SuccessStateStore();
     } catch (error) {
       this.state = new ErrorStateStore(error);
     }
@@ -207,13 +231,28 @@ class UserStore {
     this.state = new FetchingStateStore();
     try {
       const response = await ProfileServices.Search(search);
-      this.state = new SuccessStateStore();
       this.searchProfiles = response;
+
+      const photoPromises = this.searchProfiles.profiles.map(async (profile) => {
+        profile.profileImg = (await ProfileServices.GetProfileImg(profile.id)).profilePhoto;
+      })
+      await Promise.all(photoPromises);
+      this.state = new SuccessStateStore();
     } catch (error) {
       this.state = new ErrorStateStore(error);
     }
-
   }
+
+  // public async checkSubscriptions(profileId: string) {
+  //   this.state = new FetchingStateStore();
+  //   try {
+  //     const response = await ProfileServices.CheckSubscriptions(profileId);
+  //     this.state = new SuccessStateStore();
+  //     return response;
+  //   } catch (error) {
+  //     this.state = new ErrorStateStore(error);
+  //   }
+  // }
 
   public async clearUser() {
     this.user.username = undefined;
@@ -221,6 +260,8 @@ class UserStore {
     this.user.followingCount = undefined;
     this.user.description = undefined;
     this.user.img = undefined;
+    this.user.posts = undefined;
+    this.subInfo = undefined;
   }
 }
 
