@@ -2,6 +2,7 @@ using AutoMapper;
 using Grpc.Core;
 using MediatR;
 using Posts.Features.GetPhoto;
+using Posts.Features.GetPost;
 using Posts.Features.GetPosts;
 
 namespace Posts.Grpc.PostService;
@@ -22,5 +23,13 @@ public class PostGrpcService(IMediator mediator, IMapper mapper) : PostMicroserv
 	{
 		return mapper.Map<GetPostsGrpcResponse>(
 			await mediator.Send(mapper.Map<GetPostsRequest>(request), context.CancellationToken));
+	}
+
+	public override async Task<GetPostGrpcResponse> GetPost(
+		GetPostGrpcRequest request,
+		ServerCallContext context)
+	{
+		return mapper.Map<GetPostGrpcResponse>(
+			await mediator.Send(mapper.Map<GetPostRequest>(request), context.CancellationToken));
 	}
 }

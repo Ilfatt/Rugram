@@ -31,7 +31,20 @@ message ProfilePostGrpc{
   repeated string photoIds = 4;
 }
 
+message GetPostGrpcRequest{
+  string PostId = 1;
+}
+
+message GetPostGrpcResponse{
+  int32 httpStatusCode = 1;
+  string ProfileId = 2;
+  google.protobuf.Timestamp dateOfCreation = 3;
+  string Description = 4;
+  repeated bytes Photos = 5;
+}
+
 service PostMicroservice{
   rpc GetPhoto (GetPhotoGrpcRequest) returns (GetPhotoGrpcResponse);
   rpc GetPosts (GetPostsGrpcRequest) returns (GetPostsGrpcResponse);
+  rpc GetPost (GetPostGrpcRequest) returns (GetPostGrpcResponse);
 }
