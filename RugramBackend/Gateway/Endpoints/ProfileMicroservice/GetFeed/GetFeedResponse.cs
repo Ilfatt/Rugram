@@ -9,6 +9,8 @@ public record GetFeedResponse(
 public record FeedPostDto(
 	[property: SwaggerSchema("Id профиля сделавшего пост")]
 	Guid ProfileId,
+    [property: SwaggerSchema("Id профиля сделавшего пост")]
+	Guid PostId,
 	[property: SwaggerSchema("Название профиля сделавшего пост")]
 	string ProfileName,
 	[property: SwaggerSchema("Описание поста")]

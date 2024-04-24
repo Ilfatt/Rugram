@@ -15,6 +15,7 @@ message GetFeedGrpcResponse{
 
 message FeedPostGrpcDto{
   string profileId = 1;
+  string postId = 2;
   string Description = 3;
   google.protobuf.Timestamp dateOfCreation = 4;
   repeated string photoIds = 5;

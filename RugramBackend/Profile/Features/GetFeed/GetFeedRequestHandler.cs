@@ -44,6 +44,7 @@ public class GetFeedRequestHandler(
 		return new GetFeedResponse(response.FeedPostDto
 			.Select(x => new FeedPostDto(
 				new Guid(x.ProfileId),
+				new Guid(x.PostId),
 				profileIdToName[new Guid(x.ProfileId)],
 				x.Description,
 				x.DateOfCreation.ToDateTime(),

@@ -20,7 +20,7 @@ public class GetPostsRequestHandler(AppDbContext appDbContext)
 
 		var posts = await appDbContext.Posts
 			.Where(x => x.ProfileId == request.ProfileId)
-			.OrderBy(x => x.DateOfCreation)
+			.OrderByDescending(x => x.DateOfCreation)
 			.Select(x => new ProfilePostDto(
 				x.Id,
 				x.Description,

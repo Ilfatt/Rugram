@@ -18,6 +18,7 @@ public class GetFeedRequestHandler(AppDbContext appDbContext)
 			.Take(request.PageSize)
 			.Select(x => new FeedPostDto(
 				x.ProfileId,
+				x.Id,
 				x.Description,
 				x.DateOfCreation,
 				x.Photos

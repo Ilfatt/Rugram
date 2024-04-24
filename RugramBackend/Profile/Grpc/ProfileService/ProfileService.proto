@@ -62,10 +62,11 @@ message GetFeedGrpcResponse{
 
 message FeedPostGrpcDto{
   string profileId = 1;
-  string profileName = 2;
-  string Description = 3;
-  google.protobuf.Timestamp dateOfCreation = 4;
-  repeated string photoIds = 5;
+  string postId = 2;
+  string profileName = 3;
+  string Description = 4;
+  google.protobuf.Timestamp dateOfCreation = 5;
+  repeated string photoIds = 6;
 }
 
 message GetSubInfoGrpcRequest{
