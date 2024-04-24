@@ -73,6 +73,7 @@ const Login: FC = () => {
           <Input
             ref={EmailRef.ref}
             errorMessage={emailError}
+            maxLength={100}
             onChange={(value) => {
               setEmailError("");
               setEmail(value);

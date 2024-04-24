@@ -19,7 +19,6 @@ const PostContainer = styled.div`
   display: flex;
   max-width: 30vw;
   width: 100%;
-  /* height: 80vh; */
   border-radius: 16px;
 
   img {

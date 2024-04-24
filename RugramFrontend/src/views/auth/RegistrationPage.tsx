@@ -73,6 +73,7 @@ const RegistrationPage: FC = () => {
           <Input
             ref={TextRef.ref}
             errorMessage={textError}
+            maxLength={100}
             onChange={(value) => {
               setTextError("");
               setEmail(value);

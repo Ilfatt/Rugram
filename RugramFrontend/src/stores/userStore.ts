@@ -212,15 +212,16 @@ class UserStore {
     this.state = new FetchingStateStore();
     try {
       if (this.user.id) {
-        const response = await ProfileServices.GetPosts(id, pageNumber, 100);
-        this.user.posts = response.posts;
-        const photoPromises = this.user.posts.map(async (post) => {
+        const response = await ProfileServices.GetPosts(id, pageNumber, 10);
+        const photoPromises = response.posts.map(async (post) => {
           post.photoUrls = await Promise.all(post.photoIds.map(async (photo) => {
             return await ProfileServices.GetPostImage(id!, photo)
           }));
           return post;
         });
         await Promise.all(photoPromises);
+        this.user.postsCount = response.totalPostsCount;
+        this.user.posts = [...(this.user.posts ?? []), ...response.posts]
       }
 
       this.state = new SuccessStateStore();

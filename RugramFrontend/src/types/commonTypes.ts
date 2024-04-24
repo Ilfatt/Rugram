@@ -27,11 +27,12 @@ export type User = {
   followersCount?: number,
   followingCount?: number,
   posts?: Post[],
+  postsCount?: number,
 }
 
 export type Posts = {
   posts: Post[],
-  totalCount: number,
+  totalPostsCount: number,
 }
 
 export type Post = {

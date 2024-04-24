@@ -2,6 +2,7 @@ import { ChangeEvent, FC, useRef, useState } from "react";
 import styled from "styled-components";
 import UseStores from "../../hooks/useStores";
 import { icons } from "../../enums";
+import ErrorModal from "../ErrorModal";
 
 interface ButtonProps {
   text: string;
@@ -118,7 +119,7 @@ export const UploadButton : FC = () => {
         type="file"
       />
 
-      {uploadError ? <p>{uploadError}</p> : null}
+      {uploadError ? <ErrorModal error={uploadError} /> : null}
     </StyledUploadButtonContainer>
   )
 }
