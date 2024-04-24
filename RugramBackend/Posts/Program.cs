@@ -41,6 +41,6 @@ await app.MigrateDbAsync();
 app.MapGrpcService<PostGrpcService>();
 app.MapGrpcService<PostForProfileService>();
 
-await Task.Delay(1000 * 15);
+await Task.Delay(1000 * 20);
 
 app.Run();

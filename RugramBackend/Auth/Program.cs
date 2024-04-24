@@ -38,6 +38,6 @@ await app.MigrateDbAsync();
 
 app.MapGrpcService<AuthGrpcService>();
 
-await Task.Delay(1000 * 15);
+await Task.Delay(1000 * 20);
 
 app.Run();

@@ -44,6 +44,6 @@ await app.MigrateDbAsync();
 app.MapGrpcService<ProfileForAuthGrpcService>();
 app.MapGrpcService<ProfileGrpcService>();
 
-await Task.Delay(1000 * 15);
+await Task.Delay(1000 * 20);
 
 app.Run();
