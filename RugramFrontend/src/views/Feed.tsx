@@ -45,6 +45,7 @@ const Feed : FC = () => {
               <BigPostCard
                 key={uuidv4()}
                 description={post.description}
+                link={post.postId}
                 profileId={post.profileId}
                 src={post.photoUrls!}
               />

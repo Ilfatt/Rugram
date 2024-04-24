@@ -42,8 +42,17 @@ export type Post = {
   photoUrls?: string[],
 }
 
+export type SinglePost = {
+  profileId: string,
+  description: string,
+  dateOfCreation: string,
+  photos: string[],
+}
+
+
 export type ProfilePost = {
   profileId: string,
+  postId: string,
   description: string,
   dateOfCreation: string,
   photoIds: string[],
@@ -61,4 +70,12 @@ export type SearchProfile = {
 export type SubInfoType = {
   otherProfileSubscribedToThisProfile: boolean,
   thisProfileSubscribedToOtherProfile: boolean
+}
+
+export type CommentType = {
+  profileId: string,
+  profileName: string,
+  profileIcon: string,
+  commentId: string,
+  commentText: string,
 }

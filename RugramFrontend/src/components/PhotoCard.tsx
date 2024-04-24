@@ -43,7 +43,7 @@ const PostContainer = styled(GlassDiv)<{withSlider: boolean}>`
   cursor: pointer;
 
   max-width: 20vw;
-  height: ${(props) => props.withSlider ? "min-content;" : "20vw"};
+  height: min-content;
 
   img {
     width: 100%;

@@ -6,7 +6,7 @@ import ErrorStateStore from "./StateStores/ErrorStateStore";
 import SuccessStateStore from "./StateStores/SuccessStateStore";
 import { decodeToken } from "../tools/decodeToken";
 import ProfileServices from "../services/ProfileServices";
-import { SearchProfile, User } from "../types/commonTypes";
+import { SearchProfile, SinglePost, User } from "../types/commonTypes";
 
 class UserStore {
 
@@ -19,6 +19,8 @@ class UserStore {
   refreshToken?: string;
 
   searchProfiles?: SearchProfile;
+
+  singlePost?: SinglePost;
 
   subInfo?: {
     otherProfileSubscribedToThisProfile: boolean,
@@ -224,6 +226,19 @@ class UserStore {
       this.state = new SuccessStateStore();
     } catch (error) {
       this.state = new ErrorStateStore(error);
+    }
+  }
+
+  public async getSinglePost(id:string) {
+    this.state = new FetchingStateStore();
+    try {
+      const response = await ProfileServices.GetPostInfo(id);
+      this.state = new SuccessStateStore();
+      this.singlePost = response;
+    } catch (error) {
+      runInAction(() => {
+        this.state = new ErrorStateStore(error);
+      });
     }
   }
 

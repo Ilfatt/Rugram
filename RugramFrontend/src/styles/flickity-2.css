@@ -13,14 +13,15 @@ https://flickity.metafizzy.co
 .flickity-viewport {
   overflow: hidden;
   position: relative;
-  height: -webkit-fill-available;
-  width: -webkit-fill-available;
+  height: 100%;
+  width: 100%;
 }
 
 .flickity-slider {
   /* position: absolute; */
   width: -webkit-fill-available;
   height: 36vw;
+  /* height: 36vw; */
 }
 
 /* draggable */

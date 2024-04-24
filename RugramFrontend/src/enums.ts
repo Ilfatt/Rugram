@@ -8,6 +8,7 @@ import logo from "./assets/images/logo.svg";
 import close from "./assets/images/Close.svg";
 import exit from "./assets/images/log-out.svg"
 import edit from "./assets/images/edit.svg";
+import heart from "./assets/images/heart.svg";
 
 export const icons = {
   browse,
@@ -19,7 +20,8 @@ export const icons = {
   logo,
   close,
   exit,
-  edit
+  edit,
+  heart,
 };
 
 export enum Status {

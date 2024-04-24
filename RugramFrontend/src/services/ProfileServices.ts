@@ -1,4 +1,4 @@
-import { Posts, ProfilePost, ProfileRequest, SearchProfile, SubInfoType } from "../types/commonTypes";
+import { Posts, ProfilePost, ProfileRequest, SearchProfile, SinglePost, SubInfoType } from "../types/commonTypes";
 import { ApiConnection } from "./ApiConnection";
 
 class ProfileServices {
@@ -26,6 +26,11 @@ class ProfileServices {
       subscriptionsCount: number
     }>(`profile/profileIndicators/${id}`);
     return { ...name.data, icon, ...followers.data, subInfo } as unknown as ProfileRequest;
+  }
+
+  static async GetPostInfo(id: string) {
+    const response = await ApiConnection.get<SinglePost>(`post/${id}`);
+    return response.data;
   }
 
   static async GetProfileImg(id: string) {
