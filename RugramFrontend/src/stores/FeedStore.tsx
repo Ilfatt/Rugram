@@ -20,14 +20,14 @@ class FeedStore {
     try {
       const response = await ProfileServices.GetFeed(page, pageSize);
       if (response) {
-        this.post = response.feedPostDto;
-        const photoPromises = this.post.map(async (post) => {
+        const photoPromises = response.feedPostDto.map(async (post) => {
           post.photoUrls = await Promise.all(post.photoIds.map(async (photo) => {
             return await ProfileServices.GetPostImage(post.profileId!, photo)
           }));
           return post;
         });
         await Promise.all(photoPromises);
+        this.post = [...this.post, ...response.feedPostDto]
         this.state = new SuccessStateStore();
       }
     } catch (error) {

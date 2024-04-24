@@ -10,6 +10,7 @@ import { Icon, SearchLink } from "./SearchBar";
 import UseStores from "../hooks/useStores";
 import { icons } from "../enums";
 import { useNavigate } from "react-router-dom";
+import dayjs from 'dayjs';
 
 const Slider = styled(Flickity)`
   width: 100%;
@@ -19,21 +20,26 @@ const Slider = styled(Flickity)`
   gap: 4px;
 `;
 
-const Description = styled.div`
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+const Description = styled.div<{singlePost?: boolean}>`
+
+
+
   width: -webkit-fill-available;
   font-size: 14px;
   font-weight: 400;
   padding: 0 12px;
+
+  ${(props) => !props.singlePost
+    ? "overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
+    : ""
+}
 `;
 
-const PostContainer = styled(GlassDiv)`
+const PostContainer = styled(GlassDiv)<{singlePost?: boolean}>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   border-radius: 12px;
   padding: 8px;
   gap: 8px;
@@ -45,10 +51,11 @@ const PostContainer = styled(GlassDiv)`
 
   img {
     width: 100%;
-    max-width: 30vw;
     height: 100%;
-    max-height: 29vw;
     border-radius: 12px;
+    ${(props) => !props.singlePost ? (
+    "max-height: 29vw; max-width: 30vw;"
+  ) : ''}
   }
 `
 
@@ -56,14 +63,37 @@ const PostTitle = styled.b`
   font-size: 24px;
 `
 
+const Photo = styled.div`
+  width: 100%;
+  height: min-content;
+`
+
+const LikePanel = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+
+  font-weight: 300;
+
+  img {
+    width: 48px;
+    height: 48px;
+  }
+`
+
 const BigPostCard: FC<{
   src: string[],
   description?: string,
   profileId?: string,
-}> = ({src, description, profileId}) => {
+  singlePost?: boolean,
+  date?: string,
+  link?: string,
+}> = ({src, description, profileId, singlePost, date, link}) => {
   const { userStore } = UseStores();
-  const [icon, setIcon] = useState('');
+  const [icon, setIcon] = useState<string | undefined>(undefined);
   const [login, setLogin] = useState('');
+  const [formatDate, setFormatDate] = useState(dayjs(date).format('DD-MM-YYYY'));
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -71,31 +101,50 @@ const BigPostCard: FC<{
       if (profileId) {
         const profile = await userStore.getPostProfile(profileId);
         setLogin(profile?.profileName ?? '');
-        setIcon(`data:image/png;base64, ${profile?.icon.data.profilePhoto}` ?? '');
+        setIcon(profile?.icon.data.profilePhoto ? `data:image/png;base64, ${profile?.icon.data.profilePhoto}` : undefined);
       }
-
     }
 
     getProfile();
-  }, [])
+  }, [profileId])
+
+  useEffect(() => {
+    if (date) {
+      setFormatDate(dayjs(date).format('DD-MM-YYYY'));
+    }
+  }, [date])
 
   const MemoSlider = useCallback((images : string[]) => {
     return (
-      <Slider
-        static
+      <Photo
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        onClick={(e: Event) => e.stopPropagation()}
       >
-        {images ? images.map((image) => (
-          <img
-            key={image}
-            src={`data:image/png;base64, ${image}`}
-          />
-        )) : null}
-      </Slider>
+        <Slider
+          static
+        >
+          {images ? images.map((image) => (
+            <img
+              key={image}
+              src={`data:image/png;base64, ${image}`}
+            />
+          )) : null}
+        </Slider>
+      </Photo>
+
     )
   }, [src])
 
   return (
-    <PostContainer>
+    <PostContainer
+      onClick={() => {
+        if (link) {
+          navigate(`/profile/post/${link}`)
+        }
+      }}
+      singlePost={singlePost}
+    >
       <SearchLink
         key={uuidv4()}
         onClick={() => {
@@ -110,7 +159,16 @@ const BigPostCard: FC<{
       <Separator />
       {MemoSlider(src)}
       <Separator />
-      <Description>{description}</Description>
+      <LikePanel>
+        <img src={icons.heart}/>
+        {formatDate}
+      </LikePanel>
+      <Separator />
+      <Description
+        singlePost={singlePost}
+      >
+        {description}
+      </Description>
     </PostContainer>
   );
 };

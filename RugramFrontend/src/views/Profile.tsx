@@ -23,6 +23,7 @@ const cropperStyle = {
 
 const Profile: FC = () => {
   const { userStore, uploadStore } = UseStores();
+
   const navigate = useNavigate();
   const { id } = useParams()
   const [crop, setCrop] = useState({ x: 0, y: 0 })
@@ -39,13 +40,13 @@ const Profile: FC = () => {
     };
     return () => {
       userStore.clearUser()
+      userStore.user.posts = [];
     }
   }, [])
 
   useEffect(() => {
     if (id) {
-      userStore.getProfile(id)
-      userStore.getPosts(id, 0)
+      userStore.getProfile(id);
     }
   }, [id])
 
@@ -111,7 +112,7 @@ const Profile: FC = () => {
     return (
       <CardGrid />
     )
-  }, [userStore.user.posts, window.location])
+  }, [window.location, userStore.user.username])
 
   return (
     <ProfilePage>

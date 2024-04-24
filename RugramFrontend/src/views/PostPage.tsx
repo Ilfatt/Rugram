@@ -1,60 +1,67 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import styled from "styled-components";
-import { icons } from "../enums";
 import BigPostCard from "../components/BigPostCard";
-import { GlassDiv } from "../styles";
+import UseStores from "../hooks/useStores";
+import { useParams } from "react-router-dom";
+import { observer } from "mobx-react";
+import Comments from "../components/Comments";
 
 const PostPageContainer = styled.div`
   display: flex;
   gap: 36px;
-  justify-content: center;
+  justify-content: start;
   min-height: 85vh;
-  align-items: center;
   width: 90vw;
+  margin-left: 84px;
 `
 
 const PostContainer = styled.div`
   display: flex;
-  width: 40vw;
-  height: 80vh;
+  max-width: 30vw;
+  width: 100%;
   border-radius: 16px;
-`
 
-const Comments = styled(GlassDiv)`
-  display: flex;
-  width: 40vw;
-  height: 100%;
-
+  img {
+    max-width: 30vw;
+    max-height: 30vw;
+  }
 `
 
 const PostPage: FC = () => {
-  // const { userStore } = UseStores();
-  // const { id } = useParams();
-  // const currentPost = useState<Post | undefined>();
+  const { userStore } = UseStores();
+  const { id } = useParams();
 
-  // useEffect(() => {
-  //   if (id) {
-  //     userStore.getPosts(id, 0)
-  //     userStore.user.posts?.find(() => {
+  useEffect(() => {
+    if (id) {
+      userStore.getSinglePost(id)
+    }
+  }, [])
 
-  //     })
-  //   }
-  // }, [id])
+  useEffect(() => {
+    return () => {
+      userStore.singlePost = undefined;
+    }
+  }, []);
 
   return (
     <PostPageContainer>
       <PostContainer>
-        <BigPostCard
-          description="111"
-          src={[icons.plus]}
-        />
+        {
+          userStore.singlePost && (
+            <BigPostCard
+              date={userStore.singlePost.dateOfCreation}
+              description={userStore.singlePost?.description}
+              profileId={userStore.singlePost?.profileId}
+              src={(userStore.singlePost?.photos ?? [])}
+              singlePost
+            />
+          )
+        }
       </PostContainer>
-      <Comments>
-        Коменты
-      </Comments>
+      <Comments />
     </PostPageContainer>
 
   );
 };
 
-export default PostPage;
+export default observer(PostPage);

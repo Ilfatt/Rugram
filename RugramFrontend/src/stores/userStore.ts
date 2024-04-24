@@ -6,7 +6,7 @@ import ErrorStateStore from "./StateStores/ErrorStateStore";
 import SuccessStateStore from "./StateStores/SuccessStateStore";
 import { decodeToken } from "../tools/decodeToken";
 import ProfileServices from "../services/ProfileServices";
-import { SearchProfile, User } from "../types/commonTypes";
+import { SearchProfile, SinglePost, User } from "../types/commonTypes";
 
 class UserStore {
 
@@ -19,6 +19,8 @@ class UserStore {
   refreshToken?: string;
 
   searchProfiles?: SearchProfile;
+
+  singlePost?: SinglePost;
 
   subInfo?: {
     otherProfileSubscribedToThisProfile: boolean,
@@ -210,20 +212,34 @@ class UserStore {
     this.state = new FetchingStateStore();
     try {
       if (this.user.id) {
-        const response = await ProfileServices.GetPosts(id, pageNumber, 100);
-        this.user.posts = response.posts;
-        const photoPromises = this.user.posts.map(async (post) => {
+        const response = await ProfileServices.GetPosts(id, pageNumber, 10);
+        const photoPromises = response.posts.map(async (post) => {
           post.photoUrls = await Promise.all(post.photoIds.map(async (photo) => {
             return await ProfileServices.GetPostImage(id!, photo)
           }));
           return post;
         });
         await Promise.all(photoPromises);
+        this.user.postsCount = response.totalPostsCount;
+        this.user.posts = [...(this.user.posts ?? []), ...response.posts]
       }
 
       this.state = new SuccessStateStore();
     } catch (error) {
       this.state = new ErrorStateStore(error);
+    }
+  }
+
+  public async getSinglePost(id:string) {
+    this.state = new FetchingStateStore();
+    try {
+      const response = await ProfileServices.GetPostInfo(id);
+      this.state = new SuccessStateStore();
+      this.singlePost = response;
+    } catch (error) {
+      runInAction(() => {
+        this.state = new ErrorStateStore(error);
+      });
     }
   }
 
